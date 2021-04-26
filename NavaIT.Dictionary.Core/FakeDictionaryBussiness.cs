@@ -10,7 +10,7 @@ namespace NavaIT.Dictionary.Core
             if (string.IsNullOrEmpty(term)) return null;
             return new PageResult()
             {
-                Title = term,
+                Term = term,
                 Descriptions = new DescriptionPart[]{
                     new DescriptionPart()
                 {
@@ -33,7 +33,7 @@ namespace NavaIT.Dictionary.Core
 </div>
 </div>
 <div class='row'><p>رمزینۀ پاس رمزینۀ پاس رمزینۀ پاس رمزینۀ پاس رمزینۀ پاس رمزینۀ پاس </p></div>",
-                    Scopes = "Scope" + new Random().Next(10)
+                    Scopes = new string[]{"Scope" + new Random().Next(10) }
                 } }
             };
         }

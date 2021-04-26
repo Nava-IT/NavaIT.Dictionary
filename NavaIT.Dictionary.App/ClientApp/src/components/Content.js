@@ -1,11 +1,12 @@
 ﻿import React, { Component } from 'react'
+import { DescriptionList } from './DescriptionList'
 
 export class Content extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            title: '',
-            description:[]
+            term: '',
+            descriptions:[]
         };
     }
     componentDidUpdate(prevProp) {
@@ -18,8 +19,9 @@ export class Content extends Component {
     render() {
         return (
             <div>
-                <h1>{this.state.title}</h1>
-                <div dangerouslySetInnerHTML={{ __html: this.state.description }}></div>
+                <h1>{this.state.term}</h1>
+                <div>{this.state.descriptions.length}</div>
+                <DescriptionList list={this.state.descriptions} title={this.state.term} />
             </div>
         );
     }
