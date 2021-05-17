@@ -7,6 +7,7 @@ import { Counter } from './components/Counter';
 import { Dictionary } from './components/Dictionary';
 import 'bootstrap-v4-rtl/dist/css/bootstrap-rtl.min.css'
 import './custom.css'
+import { Scope } from './components/Scope';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -17,7 +18,8 @@ export default class App extends Component {
         <Route exact path='/' component={Home} />
         <Route path='/counter' component={Counter} />
         <Route path='/fetch-data' component={FetchData} />
-        <Route path='/dictionary' component={Dictionary} />
+            <Route path='/dictionary/:term' component={Dictionary} />
+            <Route path='/scope/:name' component={Scope} />
       </Layout>
     );
   }

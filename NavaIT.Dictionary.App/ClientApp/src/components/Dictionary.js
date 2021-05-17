@@ -6,7 +6,8 @@ import { Search } from './Search';
 export class Dictionary extends Component {
     constructor(props) {
         super(props);
-        this.state = { searchValue : '123' };
+        this.term = props.match?.params?.term;
+        this.state = { searchValue : this.term }; 
     }
 
     searched = (value) => {

@@ -7,6 +7,7 @@
         public string[] TranslationEquivalents { get; set; }
         public string Description { get; set; }
         public string[] Scopes { get; set; }
+        public string ReferenceWorksheetName { get; set; }
     }
     public class PageResult
     {

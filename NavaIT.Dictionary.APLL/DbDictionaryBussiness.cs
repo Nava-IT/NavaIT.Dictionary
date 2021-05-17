@@ -18,11 +18,15 @@ namespace NavaIT.Dictionary.APLL
         public PageResult Extract(string term)
         {
             if (string.IsNullOrEmpty(term)) return null;
-            string query = @"select new_worksheetId Id, new_Entry1worksheetIdName TermName, new_Entry2worksheetIdName Equivalent, new_Definition Definition, new_ScopeIdName Scope
-from new_worksheet where new_Entry1worksheetIdName = @term
+            string query = @"declare @wsIds table(Id uniqueidentifier)
+
+insert into @wsIds select new_worksheetId from new_worksheet where new_Entry1worksheetId in (select new_termId from new_term where new_name = @term)
+or new_Entry2worksheetId in (select new_termId from new_term where new_name = @term)
+select new_worksheetId Id, new_Entry1worksheetIdName TermName, new_ReferenceWorksheetName ReferenceWorksheetName, new_Entry2worksheetIdName Equivalent, new_Definition Definition, new_ScopeIdName Scope
+from new_worksheet where new_worksheetId in (select id from @wsIds)
 
 select new_ReferenceWorksheet ReferenceId, new_Entry1worksheetIdName ReferredTo
-from new_worksheet where new_ReferenceWorksheetName = @term";
+from new_worksheet where new_ReferenceWorksheet in (select id from @wsIds)";
             using (var con = new SqlConnection(ApplictionSetting.ApllConnectionString))
             {
                 var res = con.QueryMultiple(query, new { term = term });
@@ -31,7 +35,7 @@ from new_worksheet where new_ReferenceWorksheetName = @term";
                 r.ForEach(er => er.ReferredTo = s.Where(rt => rt.ReferenceId == er.Id).Select(rt => rt.ReferredTo).ToArray());
 
                 var k = r.GroupBy(a => string.Join(",",
-                    new String[] { a.TermName, a.Equivalent, a.Definition }.Union(
+                    new String[] { a.TermName, a.Equivalent, a.ReferenceWorksheetName, a.Definition }.Union(
                         a.ReferredTo.OrderBy(s => s)).ToArray()).ToUpper());
                 /*                DescriptionPart[] pd = r.Select(a =>
                                 {
@@ -47,10 +51,11 @@ from new_worksheet where new_ReferenceWorksheetName = @term";
                                 }).ToArray();*/
                 return new PageResult()
                 {
-                    Term = term,
+                    Term = k.First().First().TermName,
                     Descriptions = k.Select(a => new DescriptionPart()
                     {
                         Description = a.First().Definition,
+                        ReferenceWorksheetName = a.First().ReferenceWorksheetName,
                         ForeignEquivalents = a.First().ReferredTo.OrderBy(s => s).ToArray(),
                         Translation = a.First().Equivalent,
                         Scopes = a.Select(s => s.Scope).OrderBy(s => s).ToArray()
@@ -80,6 +85,28 @@ where new_Entry2worksheetIdName like '%'+@q+'%'
             }
         }
 
+        public string[] Scopes()
+        {
+            string query = @"select distinct new_name from new_scopeBase
+                order by new_name";
+            using (var con = new SqlConnection(ApplictionSetting.ApllConnectionString))
+            {
+                var res = con.Query<String>(query);
+                return res.ToArray();
+            }
+        }
+
+        public string[] Scope(string name)
+        {
+            string query = @"select distinct new_name from new_worksheet where new_ScopeIdName = @name
+                    order by new_name";
+            using (var con = new SqlConnection(ApplictionSetting.ApllConnectionString))
+            {
+                var res = con.Query<String>(query, new { name = name });
+                return res.ToArray();
+            }
+        }
+
         private class ApllSearchResult
         {
             public object Title { get; internal set; }
@@ -91,6 +118,7 @@ where new_Entry2worksheetIdName like '%'+@q+'%'
         {
             public Guid Id { get; set; }
             public string TermName { get; set; }
+            public string ReferenceWorksheetName { get; set; }
             public string Equivalent { get; set; }
             public string Definition { get; set; }
             public string Scope { get; set; }

@@ -29,5 +29,19 @@ namespace NavaIT.Dictionary.App.Controllers
         {
             return DictionaryBussiness.Extract(term);
         }
+
+        [HttpGet]
+        [Route("scopes")]
+        public String[] Scopes()
+        {
+            return DictionaryBussiness.Scopes();
+        }
+
+        [HttpGet]
+        [Route("scope")]
+        public String[] Scope(string name)
+        {
+            return DictionaryBussiness.Scope(name);
+        }
     }
 }

@@ -38,6 +38,16 @@ namespace NavaIT.Dictionary.Core
             };
         }
 
+        public string[] Scope(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string[] Scopes()
+        {
+            throw new NotImplementedException();
+        }
+
         public SearchResult[] Search(string q)
         {
             List<SearchResult> results = new List<SearchResult>();

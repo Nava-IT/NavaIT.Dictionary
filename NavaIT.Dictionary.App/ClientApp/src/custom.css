@@ -16,3 +16,7 @@ code {
 .text-left{
     text-align:left !important;
 }
+
+.listitem::before {
+    content: "\2022";
+}
