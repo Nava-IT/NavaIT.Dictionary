@@ -25,7 +25,7 @@ namespace NavaIT.Dictionary.App.Controllers
 
         [HttpGet]
         [Route("extract")]
-        public PageResult Extract(string term)
+        public PageResult[] Extract(string term)
         {
             return DictionaryBussiness.Extract(term);
         }

@@ -5,10 +5,10 @@ namespace NavaIT.Dictionary.Core
 {
     public class FakeDictionaryBussiness : IDictionaryBussiness
     {
-        public PageResult Extract(string term)
+        public PageResult[] Extract(string term)
         {
             if (string.IsNullOrEmpty(term)) return null;
-            return new PageResult()
+            return new PageResult[]{new PageResult()
             {
                 Term = term,
                 Descriptions = new DescriptionPart[]{
@@ -35,7 +35,7 @@ namespace NavaIT.Dictionary.Core
 <div class='row'><p>رمزینۀ پاس رمزینۀ پاس رمزینۀ پاس رمزینۀ پاس رمزینۀ پاس رمزینۀ پاس </p></div>",
                     Scopes = new string[]{"Scope" + new Random().Next(10) }
                 } }
-            };
+            } };
         }
 
         public string[] Scope(string name)

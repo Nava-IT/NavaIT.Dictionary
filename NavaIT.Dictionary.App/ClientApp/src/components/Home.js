@@ -1,12 +1,26 @@
 import React, { Component } from 'react';
 import { Scopes } from './Scopes';
+import { Search } from './Search';
+//import { useHistory } from "react-router-dom";
 
 export class Home extends Component {
     static displayName = Home.name;
 
+    constructor(props) {
+        super(props);
+
+        this.searched = this.searched.bind(this);
+    }
+
+    searched = (value) => {
+        this.setState({ searchValue: value });
+        this.props.history.push("/dictionary/"+value);
+    }
+
     render() {
         return (
             <>
+                <Search select={this.searched} />
                 <Scopes />
                 <div>
                     <h1>Hello, world!</h1>

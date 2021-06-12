@@ -15,7 +15,7 @@ namespace NavaIT.Dictionary.APLL
         {
             ApplictionSetting = applictionSetting;
         }
-        public PageResult Extract(string term)
+        public PageResult[] Extract(string term)
         {
             if (string.IsNullOrEmpty(term)) return null;
             string query = @"declare @wsIds table(Id uniqueidentifier)
@@ -34,6 +34,27 @@ from new_worksheet where new_ReferenceWorksheet in (select id from @wsIds)";
                 var s = res.Read<ReferredToResult>();
                 r.ForEach(er => er.ReferredTo = s.Where(rt => rt.ReferenceId == er.Id).Select(rt => rt.ReferredTo).ToArray());
 
+                var groups = r.GroupBy(a => a.TermName);
+                var result = groups.Select(g =>
+                {
+                    var termDefs = g.GroupBy(a => string.Join(",",
+                    new String[] { a.TermName, a.Equivalent, a.ReferenceWorksheetName, a.Definition }.Union(
+                        a.ReferredTo.OrderBy(s => s)).ToArray()).ToUpper());
+                    return new PageResult()
+                    {
+                        Term = g.Key,
+                        Descriptions = termDefs.Select(a => new DescriptionPart()
+                        {
+                            Description = a.First().Definition,
+                            ReferenceWorksheetName = a.First().ReferenceWorksheetName,
+                            ForeignEquivalents = a.First().ReferredTo.OrderBy(s => s).ToArray(),
+                            Translation = a.First().Equivalent,
+                            Scopes = a.Select(s => s.Scope).OrderBy(s => s).ToArray()
+
+                        }).ToArray()
+                    };
+                }).OrderBy(e=>e.Term).ToArray();
+                return result;
                 var k = r.GroupBy(a => string.Join(",",
                     new String[] { a.TermName, a.Equivalent, a.ReferenceWorksheetName, a.Definition }.Union(
                         a.ReferredTo.OrderBy(s => s)).ToArray()).ToUpper());
@@ -49,31 +70,52 @@ from new_worksheet where new_ReferenceWorksheet in (select id from @wsIds)";
                                         Scopes = a.Scope
                                     };
                                 }).ToArray();*/
-                return new PageResult()
-                {
-                    Term = k.First().First().TermName,
-                    Descriptions = k.Select(a => new DescriptionPart()
-                    {
-                        Description = a.First().Definition,
-                        ReferenceWorksheetName = a.First().ReferenceWorksheetName,
-                        ForeignEquivalents = a.First().ReferredTo.OrderBy(s => s).ToArray(),
-                        Translation = a.First().Equivalent,
-                        Scopes = a.Select(s => s.Scope).OrderBy(s => s).ToArray()
 
+                var b = k.Select(item => new PageResult()
+                {
+                    Term = item.First().TermName,
+                    Descriptions = item.Select(a=>new DescriptionPart()
+                    {
+                        Description = a.Definition,
+                        ReferenceWorksheetName = a.ReferenceWorksheetName,
+                        ForeignEquivalents = a.ReferredTo.OrderBy(s=>s).ToArray(),
+                        Translation = a.Equivalent,
+                        //Scopes = item.
                     }).ToArray()
+                });
+                return new PageResult[]{
+                    new PageResult()
+                    {
+                        Term = k.First().First().TermName,
+                        Descriptions = k.Select(a => new DescriptionPart()
+                        {
+                            Description = a.First().Definition,
+                            ReferenceWorksheetName = a.First().ReferenceWorksheetName,
+                            ForeignEquivalents = a.First().ReferredTo.OrderBy(s => s).ToArray(),
+                            Translation = a.First().Equivalent,
+                            Scopes = a.Select(s => s.Scope).OrderBy(s => s).ToArray()
+
+                        }).ToArray()
+                    }
                 };
             }
         }
 
         public SearchResult[] Search(string q)
         {
-            string query = @"select top 10 * from(
-select distinct new_Entry1worksheetIdName Title, new_Definition Definition, new_ScopeIdName Scope from new_worksheet 
-where new_Entry1worksheetIdName like '%'+@q+'%' 
+            string query = @"select top 10 Title, Definition, Scope from(
+select distinct 1 type, new_Entry1worksheetIdName Title, new_Definition Definition, new_ScopeIdName Scope from new_worksheet 
+where new_Entry1worksheetIdName COLLATE Latin1_general_CI_AI like @q+'%' COLLATE Latin1_general_CI_AI
 union all
-select distinct new_Entry2worksheetIdName Title, new_Definition Definition, new_ScopeIdName Scope from new_worksheet 
-where new_Entry2worksheetIdName like '%'+@q+'%' 
-) a order by 1";
+select distinct 1 type, new_Entry2worksheetIdName Title, new_Definition Definition, new_ScopeIdName Scope from new_worksheet 
+where new_Entry2worksheetIdName COLLATE Latin1_general_CI_AI like @q+'%' COLLATE Latin1_general_CI_AI
+union all
+select distinct 2 type, new_Entry1worksheetIdName Title, new_Definition Definition, new_ScopeIdName Scope from new_worksheet 
+where new_Entry1worksheetIdName COLLATE Latin1_general_CI_AI like '%'+@q+'%' COLLATE Latin1_general_CI_AI
+union all
+select distinct 2, new_Entry2worksheetIdName Title, new_Definition Definition, new_ScopeIdName Scope from new_worksheet 
+where new_Entry2worksheetIdName COLLATE Latin1_general_CI_AI like '%'+@q+'%' COLLATE Latin1_general_CI_AI
+) a order by type, title";
             using (var con = new SqlConnection(ApplictionSetting.ApllConnectionString))
             {
                 var res = con.Query<ApllSearchResult>(query, new { q = q });

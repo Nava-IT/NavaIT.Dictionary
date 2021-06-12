@@ -20,7 +20,7 @@ export class Scopes extends Component {
             <div className='row'>
                 {this.state.scopes.map((s) => {
                     return (
-                        <div className='listitem col-lg-2 col-md-4 col-sm-6'>
+                        <div className='listitem col-lg-4 col-md-4 col-sm-4'>
                             <a href={'scope/'+s}>{s}</a>
                         </div>
                     );
