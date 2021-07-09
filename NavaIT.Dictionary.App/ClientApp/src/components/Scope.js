@@ -11,7 +11,7 @@ export class Scope extends Component {
     }
 
     componentDidMount() {
-        fetch('api/dictionary/Scope?name='+this.name)
+        fetch('api/dictionary/Scope?name=' + this.name)
             .then(resp => resp.json())
             .then(data => this.setState({ scopes: data, isFetching: false }));
 
@@ -20,13 +20,15 @@ export class Scope extends Component {
         return (
             <div className='row'>
                 <div className='col-12'>{this.name}</div>
-                {this.state.scopes.map((s) => {
-                    return (
-                        <div className='listitem col-lg-2 col-md-4 col-sm-6'>
-                            <a href={'dictionary/'+s}>{s}</a>
-                        </div>
-                    );
-                })}
+                <ul class='col-12 ltrbullets'>
+                    {this.state.scopes.map((s) => {
+                        return (
+                            <li className='listitem col-lg-4 col-md-4 col-sm-5' style={{ display: 'inline' }}>
+                                <a href={'dictionary/' + s}>{s}</a>
+                            </li>
+                        );
+                    })}
+                </ul>
             </div>
         );
     }
