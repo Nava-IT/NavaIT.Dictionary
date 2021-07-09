@@ -28,17 +28,17 @@ namespace NavaIT.Dictionary.App
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins("http://localhost:19006");
+                                      builder.WithOrigins("http://localhost:19006", "http://localhost:3000");
                                   });
             });
 
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/build";
-            });
+            //services.AddSpaStaticFiles(configuration =>
+            //{
+            //    configuration.RootPath = "ClientApp/build";
+            //});
 
             services.AddScoped<IDictionaryBussiness, DbDictionaryBussiness>();
             services.AddScoped<IApplictionSetting, ApplictionSetting>();
@@ -60,7 +60,7 @@ namespace NavaIT.Dictionary.App
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseSpaStaticFiles();
+            //app.UseSpaStaticFiles();
             app.UseCors(MyAllowSpecificOrigins);
             app.UseRouting();
 
@@ -71,15 +71,15 @@ namespace NavaIT.Dictionary.App
                     pattern: "{controller}/{action=Index}/{id?}");
             });
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
+            //app.UseSpa(spa =>
+            //{
+            //    spa.Options.SourcePath = "ClientApp";
 
-                if (env.IsDevelopment())
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
-            });
+            //    if (env.IsDevelopment())
+            //    {
+            //        spa.UseReactDevelopmentServer(npmScript: "start");
+            //    }
+            //});
         }
     }
 }
