@@ -50,6 +50,7 @@
     <Content Include="src\components\Scopes.js" />
     <Content Include="src\components\Search.css" />
     <Content Include="src\components\Search.js" />
+    <Content Include="src\Configuration\Config.json" />
     <Content Include="src\custom.css" />
     <Content Include="src\fonts\Sahel.woff" />
     <Content Include="src\index.js" />
@@ -59,6 +60,7 @@
     <Folder Include="public\" />
     <Folder Include="src\" />
     <Folder Include="src\components\" />
+    <Folder Include="src\Configuration\" />
     <Folder Include="src\fonts\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />

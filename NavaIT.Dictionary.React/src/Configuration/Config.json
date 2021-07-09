@@ -1,0 +1,8 @@
+{
+    "Urls":{
+        "Scope":"https://localhost:44348/api/dictionary/Scope?name=",
+        "Extract":"https://localhost:44348/api/dictionary/Extract?term=",
+        "Scopes":"https://localhost:44348/api/dictionary/Scopes",
+        "Search":"https://localhost:44348/api/dictionary/search?q="
+    }
+}

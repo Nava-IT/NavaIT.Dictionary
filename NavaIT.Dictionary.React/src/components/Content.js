@@ -1,5 +1,6 @@
 ﻿import React, { Component } from 'react'
 import { DescriptionList } from './DescriptionList'
+import Configs from '../Configuration/Config.json';
 
 export class Content extends Component {
     constructor(props) {
@@ -12,15 +13,15 @@ export class Content extends Component {
         };*/
     }
     componentDidUpdate(prevProp) {
-        if (prevProp.term != this.props.term) {
-            fetch('api/dictionary/Extract?term=' + this.props.term)
+        if (prevProp.term !== this.props.term) {
+            fetch(Configs.Urls.Extract + this.props.term)
                 .then(resp => resp.json())
                 .then(data => this.setState({ items: data }));
         }
     }
     componentDidMount(prevProp) {
         //if (!prevProp.hasOwnProperty('term') || prevProp.term != this.props.term) {
-        fetch('api/dictionary/Extract?term=' + this.props.term)
+        fetch(Configs.Urls.Extract + this.props.term)
             .then(resp => resp.json())
             .then(data => this.setState({ items: data }));
         //}

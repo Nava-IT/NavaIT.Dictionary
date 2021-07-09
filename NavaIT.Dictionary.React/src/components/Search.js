@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react'
 import Autosuggest from 'react-autosuggest';
-
+import Configs from '../Configuration/Config.json';
 import './Search.css'
 
 // When suggestion is clicked, Autosuggest needs to populate the input
@@ -50,7 +50,7 @@ export class Search extends Component {
     async SearchData(value) {
         const inputValue = value.trim().toLowerCase();
         const inputLength = inputValue.length;
-        const response = await fetch('api/dictionary/search?q='+value);
+        const response = await fetch(Configs.Urls.Search+value);
         const data = await response.json();
         this.setState({
             suggestions: inputLength === 0 ? [] : data

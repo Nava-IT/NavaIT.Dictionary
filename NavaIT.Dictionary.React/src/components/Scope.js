@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react';
+import Configs from '../Configuration/Config.json';
 
 export class Scope extends Component {
     constructor(props) {
@@ -11,7 +12,7 @@ export class Scope extends Component {
     }
 
     componentDidMount() {
-        fetch('api/dictionary/Scope?name=' + this.name)
+        fetch(Configs.Urls.Scope + this.name)
             .then(resp => resp.json())
             .then(data => this.setState({ scopes: data, isFetching: false }));
 
