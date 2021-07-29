@@ -1,0 +1,9 @@
+﻿@model string[]
+
+@if (Model != null)
+{
+    <div class="text-center col-12">
+        <h1 class="display-4">حوزه‌ها</h1>
+    </div>
+    <partial name="/Views/Components/Scopes.cshtml" model="Model" />
+}

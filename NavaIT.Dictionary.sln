@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NavaIT.Dictionary.APLL", "N
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "NavaIT.Dictionary.React", "NavaIT.Dictionary.React\NavaIT.Dictionary.React.njsproj", "{A0DE0E19-441E-4EB9-8725-040EB0E48ECE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavaIT.Dictionary.Web", "NavaIT.Dictionary.Web\NavaIT.Dictionary.Web.csproj", "{69D4F6C0-EC40-4C42-AE30-2BBC16ADCBDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{A0DE0E19-441E-4EB9-8725-040EB0E48ECE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0DE0E19-441E-4EB9-8725-040EB0E48ECE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0DE0E19-441E-4EB9-8725-040EB0E48ECE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69D4F6C0-EC40-4C42-AE30-2BBC16ADCBDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69D4F6C0-EC40-4C42-AE30-2BBC16ADCBDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69D4F6C0-EC40-4C42-AE30-2BBC16ADCBDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69D4F6C0-EC40-4C42-AE30-2BBC16ADCBDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

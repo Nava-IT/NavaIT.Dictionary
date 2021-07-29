@@ -1,0 +1,10 @@
+﻿@model NavaIT.Dictionary.Core.PageResult[]
+@section header{
+    <partial name="~/Views/Components/Search.cshtml" model='@("qwe")' />
+}
+<div>
+    @if (Model != null)
+    {
+        <partial name="/Views/Components/Content.cshtml" model="Model" />
+    }
+</div>

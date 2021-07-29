@@ -29,6 +29,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include=".babelrc.json" />
     <Content Include=".gitignore" />
     <Content Include="package.json" />
     <Content Include="public\favicon.ico" />
@@ -50,18 +51,21 @@
     <Content Include="src\components\Scopes.js" />
     <Content Include="src\components\Search.css" />
     <Content Include="src\components\Search.js" />
-    <Content Include="src\Configuration\Config.json" />
+    <Content Include="src\configuration\Config.json" />
     <Content Include="src\custom.css" />
     <Content Include="src\fonts\Sahel.woff" />
     <Content Include="src\index.js" />
     <Content Include="src\registerServiceWorker.js" />
+    <Content Include="server\index.js" />
+    <Content Include="webpack.server.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="public\" />
     <Folder Include="src\" />
     <Folder Include="src\components\" />
-    <Folder Include="src\Configuration\" />
+    <Folder Include="src\configuration\" />
     <Folder Include="src\fonts\" />
+    <Folder Include="server\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>
