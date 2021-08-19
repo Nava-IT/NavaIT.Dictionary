@@ -20,6 +20,7 @@ namespace NavaIT.Dictionary.App
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseUrls("http://localhost:5500");
                     webBuilder.UseStartup<Startup>();
                 });
     }

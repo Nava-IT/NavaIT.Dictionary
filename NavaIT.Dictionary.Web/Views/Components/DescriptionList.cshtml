@@ -1,0 +1,37 @@
+﻿@model NavaIT.Dictionary.Core.PageResult
+@foreach (var description in Model.Descriptions.Where(p => String.IsNullOrEmpty(p.ReferenceWorksheetName)))
+{
+    var foreignEquivalentsHasElement = description.ForeignEquivalents != null && description.ForeignEquivalents.Length > 0;
+    <div>
+        <div class='row'>
+            <div class='d-block'>
+                <div class='float-end mr-auto'>@description.Translation</div>
+                <div class='float-start' dir='ltr'>@Model.Term@(foreignEquivalentsHasElement ? ", " : "")</div>
+                @for (int i = 0; foreignEquivalentsHasElement && i < description.ForeignEquivalents.Length; i++)
+                {
+                    <div class='float-start' dir='ltr'>@description.ForeignEquivalents[i]@(i+1== description.ForeignEquivalents.Length ? "" : ", ")</div>
+                }
+            </div>
+        </div>
+        <div class='row'>
+            <p>
+                [@Html.Raw(String.Join(", ", @description.Scopes.Select(sc => $"<a href='/scope/'{sc}>{sc}</a>")))]@description.Description
+            </p>
+        </div>
+    </div>
+}
+@foreach (var description in Model.Descriptions.Where(p => !String.IsNullOrEmpty(p.ReferenceWorksheetName)))
+{
+    var foreignEquivalentsHasElement = description.ForeignEquivalents != null && description.ForeignEquivalents.Length > 0;
+    <div>
+        <div class='row'>
+            <div class='d-block'>
+                <div class='float-start' dir='ltr'>
+                    &rarr;<a href='/dictionary/' @description.ReferenceWorksheetName>@description.ReferenceWorksheetName</a>
+                    <div class='float-start' dir='ltr'>@Model.Term@(foreignEquivalentsHasElement ? ", " : "")</div>
+                    [@Html.Raw(String.Join(", ", @description.Scopes.Select(sc => $"<a href='/scope/' + {sc}>{sc}</a>")))]@description.Description
+                </div>
+            </div>
+        </div>
+    </div>
+}

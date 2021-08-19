@@ -1,0 +1,10 @@
+﻿@model string[]
+
+<div class='row'>
+    @foreach (var scope in Model)
+    {
+        <div class='listitem col-lg-4 col-md-4 col-sm-4'>
+            <a href=@("scope/" + scope)>@scope</a>
+        </div>
+    }
+</div>

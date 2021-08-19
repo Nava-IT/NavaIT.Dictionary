@@ -1,0 +1,8 @@
+﻿@model NavaIT.Dictionary.Core.PageResult[]
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        <partial name="~/Views/Components/DescriptionList.cshtml" model="item" />
+    }
+}
