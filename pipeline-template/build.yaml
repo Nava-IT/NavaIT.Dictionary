@@ -25,5 +25,5 @@ steps:
     arguments: '--no-build --configuration ${{parameters.buildConfiguration}} --output $(Build.ArtifactStagingDirectory)/${{parameters.buildConfiguration}}'
     zipAfterPublish: true
 
-- publish: '$(Build.SourceBranchName)'
+- publish: '$(Build.ArtifactStagingDirectory)'
   artifact: ${{parameters.artifact}}
