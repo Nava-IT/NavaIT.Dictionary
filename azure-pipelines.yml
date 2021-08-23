@@ -14,12 +14,12 @@ variables:
 
 steps:
 - template: pipeline-template/build.yaml
-  parameter:
-     buildConfiguration: 'Release'
+  parameters:
+    buildConfiguration: 'Release'
     buildProject: '**/NavaIT.Dictionary.App.csproj'
     artifact: serviceApp-Sandbox
 - template: pipeline-template/build.yaml
-  parameter:
-     buildConfiguration: 'Release'
+  parameters:
+    buildConfiguration: 'Release'
     buildProject: '**/NavaIT.Dictionary.Web.csproj'
     artifact: web-Sandbox
