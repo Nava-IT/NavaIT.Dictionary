@@ -22,8 +22,8 @@ steps:
     command: 'publish'
     projects: '${{parameters.buildProject}}'
     publishWebProjects: false
-    arguments: '--no-build --configuration ${{parameters.buildConfiguration}} --output $(Build.ArtifactStagingDirectory)/${{buildProject}}/${{parameters.buildConfiguration}}'
+    arguments: '--no-build --configuration ${{parameters.buildConfiguration}} --output $(Build.ArtifactStagingDirectory)/${{parameters.buildProject}}/${{parameters.buildConfiguration}}'
     zipAfterPublish: true
 
-- publish: '$(Build.ArtifactStagingDirectory)/${{buildProject}}'
+- publish: '$(Build.ArtifactStagingDirectory)/${{parameters.buildProject}}'
   artifact: ${{parameters.artifact}}
