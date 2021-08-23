@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- *
+- '*'
 
 pool:
   name: 'Windows Agent Poll'
@@ -13,12 +13,12 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
--template: pipeline-template/build.yaml
+- template: pipeline-template/build.yaml
   parameter:
      buildConfiguration: 'Release'
     buildProject: '**/NavaIT.Dictionary.App.csproj'
     artifact: serviceApp-Sandbox
--template: pipeline-template/build.yaml
+- template: pipeline-template/build.yaml
   parameter:
      buildConfiguration: 'Release'
     buildProject: '**/NavaIT.Dictionary.Web.csproj'
