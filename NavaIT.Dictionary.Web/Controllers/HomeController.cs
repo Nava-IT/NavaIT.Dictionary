@@ -31,6 +31,7 @@ namespace NavaIT.Dictionary.Web.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogInformation("Start index action.");
             var model = _serviceUtil.Get<string[]>($"{_ServiceConfiguration.Apll.BaseUrl}/dictionary/Scopes");
             return View(model);
         }
