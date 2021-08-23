@@ -1,0 +1,29 @@
+parameters:
+  buildConfiguration: 'Release'
+  buildProject: '**/NavaIT.Dictionary.App.csproj'
+  artifact: serviceApp
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'Restore the project - ${{parameters.buildConfiguration}}'
+  inputs:
+    command: 'restore'
+    projects: '**/${{parameters.buildProject}}'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build the project - ${{parameters.buildConfiguration}}'
+  inputs:
+    command: 'build'
+    arguments: '--configuration ${{parameters.buildConfiguration}}'
+    projects: '**/${{parameters.buildProject}}'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish the project - ${{parameters.buildConfiguration}}'
+  inputs:
+    command: 'publish'
+    projects: '**/${{parameters.buildProject}}'
+    publishWebProjects: false
+    arguments: '--no-build --configuration ${{parameters.buildConfiguration}} --output $(Build.ArtifactStagingDirectory)/${{parameters.buildProject}}/${{parameters.buildConfiguration}}'
+    zipAfterPublish: true
+
+- publish: '$(Build.ArtifactStagingDirectory)/${{parameters.buildProject}}'
+  artifact: ${{parameters.artifact}}
