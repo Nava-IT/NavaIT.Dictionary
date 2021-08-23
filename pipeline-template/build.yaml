@@ -4,26 +4,26 @@ parameters:
   artifact: serviceApp
 steps:
 - task: DotNetCoreCLI@2
-  displayName: 'Restore the project - ${{buildConfiguration}}'
+  displayName: 'Restore the project - ${{parameters.buildConfiguration}}'
   inputs:
     command: 'restore'
-    projects: '${{buildProject}}'
+    projects: '${{parameters.buildProject}}'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Build the project - ${{buildConfiguration}}'
+  displayName: 'Build the project - ${{parameters.buildConfiguration}}'
   inputs:
     command: 'build'
-    arguments: '--configuration ${{buildConfiguration}}'
-    projects: '${{buildProject}}'
+    arguments: '--configuration ${{parameters.buildConfiguration}}'
+    projects: '${{parameters.buildProject}}'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Publish the project - ${{buildConfiguration}}'
+  displayName: 'Publish the project - ${{parameters.buildConfiguration}}'
   inputs:
     command: 'publish'
-    projects: '${{buildProject}}'
+    projects: '${{parameters.buildProject}}'
     publishWebProjects: false
-    arguments: '--no-build --configuration ${{buildConfiguration}} --output $(Build.ArtifactStagingDirectory)/${{buildConfiguration}}'
+    arguments: '--no-build --configuration ${{parameters.buildConfiguration}} --output $(Build.ArtifactStagingDirectory)/${{parameters.buildConfiguration}}'
     zipAfterPublish: true
 
 - publish: '$(Build.ArtifactStagingDirectory)'
-  artifact: ${{artifact}}
+  artifact: ${{parameters.artifact}}
