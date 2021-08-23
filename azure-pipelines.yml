@@ -17,9 +17,9 @@ steps:
   parameters:
     buildConfiguration: 'Release'
     buildProject: '**/NavaIT.Dictionary.App.csproj'
-    artifact: serviceApp-Sandbox
+    artifact: $(Build.SourceBranchName)/serviceApp-Sandbox
 - template: pipeline-template/build.yaml
   parameters:
     buildConfiguration: 'Release'
     buildProject: '**/NavaIT.Dictionary.Web.csproj'
-    artifact: web-Sandbox
+    artifact: $(Build.SourceBranchName)/web-Sandbox
