@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- feature/EnablingSSR
+- *
 
 pool:
   name: 'Windows Agent Poll'
@@ -13,20 +13,13 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: DotNetCoreCLI@2
-  displayName: 'Build the project - $(buildConfiguration)'
-  inputs:
-    command: 'build'
-    arguments: '--configuration $(buildConfiguration)'
-    projects: '**/*.csproj'
-- task: DotNetCoreCLI@2
-  displayName: 'Publish the project - $(buildConfiguration)'
-  inputs:
-    command: 'publish'
-    projects: '**/*.csproj'
-    publishWebProjects: false
-    arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
-    zipAfterPublish: true
-
-- publish: '$(Build.ArtifactStagingDirectory)'
-  artifact: drop
+-template: pipeline-template/build.yaml
+  parameter:
+     buildConfiguration: 'Release'
+    buildProject: '**/NavaIT.Dictionary.App.csproj'
+    artifact: serviceApp-Sandbox
+-template: pipeline-template/build.yaml
+  parameter:
+     buildConfiguration: 'Release'
+    buildProject: '**/NavaIT.Dictionary.Web.csproj'
+    artifact: web-Sandbox
