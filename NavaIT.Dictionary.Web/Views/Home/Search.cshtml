@@ -1,0 +1,22 @@
+﻿@model NavaIT.Dictionary.Web.Models.SearchResultUI[]
+@if (Model != null)
+{
+    <div class='row'>
+        <div class='col-12'>{this.name}</div>
+        @foreach (var s in Model)
+        {
+            <div class='listitem col-lg-4 col-md-4 col-sm-5'>
+
+                <a href=@($"/dictionary/{Uri.EscapeDataString(s.Title)}")>@Html.Raw(s.UITitle)</a>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-12">
+            در این حوزه واژه‌ای پیدا نشد.
+        </div>
+    </div>
+}

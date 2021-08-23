@@ -1,10 +1,10 @@
-﻿using NavaIT.Dictionary.Core;
-using System.Data.SqlClient;
-using Dapper;
-using System.Linq;
+﻿using Dapper;
+using NavaIT.Dictionary.Core;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace NavaIT.Dictionary.APLL
 {
@@ -20,13 +20,13 @@ namespace NavaIT.Dictionary.APLL
             if (string.IsNullOrEmpty(term)) return null;
             string query = @"declare @wsIds table(Id uniqueidentifier)
 
-insert into @wsIds select new_worksheetId from new_worksheet where new_Entry1worksheetId in (select new_termId from new_term where new_name = @term)
-or new_Entry2worksheetId in (select new_termId from new_term where new_name = @term)
-select new_worksheetId Id, new_Entry1worksheetIdName TermName, new_ReferenceWorksheetName ReferenceWorksheetName, new_Entry2worksheetIdName Equivalent, new_Definition Definition, new_ScopeIdName Scope
-from new_worksheet where new_worksheetId in (select id from @wsIds)
+insert into @wsIds select worksheetId from worksheet where Entry1worksheetId in (select termId from term where name = @term)
+or Entry2worksheetId in (select termId from term where name = @term)
+select worksheetId Id, Entry1worksheetIdName TermName, ReferenceWorksheetName ReferenceWorksheetName, Entry2worksheetIdName Equivalent, Definition Definition, ScopeIdName Scope
+from worksheet where worksheetId in (select id from @wsIds)
 
-select new_ReferenceWorksheet ReferenceId, new_Entry1worksheetIdName ReferredTo
-from new_worksheet where new_ReferenceWorksheet in (select id from @wsIds)";
+select ReferenceWorksheet ReferenceId, Entry1worksheetIdName ReferredTo
+from worksheet where ReferenceWorksheet in (select id from @wsIds)";
             using (var con = new SqlConnection(ApplictionSetting.ApllConnectionString))
             {
                 var res = con.QueryMultiple(query, new { term = term });
@@ -53,7 +53,7 @@ from new_worksheet where new_ReferenceWorksheet in (select id from @wsIds)";
 
                         }).ToArray()
                     };
-                }).OrderBy(e=>e.Term).ToArray();
+                }).OrderBy(e => e.Term).ToArray();
                 return result;
                 var k = r.GroupBy(a => string.Join(",",
                     new String[] { a.TermName, a.Equivalent, a.ReferenceWorksheetName, a.Definition }.Union(
@@ -74,11 +74,11 @@ from new_worksheet where new_ReferenceWorksheet in (select id from @wsIds)";
                 var b = k.Select(item => new PageResult()
                 {
                     Term = item.First().TermName,
-                    Descriptions = item.Select(a=>new DescriptionPart()
+                    Descriptions = item.Select(a => new DescriptionPart()
                     {
                         Description = a.Definition,
                         ReferenceWorksheetName = a.ReferenceWorksheetName,
-                        ForeignEquivalents = a.ReferredTo.OrderBy(s=>s).ToArray(),
+                        ForeignEquivalents = a.ReferredTo.OrderBy(s => s).ToArray(),
                         Translation = a.Equivalent,
                         //Scopes = item.
                     }).ToArray()
@@ -104,17 +104,17 @@ from new_worksheet where new_ReferenceWorksheet in (select id from @wsIds)";
         public SearchResult[] Search(string q)
         {
             string query = @"select top 10 Title, Definition, Scope from(
-select distinct 1 type, new_Entry1worksheetIdName Title, new_Definition Definition, new_ScopeIdName Scope from new_worksheet 
-where new_Entry1worksheetIdName COLLATE Latin1_general_CI_AI like @q+'%' COLLATE Latin1_general_CI_AI
+select distinct 1 type, Entry1worksheetIdName Title, Definition Definition, ScopeIdName Scope from dictionary.worksheet 
+where Entry1worksheetIdNameNomalised COLLATE Latin1_general_CI_AI like @q+'%' COLLATE Latin1_general_CI_AI
 union all
-select distinct 1 type, new_Entry2worksheetIdName Title, new_Definition Definition, new_ScopeIdName Scope from new_worksheet 
-where new_Entry2worksheetIdName COLLATE Latin1_general_CI_AI like @q+'%' COLLATE Latin1_general_CI_AI
+select distinct 1 type, Entry2worksheetIdName Title, Definition Definition, ScopeIdName Scope from dictionary.worksheet 
+where Entry2worksheetIdNameNomalised COLLATE Latin1_general_CI_AI like @q+'%' COLLATE Latin1_general_CI_AI
 union all
-select distinct 2 type, new_Entry1worksheetIdName Title, new_Definition Definition, new_ScopeIdName Scope from new_worksheet 
-where new_Entry1worksheetIdName COLLATE Latin1_general_CI_AI like '%'+@q+'%' COLLATE Latin1_general_CI_AI
+select distinct 2 type, Entry1worksheetIdName Title, Definition Definition, ScopeIdName Scope from dictionary.worksheet 
+where Entry1worksheetIdNameNomalised COLLATE Latin1_general_CI_AI like '%'+@q+'%' COLLATE Latin1_general_CI_AI
 union all
-select distinct 2, new_Entry2worksheetIdName Title, new_Definition Definition, new_ScopeIdName Scope from new_worksheet 
-where new_Entry2worksheetIdName COLLATE Latin1_general_CI_AI like '%'+@q+'%' COLLATE Latin1_general_CI_AI
+select distinct 2, Entry2worksheetIdName Title, Definition Definition, ScopeIdName Scope from dictionary.worksheet 
+where Entry2worksheetIdName COLLATE Latin1_general_CI_AI like '%'+@q+'%' COLLATE Latin1_general_CI_AI
 ) a order by type, title";
             using (var con = new SqlConnection(ApplictionSetting.ApllConnectionString))
             {
@@ -129,8 +129,8 @@ where new_Entry2worksheetIdName COLLATE Latin1_general_CI_AI like '%'+@q+'%' COL
 
         public string[] Scopes()
         {
-            string query = @"select distinct new_name from new_scopeBase
-                order by new_name";
+            string query = @"select distinct name from Scope
+                order by name";
             using (var con = new SqlConnection(ApplictionSetting.ApllConnectionString))
             {
                 var res = con.Query<String>(query);
@@ -140,8 +140,8 @@ where new_Entry2worksheetIdName COLLATE Latin1_general_CI_AI like '%'+@q+'%' COL
 
         public string[] Scope(string name)
         {
-            string query = @"select distinct new_name from new_worksheet where new_ScopeIdName = @name
-                    order by new_name";
+            string query = @"select distinct name from worksheet where ScopeIdName = @name
+                    order by name";
             using (var con = new SqlConnection(ApplictionSetting.ApllConnectionString))
             {
                 var res = con.Query<String>(query, new { name = name });
