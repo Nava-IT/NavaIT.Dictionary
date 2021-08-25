@@ -40,7 +40,6 @@ namespace NavaIT.Dictionary.App
             //    configuration.RootPath = "ClientApp/build";
             //});
 
-            services.AddScoped<IDictionaryBussiness, DbDictionaryBussiness>();
             services.AddScoped<IApplictionSetting, ApplictionSetting>();
         }
 

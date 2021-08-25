@@ -25,7 +25,7 @@ namespace NavaIT.Dictionary.App.Controllers
         [Route("search")]
         public SearchResult[] Search(string q)
         {
-            _logger.Debug(EventIds.StartMethod, new { Method = "Sreach", Parameters = new[] { new { q = q } } });
+            _logger.Debug(EventIds.StartMethod, new { Method = "Sreach", Parameters = new[] { new { q } } });
             return DictionaryBussiness.Search(q);
         }
 
@@ -33,7 +33,7 @@ namespace NavaIT.Dictionary.App.Controllers
         [Route("extract")]
         public PageResult[] Extract(string term)
         {
-            _logger.Info(EventIds.StartMethod, new { Method = "Extract", Parameters = new[] { new { term = term } } });
+            _logger.Info(EventIds.StartMethod, new { Method = "Extract", Parameters = new[] { new { term } } });
             return DictionaryBussiness.Extract(term);
         }
 
@@ -49,7 +49,7 @@ namespace NavaIT.Dictionary.App.Controllers
         [Route("scope")]
         public String[] Scope(string name)
         {
-            _logger.Debug(EventIds.StartMethod, new { Method = "Extract", Parameters = new[] { new { name = name } } });
+            _logger.Debug(EventIds.StartMethod, new { Method = "Extract", Parameters = new[] { new { name } } });
             return DictionaryBussiness.Scope(name);
         }
     }

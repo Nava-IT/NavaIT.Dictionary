@@ -6,7 +6,7 @@ namespace NavaIT.Dictionary.Logging
     {
         protected EventIdsBase() { }
 
-        public static EventId StartMethod => new EventId(1000, "Start method.");
+        public static EventId StartMethod => new(1000, "Start method.");
 
     }
 }

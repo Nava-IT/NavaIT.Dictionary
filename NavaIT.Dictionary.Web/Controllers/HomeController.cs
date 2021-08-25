@@ -40,7 +40,7 @@ namespace NavaIT.Dictionary.Web.Controllers
         [HttpGet("/dictionary/{term?}")]
         public IActionResult Dictionary(string term)
         {
-            _logger.Debug(EventIds.StartMethod, new { Method = "Dictionary", Parameters = new[] { new { term = term } } });
+            _logger.Debug(EventIds.StartMethod, new { Method = "Dictionary", Parameters = new[] { new { term } } });
             try
             {
                 _logger.Info(EventIds.ReadingDataIsStarted, new { Url = $"{ _ServiceConfiguration.Apll.BaseUrl}/dictionary/Extract?term={term}" });

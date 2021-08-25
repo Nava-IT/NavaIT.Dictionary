@@ -6,7 +6,7 @@ namespace NavaIT.Dictionary.Web.Utils
 {
     public class ServiceUtil : IServiceUtil
     {
-        private ILogger<ServiceUtil> _logger;
+        private readonly ILogger<ServiceUtil> _logger;
 
         public ServiceUtil(ILogger<ServiceUtil> logger)
         {

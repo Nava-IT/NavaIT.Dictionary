@@ -14,6 +14,11 @@ namespace NavaIT.Dictionary.App
     {
         public static void Main(string[] args)
         {
+            Console.WriteLine("ASPNETCORE_HOSTINGSTARTUPASSEMBLIES: " +
+                Environment.GetEnvironmentVariable("ASPNETCORE_HOSTINGSTARTUPASSEMBLIES"));
+            Console.WriteLine("DOTNET_ADDITIONAL_DEPS: " +
+                Environment.GetEnvironmentVariable("DOTNET_ADDITIONAL_DEPS"));
+
             var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
             try
             {
@@ -37,8 +42,10 @@ namespace NavaIT.Dictionary.App
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseUrls("http://localhost:5500");
-                    webBuilder.UseStartup<Startup>();
+                    var a = WebHostDefaults.HostingStartupAssembliesKey;
+                    webBuilder.UseSetting(WebHostDefaults.HostingStartupAssembliesKey, "NavaIT.Dictionary.APLL")
+                        .UseUrls("http://localhost:5500")
+                        .UseStartup<Startup>();
                 }).ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
