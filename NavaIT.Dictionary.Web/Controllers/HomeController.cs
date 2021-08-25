@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NavaIT.Dictionary.Core;
+using NavaIT.Dictionary.Logging;
 using NavaIT.Dictionary.Web.Configuration;
 using NavaIT.Dictionary.Web.Models;
 using NavaIT.Dictionary.Web.Utils;
@@ -31,7 +32,7 @@ namespace NavaIT.Dictionary.Web.Controllers
 
         public IActionResult Index()
         {
-            _logger.LogInformation("Start index action.");
+            _logger.Debug(EventIds.StartMethod, new { Method = "Index" });
             var model = _serviceUtil.Get<string[]>($"{_ServiceConfiguration.Apll.BaseUrl}/dictionary/Scopes");
             return View(model);
         }
@@ -39,19 +40,18 @@ namespace NavaIT.Dictionary.Web.Controllers
         [HttpGet("/dictionary/{term?}")]
         public IActionResult Dictionary(string term)
         {
-            _logger.LogError($"{ _ServiceConfiguration.Apll.BaseUrl}/dictionary/Extract?term={term}");
+            _logger.Debug(EventIds.StartMethod, new { Method = "Dictionary", Parameters = new[] { new { term = term } } });
             try
             {
-                _logger.LogInformation($"/dictionary/{term} started.");
+                _logger.Info(EventIds.ReadingDataIsStarted, new { Url = $"{ _ServiceConfiguration.Apll.BaseUrl}/dictionary/Extract?term={term}" });
                 var model = _serviceUtil.Get<PageResult[]>(
                     $"{ _ServiceConfiguration.Apll.BaseUrl}/dictionary/Extract?term={term}");
-                _logger.LogInformation($"/dictionary/{term} end (model.count={model?.Count()}.");
-                var view = View("Dictionary", model);
-                return view;
+                _logger.Info(EventIds.ReadingDataIsEnded, new { Url = $"{ _ServiceConfiguration.Apll.BaseUrl}/dictionary/Extract?term={term}" });
+                return View("Dictionary", model);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"/dictionary/{term} has error.");
+                _logger.Error(EventIds.ReadingDataHasError, new { Url = $"{ _ServiceConfiguration.Apll.BaseUrl}/dictionary/Extract?term={term}" }, ex);
                 return View("Dictionary");
             }
         }
@@ -59,8 +59,19 @@ namespace NavaIT.Dictionary.Web.Controllers
         [HttpGet("/scope/{scope}")]
         public IActionResult Scope(string scope)
         {
-            var model = _serviceUtil.Get<string[]>($"{ _ServiceConfiguration.Apll.BaseUrl}/dictionary/Scope?name={scope}");
-            return View(model);
+            _logger.Debug(EventIds.StartMethod, new { Method = "Scope", Parameters = new[] { new { term = scope } } });
+            try
+            {
+                _logger.Info(EventIds.ReadingDataIsStarted, new { Url = $"{ _ServiceConfiguration.Apll.BaseUrl}/dictionary/Scope?name={scope}" });
+                var model = _serviceUtil.Get<string[]>($"{ _ServiceConfiguration.Apll.BaseUrl}/dictionary/Scope?name={scope}");
+                _logger.Info(EventIds.ReadingDataIsEnded, new { Url = $"{ _ServiceConfiguration.Apll.BaseUrl}/dictionary/Scope?name={scope}" });
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(EventIds.ReadingDataHasError, new { Url = $"{ _ServiceConfiguration.Apll.BaseUrl}/dictionary/Scope?name={scope}" }, ex);
+                return View("Dictionary");
+            }
         }
 
         [HttpGet("/search")]

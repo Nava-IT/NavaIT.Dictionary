@@ -45,7 +45,9 @@ namespace NavaIT.Dictionary.Web
                     logging.ClearProviders();
                     logging.SetMinimumLevel(LogLevel.Trace);
                 })
-                .UseNLog();  // NLog: Setup NLog for Dependency injection
-
+                .UseNLog(new NLogAspNetCoreOptions()
+                {
+                    IncludeScopes = true,
+                });  // NLog: Setup NLog for Dependency injection
     }
 }
