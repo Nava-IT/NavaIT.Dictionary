@@ -16,13 +16,13 @@ stages:
   - template: 'build.yaml'
     parameters:
       buildConfiguration: 'Release'
-      buildProject: '**/${{parameters.projectName}}.csproj'
+      projectName: '**/${{parameters.projectName}}.csproj'
       artifact: '${{parameters.appType}}App'
   - template: 'deploy.yaml'
     parameters:
       appType: ${{parameters.appType}}
       buildConfiguration: 'Release'
-      buildProject: '**/${{parameters.projectName}}.csproj'
+      projectName: '**/${{parameters.projectName}}.csproj'
       artifact: '${{parameters.appType}}App'
     
     
