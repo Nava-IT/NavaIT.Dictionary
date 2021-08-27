@@ -15,10 +15,8 @@ parameters:
     displayName: 'Application Type'
     type: string
 
-variables:
-  projectNameWithoutPoint: ${{replace(parameters.projectName, '.', '_')}}
 jobs:
-  - deployment: 'Deploy$(projectNameWithoutPoint)'
+  - deployment: 'Deploy$(${{replace(parameters.projectName, ''.'', ''_'')}})'
     displayName: 'Deploy ${{parameters.projectName}}'
     environment: 'NavaIT Test'
     strategy:
