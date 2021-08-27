@@ -13,8 +13,8 @@ stages:
   - template: 'pipeline-template/buildAndDeploy.yaml'
     parameters:
       appType: 'Services'
-      projectName: 'NavaIT.Dictionary.App'
+      projectNameForBuildAndDeploy: 'NavaIT.Dictionary.App'
   - template: 'pipeline-template/buildAndDeploy.yaml'
     parameters:
       appType: 'Web'
-      projectName: 'NavaIT.Dictionary.Web'
+      projectNameForBuildAndDeploy: 'NavaIT.Dictionary.Web'
