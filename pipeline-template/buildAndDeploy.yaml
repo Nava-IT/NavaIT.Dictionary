@@ -5,7 +5,7 @@ parameters:
     values:
       - Services
       - Web
-  - name: 'projectNameForBuildAndDeploy'
+  - name: 'projectName'
     displayName: 'Project Name'
     type: string
     values:
@@ -16,16 +16,16 @@ stages:
   - template: 'build.yaml'
     parameters:
       buildConfiguration: 'Release'
-      projectName: '**/${{parameters.projectNameForBuildAndDeploy}}.csproj'
+      projectName: '${{parameters.projectName}}'
       artifact: '${{parameters.appType}}App'
-  - stage: 'MainStageDeploy${{replace(parameters.projectNameForBuildAndDeploy, ''.'', ''_'')}}'
-    displayName: 'Deploy ${{parameters.projectNameForBuildAndDeploy}}'
+  - stage: 'MainStageDeploy${{replace(parameters.projectName, ''.'', ''_'')}}'
+    displayName: 'Deploy ${{parameters.projectName}}'
     jobs:
     - template: 'deploy.yaml'
       parameters:
         appType: ${{parameters.appType}}
         buildConfiguration: 'Release'
-        projectName: '**/${{parameters.projectNameForBuildAndDeploy}}.csproj'
+        projectName: '${{parameters.projectName}}'
         artifact: '${{parameters.appType}}App'
     
     
