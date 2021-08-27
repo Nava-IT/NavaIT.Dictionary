@@ -16,7 +16,7 @@ parameters:
     type: string
 
 jobs:
-  - deployment: 'Deploy${{parameters.projectName}}'
+  - deployment: 'Deploy${{replace(parameters.projectName, ".", "_"}}'
     displayName: 'Deploy ${{parameters.projectName}}'
     environment: 'NavaIT Test'
     strategy:
