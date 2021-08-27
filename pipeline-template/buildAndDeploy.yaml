@@ -18,11 +18,14 @@ stages:
       buildConfiguration: 'Release'
       projectName: '**/${{parameters.projectName}}.csproj'
       artifact: '${{parameters.appType}}App'
-  - template: 'deploy.yaml'
-    parameters:
-      appType: ${{parameters.appType}}
-      buildConfiguration: 'Release'
-      projectName: '**/${{parameters.projectName}}.csproj'
-      artifact: '${{parameters.appType}}App'
+  - stage: 'Deploy${{parameters.projectName}}'
+    displayName: 'Deploy ${{parameters.projectName}}'
+    jobs:
+    - template: 'deploy.yaml'
+      parameters:
+        appType: ${{parameters.appType}}
+        buildConfiguration: 'Release'
+        projectName: '**/${{parameters.projectName}}.csproj'
+        artifact: '${{parameters.appType}}App'
     
     
