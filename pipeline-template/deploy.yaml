@@ -1,0 +1,60 @@
+parameters:
+  - name: 'buildConfiguration'
+    displayName: 'Build Configuration'
+    type: string
+    values:
+      - Release
+      - Debug
+  - name: 'projectName'
+    displayName: 'Project Name'
+    type: string
+  - name: 'artifact'
+    displayName: 'Artifact Name'
+    type: string
+  - name: 'appType'
+    displayName: 'Application Type'
+    type: string
+
+jobs:
+  - deployment: 'Deploy${{parameters.projectName}}'
+    displayName: 'Deploy ${{parameters.projectName}}'
+    environment: 'NavaIT Test'
+    strategy:
+      rolling:
+        deploy:
+          steps:
+          - task: IISWebAppManagementOnMachineGroup@0
+            displayName: 'IIS Web App Manage'
+            inputs:
+              EnableIIS: true
+              WebsiteName: 'Sandbox${{parameters.appType}}''
+              WebsitePhysicalPath: '%SystemDrive%\sandbox\${{parameters.appType}}'
+              AddBinding: True
+              Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"7000","hostname":"","sslThumbprint":"","sniFlag":false}]}'
+              CreateOrUpdateAppPoolForWebsite: true
+              AppPoolName: 'Sandbox${{parameters.appType}}'
+              AppPoolNameForWebsite: 'Sandbox${{parameters.appType}}'
+              DotNetVersionForWebsite: 'No Managed Code'
+              AppPoolIdentityForWebsite: SpecificUser
+              AppPoolUsernameForWebsite: $(iisUsername)
+              AppPoolPasswordForWebsite: $(iisUserPassword)
+              ParentWebsiteNameForVD: 'Sandbox${{parameters.appType}}'
+              VirtualPathForVD: /
+              ParentWebsiteNameForApplication: 'Sandbox${{parameters.appType}}'
+              VirtualPathForApplication: /
+              PhysicalPathForApplication: '%SystemDrive%\apll\${{parameters.appType}}'
+              ApplicationPhysicalPathAuth: ApplicationWindowsAuth
+              ApplicationAuthUserName: $(iisUsername)
+              ApplicationAuthUserPassword: $(iisUserPassword)
+              CreateOrUpdateAppPoolForApplication: true
+              AppPoolNameForApplication: 'Apll${{parameters.appType}}'
+              DotNetVersionForApplication: 'No Managed Code'
+          - task: IISWebAppDeploymentOnMachineGroup@0
+            displayName: 'IIS Web App Deploy'
+            inputs:
+              WebSiteName: 'Sandbox${{parameters.appType}}'
+              VirtualApplication: /
+              RemoveAdditionalFilesFlag: true
+              TakeAppOfflineFlag: True
+              XmlVariableSubstitution: True
+              JSONFiles: '**/appsettings.json'

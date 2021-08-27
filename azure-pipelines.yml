@@ -6,20 +6,15 @@
 trigger:
 - '*'
 
-pool:
-  name: 'Windows Agent Poll'
-
 variables:
   buildConfiguration: 'Release'
 
-steps:
-- template: pipeline-template/build.yaml
-  parameters:
-    buildConfiguration: 'Release'
-    buildProject: 'NavaIT.Dictionary.App.csproj'
-    artifact: '$(Build.SourceBranchName)-serviceApp-Sandbox'
-- template: pipeline-template/build.yaml
-  parameters:
-    buildConfiguration: 'Release'
-    buildProject: 'NavaIT.Dictionary.Web.csproj'
-    artifact: '$(Build.SourceBranchName)-web-Sandbox'
+stages:
+  - template: 'pipeline-template/buildAndDeploy.yaml'
+    parameters:
+      appType: 'Services'
+      projectName: 'NavaIT.Dictionary.App'
+  - template: 'pipeline-template/buildAndDeploy.yaml'
+    parameters:
+      appType: 'Web'
+      projectName: 'NavaIT.Dictionary.Web'
