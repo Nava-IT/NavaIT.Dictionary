@@ -27,7 +27,7 @@ jobs:
             displayName: 'IIS Web App Manage'
             inputs:
               EnableIIS: true
-              WebsiteName: 'Sandbox${{parameters.appType}}''
+              WebsiteName: 'Sandbox${{parameters.appType}}'
               WebsitePhysicalPath: '%SystemDrive%\sandbox\${{parameters.appType}}'
               AddBinding: True
               Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"7000","hostname":"","sslThumbprint":"","sniFlag":false}]}'
