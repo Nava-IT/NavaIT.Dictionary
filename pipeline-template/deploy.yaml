@@ -20,7 +20,7 @@ jobs:
     displayName: 'Deploy ${{parameters.projectName}}'
     environment: 'NavaIT Sandbox Server'
     strategy:
-      rolling:
+      runOnce:
         deploy:
           steps:
           - task: IISWebAppManagementOnMachineGroup@0

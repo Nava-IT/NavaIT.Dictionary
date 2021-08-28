@@ -13,7 +13,8 @@ parameters:
     type: string
 
 stages:
-  - stage: 
+  - stage: Build${{replace(parameters.projectName, ''.'', ''_'')}}
+    displayName: 'Build ${{parameters.projectName}}'
     jobs:
       - job: 'Build'
         displayName: 'Build ${{parameters.projectName}}'
