@@ -18,7 +18,7 @@ parameters:
 jobs:
   - deployment: 'Deploy${{replace(parameters.projectName, ''.'', ''_'')}}'
     displayName: 'Deploy ${{parameters.projectName}}'
-    environment: $(variables.deployEnviroment)
+    environment: $(deployEnviroment)
     strategy:
       runOnce:
         deploy:

@@ -19,7 +19,7 @@ stages:
       - job: 'Build'
         displayName: 'Build ${{parameters.projectName}}'
         pool:
-          name: $(variables.buildServer)
+          name: $(buildServer)
         
         steps:
           - task: DotNetCoreCLI@2
