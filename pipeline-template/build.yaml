@@ -44,5 +44,7 @@ stages:
               arguments: '--no-build --configuration ${{parameters.buildConfiguration}} --output $(Build.ArtifactStagingDirectory)/${{parameters.projectName}}/${{parameters.buildConfiguration}}'
               zipAfterPublish: true
           
-          - publish: '$(Build.ArtifactStagingDirectory)/${{parameters.projectName}}'
-            artifact: ${{parameters.artifact}}
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: '$(Build.ArtifactStagingDirectory)/${{parameters.projectName}}'
+              artifactName: ${{parameters.artifact}}
