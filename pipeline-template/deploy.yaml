@@ -23,6 +23,12 @@ jobs:
       runOnce:
         deploy:
           steps:
+          - script: echo $(System.ArtifactsDirectory)
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              artifactName: ${{parameters.artifact}}
+              downloadPath: '$(System.ArtifactsDirectory)'
           - task: IISWebAppManagementOnMachineGroup@0
             displayName: 'IIS Web App Manage'
             inputs:
@@ -58,3 +64,4 @@ jobs:
               TakeAppOfflineFlag: True
               XmlVariableSubstitution: True
               JSONFiles: '**/appsettings.json'
+              package: '$(System.ArtifactsDirectory)'
