@@ -63,5 +63,4 @@ jobs:
               RemoveAdditionalFilesFlag: true
               TakeAppOfflineFlag: True
               XmlVariableSubstitution: True
-              JSONFiles: '**/appsettings.json'
               package: '$(System.ArtifactsDirectory)'
