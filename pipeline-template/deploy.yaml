@@ -38,7 +38,7 @@ jobs:
               WebsiteName: 'Sandbox${{parameters.appType}}'
               WebsitePhysicalPath: '%SystemDrive%\sandbox\${{parameters.appType}}'
               AddBinding: True
-              Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"${{parameter.portNumber}}","hostname":"","sslThumbprint":"","sniFlag":false}]}'
+              Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"${{parameters.portNumber}}","hostname":"","sslThumbprint":"","sniFlag":false}]}'
               CreateOrUpdateAppPoolForWebsite: true
               AppPoolName: 'Sandbox${{parameters.appType}}'
               AppPoolNameForWebsite: 'Sandbox${{parameters.appType}}'
