@@ -14,6 +14,8 @@ parameters:
   - name: 'appType'
     displayName: 'Application Type'
     type: string
+  - name: 'portNumber'
+    type: string
 
 jobs:
   - deployment: 'Deploy${{replace(parameters.projectName, ''.'', ''_'')}}'
@@ -36,7 +38,7 @@ jobs:
               WebsiteName: 'Sandbox${{parameters.appType}}'
               WebsitePhysicalPath: '%SystemDrive%\sandbox\${{parameters.appType}}'
               AddBinding: True
-              Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"7000","hostname":"","sslThumbprint":"","sniFlag":false}]}'
+              Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"${{parameter.portNumber}}","hostname":"","sslThumbprint":"","sniFlag":false}]}'
               CreateOrUpdateAppPoolForWebsite: true
               AppPoolName: 'Sandbox${{parameters.appType}}'
               AppPoolNameForWebsite: 'Sandbox${{parameters.appType}}'

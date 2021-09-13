@@ -11,6 +11,8 @@ parameters:
     values:
       - NavaIT.Dictionary.App
       - NavaIT.Dictionary.Web
+  - name: 'portNumber'
+    type: string
 
 stages:
   - template: 'build.yaml'
@@ -27,5 +29,6 @@ stages:
         buildConfiguration: 'Release'
         projectName: '${{parameters.projectName}}'
         artifact: '${{parameters.appType}}App'
+        portNumber: ${{parameters.portNumber}}
     
     
