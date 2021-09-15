@@ -65,4 +65,4 @@ jobs:
               RemoveAdditionalFilesFlag: true
               TakeAppOfflineFlag: True
               XmlVariableSubstitution: True
-              package: '$(System.ArtifactsDirectory)'
+              package: '$(System.ArtifactsDirectory)\**\*.zip'
