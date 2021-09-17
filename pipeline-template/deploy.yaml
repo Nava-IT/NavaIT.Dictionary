@@ -35,34 +35,27 @@ jobs:
             displayName: 'IIS Web App Manage'
             inputs:
               EnableIIS: true
+              IISDeploymentType: 'IISWebsite'
+              ActionIISWebsite: 'CreateOrUpdateWebsite'
               WebsiteName: 'Sandbox${{parameters.appType}}'
               WebsitePhysicalPath: '%SystemDrive%\sandbox\${{parameters.appType}}\$(Build.SourceBranchName)'
-              AddBinding: True
+              WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
+              AddBinding: true
               Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"${{parameters.portNumber}}","hostname":"","sslThumbprint":"","sniFlag":false}]}'
               CreateOrUpdateAppPoolForWebsite: true
-              AppPoolName: 'Sandbox${{parameters.appType}}'
               AppPoolNameForWebsite: 'Sandbox${{parameters.appType}}'
               DotNetVersionForWebsite: 'No Managed Code'
-              AppPoolIdentityForWebsite: SpecificUser
-              AppPoolUsernameForWebsite: $(iisUsername)
-              AppPoolPasswordForWebsite: $(iisUserPassword)
-              ParentWebsiteNameForVD: 'Sandbox${{parameters.appType}}'
-              VirtualPathForVD: /
-              ParentWebsiteNameForApplication: 'Sandbox${{parameters.appType}}'
-              VirtualPathForApplication: /
-              PhysicalPathForApplication: '%SystemDrive%\apll\${{parameters.appType}}\$(Build.SourceBranchName)'
-              ApplicationPhysicalPathAuth: ApplicationWindowsAuth
-              ApplicationAuthUserName: $(iisUsername)
-              ApplicationAuthUserPassword: $(iisUserPassword)
-              CreateOrUpdateAppPoolForApplication: true
-              AppPoolNameForApplication: 'Apll${{parameters.appType}}'
-              DotNetVersionForApplication: 'No Managed Code'
+              PipeLineModeForWebsite: 'Integrated'
+              AppPoolName: 'Sandbox${{parameters.appType}}_$(build.SourceBranchName)'
+              AppPoolIdentityForWebsite: 'SpecificUser'
+              AppPoolUsernameForWebsite: '$(iisUsername)'
+              AppPoolPasswordForWebsite: '$(iisUserPassword)'
           - task: IISWebAppDeploymentOnMachineGroup@0
             displayName: 'IIS Web App Deploy'
             inputs:
               WebSiteName: 'Sandbox${{parameters.appType}}'
-              VirtualApplication: /
+              VirtualApplication: '/$(Build.SourceBranchName)'
+              Package: '$(System.DefaultWorkingDirectory)\**\*.zip'
               RemoveAdditionalFilesFlag: true
-              TakeAppOfflineFlag: True
-              XmlVariableSubstitution: True
-              package: '$(System.ArtifactsDirectory)\**\*.zip'
+              TakeAppOfflineFlag: true
+              XmlVariableSubstitution: true
