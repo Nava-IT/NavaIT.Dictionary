@@ -3,32 +3,32 @@ parameters:
     displayName: 'Application Type'
     type: string
     values:
-      - Services
-      - Web
+      - "Services"
+      - "Web"
   - name: 'projectName'
     displayName: 'Project Name'
     type: string
     values:
-      - NavaIT.Dictionary.App
-      - NavaIT.Dictionary.Web
+      - "NavaIT.Dictionary.App"
+      - "NavaIT.Dictionary.Web"
   - name: 'portNumber'
     type: string
 
 stages:
   - template: 'build.yaml'
     parameters:
-      buildConfiguration: 'Release'
-      projectName: '${{parameters.projectName}}'
-      artifact: '${{parameters.appType}}App'
+      buildConfiguration: "Release"
+      projectName: "${{parameters.projectName}}"
+      artifact: "${{parameters.appType}}App"
   - stage: 'MainStageDeploy${{replace(parameters.projectName, ''.'', ''_'')}}'
     displayName: 'Deploy ${{parameters.projectName}}'
     jobs:
     - template: 'deploy.yaml'
       parameters:
-        appType: ${{parameters.appType}}
-        buildConfiguration: 'Release'
-        projectName: '${{parameters.projectName}}'
-        artifact: '${{parameters.appType}}App'
-        portNumber: ${{parameters.portNumber}}
+        appType: "${{parameters.appType}}"
+        buildConfiguration: "Release"
+        projectName: "${{parameters.projectName}}"
+        artifact: "${{parameters.appType}}App"
+        portNumber: "${{parameters.portNumber}}"
     
     
