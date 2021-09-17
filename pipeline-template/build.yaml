@@ -22,6 +22,7 @@ stages:
           name: $(buildServer)
         
         steps:
+          - task:
           - task: DotNetCoreCLI@2
             displayName: 'Restore the project - ${{parameters.buildConfiguration}}'
             inputs:
@@ -46,5 +47,5 @@ stages:
           
           - task: PublishBuildArtifacts@1
             inputs:
-              pathToPublish: '$(Build.ArtifactStagingDirectory)/${{parameters.projectName}}'
+              pathToPublish: '$(Build.ArtifactStagingDirectory)/${{parameters.projectName}}/${{Build.SourceBranchName}}'
               artifactName: ${{parameters.artifact}}
