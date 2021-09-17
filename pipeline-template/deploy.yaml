@@ -38,7 +38,7 @@ jobs:
               IISDeploymentType: 'IISWebsite'
               ActionIISWebsite: 'CreateOrUpdateWebsite'
               WebsiteName: 'Sandbox${{parameters.appType}}'
-              WebsitePhysicalPath: '%SystemDrive%\sandbox\${{parameters.appType}}\$(Build.SourceBranchName)'
+              WebsitePhysicalPath: '%SystemDrive%\sandbox\${{parameters.appType}}'
               WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
               AddBinding: true
               Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"${{parameters.portNumber}}","hostname":"","sslThumbprint":"","sniFlag":false}]}'
@@ -50,6 +50,23 @@ jobs:
               AppPoolIdentityForWebsite: 'SpecificUser'
               AppPoolUsernameForWebsite: '$(iisUsername)'
               AppPoolPasswordForWebsite: '$(iisUserPassword)'
+          - task: IISWebAppManagementOnMachineGroup@0
+            inputs:
+              EnableIIS: true
+              IISDeploymentType: 'IISWebApplication'
+              ParentWebsiteNameForApplication: 'Sandbox${{parameters.appType}}'
+              VirtualPathForApplication: '/$(Build.SourceBranchName)'
+              PhysicalPathForApplication: '%SystemDrive%\sandbox\${{parameters.appType}}\$(Build.SourceBranchName)'
+              ApplicationPhysicalPathAuth: 'ApplicationWindowsAuth'
+              ApplicationAuthUserName: '$(iisUser)'
+              ApplicationAuthUserPassword: '$(iisPassword)'
+              CreateOrUpdateAppPoolForApplication: true
+              AppPoolNameForApplication: 'DevOpsAndGithubIntegration_$(Build.SourceBranchName)'
+              DotNetVersionForApplication: 'No Managed Code'
+              PipeLineModeForApplication: 'Integrated'
+              AppPoolIdentityForApplication: 'SpecificUser'
+              AppPoolUsernameForApplication: '$(iisUser)'
+              AppPoolPasswordForApplication: '$(iisPassword)'
           - task: IISWebAppDeploymentOnMachineGroup@0
             displayName: 'IIS Web App Deploy'
             inputs:
