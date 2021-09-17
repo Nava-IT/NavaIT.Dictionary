@@ -22,7 +22,6 @@ stages:
           name: $(buildServer)
         
         steps:
-          - task:
           - task: DotNetCoreCLI@2
             displayName: 'Restore the project - ${{parameters.buildConfiguration}}'
             inputs:
