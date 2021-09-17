@@ -46,5 +46,5 @@ stages:
           
           - task: PublishBuildArtifacts@1
             inputs:
-              pathToPublish: '$(Build.ArtifactStagingDirectory)/${{parameters.projectName}}/$(Build.SourceBranchName)'
+              pathToPublish: '$(Build.ArtifactStagingDirectory)/${{parameters.projectName}}'
               artifactName: ${{parameters.artifact}}
