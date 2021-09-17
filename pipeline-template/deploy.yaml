@@ -36,7 +36,7 @@ jobs:
             inputs:
               EnableIIS: true
               WebsiteName: 'Sandbox${{parameters.appType}}'
-              WebsitePhysicalPath: '%SystemDrive%\sandbox\${{parameters.appType}}'
+              WebsitePhysicalPath: '%SystemDrive%\sandbox\${{parameters.appType}}\$(Build.SourceBranchName)'
               AddBinding: True
               Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"${{parameters.portNumber}}","hostname":"","sslThumbprint":"","sniFlag":false}]}'
               CreateOrUpdateAppPoolForWebsite: true
@@ -50,7 +50,7 @@ jobs:
               VirtualPathForVD: /
               ParentWebsiteNameForApplication: 'Sandbox${{parameters.appType}}'
               VirtualPathForApplication: /
-              PhysicalPathForApplication: '%SystemDrive%\apll\${{parameters.appType}}'
+              PhysicalPathForApplication: '%SystemDrive%\apll\${{parameters.appType}}\$(Build.SourceBranchName)'
               ApplicationPhysicalPathAuth: ApplicationWindowsAuth
               ApplicationAuthUserName: $(iisUsername)
               ApplicationAuthUserPassword: $(iisUserPassword)

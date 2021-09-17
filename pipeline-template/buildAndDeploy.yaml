@@ -28,7 +28,7 @@ stages:
         appType: ${{parameters.appType}}
         buildConfiguration: 'Release'
         projectName: '${{parameters.projectName}}'
-        artifact: '${{parameters.appType}}App/$(Build.SourceBranchName)'
+        artifact: '${{parameters.appType}}App'
         portNumber: ${{parameters.portNumber}}
     
     
