@@ -61,7 +61,7 @@ jobs:
               ApplicationAuthUserName: '$(iisUser)'
               ApplicationAuthUserPassword: '$(iisPassword)'
               CreateOrUpdateAppPoolForApplication: true
-              AppPoolNameForApplication: 'DevOpsAndGithubIntegration_${{replace(variables.Build.SourceBranch, ''/'', ''_'')}}'
+              AppPoolNameForApplication: 'Sandbox${{parameters.appType}}_${{ replace(variables['Build.SourceBranch'], '/', '_') }}'
               DotNetVersionForApplication: 'No Managed Code'
               PipeLineModeForApplication: 'Integrated'
               AppPoolIdentityForApplication: 'SpecificUser'
