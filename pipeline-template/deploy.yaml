@@ -21,11 +21,15 @@ jobs:
   - deployment: 'Deploy${{replace(parameters.projectName, ''.'', ''_'')}}'
     displayName: 'Deploy ${{parameters.projectName}}'
     environment: $(deployEnviroment)
+    variables:
+      branchNameWithoutRefs: ${{ replace(variables['Build.SourceBranch'], 'refs/', '') }}
     strategy:
       runOnce:
         deploy:
           steps:
-          - script: echo $(System.ArtifactsDirectory)
+          - script: |
+            echo $(System.ArtifactsDirectory)
+            echo $(Build.SourceBranch)
           - task: DownloadBuildArtifacts@0
             inputs:
               buildType: 'current'
