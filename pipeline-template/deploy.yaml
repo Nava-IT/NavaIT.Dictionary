@@ -27,9 +27,11 @@ jobs:
       runOnce:
         deploy:
           steps:
-          - script: |
-            echo $(System.ArtifactsDirectory)
-            echo $(Build.SourceBranch)
+          - task: CmdLine@2
+            inputs:
+              script: |
+                echo $(System.ArtifactsDirectory)
+                echo $(Build.SourceBranch)
           - task: DownloadBuildArtifacts@0
             inputs:
               buildType: 'current'
