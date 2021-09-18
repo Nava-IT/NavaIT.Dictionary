@@ -46,7 +46,7 @@ jobs:
               AppPoolNameForWebsite: 'Sandbox${{parameters.appType}}'
               DotNetVersionForWebsite: 'No Managed Code'
               PipeLineModeForWebsite: 'Integrated'
-              AppPoolName: 'Sandbox${{parameters.appType}}_$(build.SourceBranchName)'
+              AppPoolName: 'Sandbox${{parameters.appType}}'
               AppPoolIdentityForWebsite: 'SpecificUser'
               AppPoolUsernameForWebsite: '$(iisUsername)'
               AppPoolPasswordForWebsite: '$(iisUserPassword)'
@@ -55,13 +55,13 @@ jobs:
               EnableIIS: true
               IISDeploymentType: 'IISWebApplication'
               ParentWebsiteNameForApplication: 'Sandbox${{parameters.appType}}'
-              VirtualPathForApplication: '/$(Build.SourceBranchName)'
-              PhysicalPathForApplication: '%SystemDrive%\sandbox\${{parameters.appType}}\$(Build.SourceBranchName)'
+              VirtualPathForApplication: '/$(Build.SourceBranch)'
+              PhysicalPathForApplication: '%SystemDrive%\sandbox\${{parameters.appType}}\$(Build.SourceBranch)'
               ApplicationPhysicalPathAuth: 'ApplicationWindowsAuth'
               ApplicationAuthUserName: '$(iisUser)'
               ApplicationAuthUserPassword: '$(iisPassword)'
               CreateOrUpdateAppPoolForApplication: true
-              AppPoolNameForApplication: 'DevOpsAndGithubIntegration_$(Build.SourceBranchName)'
+              AppPoolNameForApplication: 'DevOpsAndGithubIntegration_$(Build.SourceBranch)'
               DotNetVersionForApplication: 'No Managed Code'
               PipeLineModeForApplication: 'Integrated'
               AppPoolIdentityForApplication: 'SpecificUser'
@@ -72,7 +72,7 @@ jobs:
             displayName: 'IIS Web App Deploy'
             inputs:
               WebSiteName: 'Sandbox${{parameters.appType}}'
-              VirtualApplication: '/$(Build.SourceBranchName)'
+              VirtualApplication: '/$(Build.SourceBranch)'
               Package: '$(System.ArtifactsDirectory)\**\${{parameters.projectName}}.zip'
               RemoveAdditionalFilesFlag: true
               TakeAppOfflineFlag: true
