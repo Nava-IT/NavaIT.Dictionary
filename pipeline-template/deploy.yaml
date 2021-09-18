@@ -73,7 +73,7 @@ jobs:
             inputs:
               WebSiteName: 'Sandbox${{parameters.appType}}'
               VirtualApplication: '/$(Build.SourceBranchName)'
-              Package: '$(System.DefaultWorkingDirectory)\**\*.zip'
+              Package: '$(System.DefaultWorkingDirectory)\**\${{parameters.projectName}}.zip'
               RemoveAdditionalFilesFlag: true
               TakeAppOfflineFlag: true
               XmlVariableSubstitution: true
