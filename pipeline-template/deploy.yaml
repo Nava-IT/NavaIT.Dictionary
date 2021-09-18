@@ -67,6 +67,7 @@ jobs:
               AppPoolIdentityForApplication: 'SpecificUser'
               AppPoolUsernameForApplication: '$(iisUser)'
               AppPoolPasswordForApplication: '$(iisPassword)'
+          - script: echo $(System.DefaultWorkingDirectory)
           - task: IISWebAppDeploymentOnMachineGroup@0
             displayName: 'IIS Web App Deploy'
             inputs:
