@@ -34,6 +34,8 @@ jobs:
             inputs:
               targetType: 'inline'
               script: |
+                  $branch = '$(branchNameToTileCase)' -replace 'refs/(heads/)?(.*)','$2' -replace '/',''
+                  Write-Host "##vso[task.setvariable variable=branchNameWithoutRefs]$branch"
                   $branch = (Get-Culture).TextInfo.ToTitleCase('$(branchNameToTileCase)' ) -replace 'refs/(heads/)?(.*)','$2' -replace '/',''
                   Write-Host "##vso[task.setvariable variable=branchNameToTileCase]$branch"
           - task: DownloadBuildArtifacts@0
@@ -65,8 +67,8 @@ jobs:
               EnableIIS: true
               IISDeploymentType: 'IISWebApplication'
               ParentWebsiteNameForApplication: 'Sandbox${{parameters.appType}}'
-              VirtualPathForApplication: '/$(Build.SourceBranch)'
-              PhysicalPathForApplication: '%SystemDrive%\sandbox\${{parameters.appType}}\$(Build.SourceBranch)'
+              VirtualPathForApplication: '/$(branchNameWithoutRefs)'
+              PhysicalPathForApplication: '%SystemDrive%\sandbox\${{parameters.appType}}\$(branchNameWithoutRefs)'
               ApplicationPhysicalPathAuth: 'ApplicationWindowsAuth'
               ApplicationAuthUserName: '$(iisUsername)'
               ApplicationAuthUserPassword: '$(iisUserPassword)'
@@ -82,7 +84,7 @@ jobs:
             displayName: 'IIS Web App Deploy'
             inputs:
               WebSiteName: 'Sandbox${{parameters.appType}}'
-              VirtualApplication: '/$(Build.SourceBranch)'
+              VirtualApplication: '/$(branchNameWithoutRefs)'
               Package: '$(System.ArtifactsDirectory)\**\${{parameters.projectName}}.zip'
               RemoveAdditionalFilesFlag: true
               TakeAppOfflineFlag: true
