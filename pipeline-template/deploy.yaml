@@ -34,7 +34,7 @@ jobs:
             inputs:
               targetType: 'inline'
               script: |
-                  $branch = '$(branchNameToTileCase)' -replace 'refs/(heads/)?(.*)','$2' -replace '/',''
+                  $branch = '$(branchNameToTileCase)' -replace 'refs/(heads/)?(.*)','$2'
                   Write-Host "##vso[task.setvariable variable=branchNameWithoutRefs]$branch"
                   $branch = (Get-Culture).TextInfo.ToTitleCase('$(branchNameToTileCase)' ) -replace 'refs/(heads/)?(.*)','$2' -replace '/',''
                   Write-Host "##vso[task.setvariable variable=branchNameToTileCase]$branch"
