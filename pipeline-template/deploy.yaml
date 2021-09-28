@@ -51,7 +51,7 @@ jobs:
               WebsitePhysicalPath: '%SystemDrive%\sandbox\${{parameters.appType}}'
               WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
               AddBinding: true
-              Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"${{parameters.portNumber}}","hostname":"","sslThumbprint":"","sniFlag":false}]}'
+              Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"${{parameters.portNumber}}","hostname":"test.apll.ir","sslThumbprint":"","sniFlag":false}]}'
               CreateOrUpdateAppPoolForWebsite: true
               AppPoolNameForWebsite: 'Sandbox${{parameters.appType}}'
               DotNetVersionForWebsite: 'No Managed Code'

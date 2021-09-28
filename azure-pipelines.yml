@@ -19,5 +19,5 @@ stages:
     parameters:
       appType: "Web"
       projectName: "NavaIT.Dictionary.Web"
-      portNumber: "8000"
+      portNumber: "80"
 
