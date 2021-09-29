@@ -30,6 +30,12 @@ jobs:
       runOnce:
         deploy:
           steps:
+          - task: InstallNetCoreRuntimeAndHosting@1
+            inputs:
+              version: '5.0'
+              useProxy: false
+              norestart: true
+              iisReset: true
           - task: PowerShell@2
             inputs:
               targetType: 'inline'
