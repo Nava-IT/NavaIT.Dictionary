@@ -23,7 +23,9 @@ jobs:
     environment: $(deployEnviroment)
     variables:
       - name: branchNameWithoutRefs 
-        value: ${{ replace(variables['Build.SourceBranch'], 'refs/', '') }}
+        value: ${{ replace(replace(variables['Build.SourceBranch'], 'refs/', ''), 'head/', '') }}
+      - name: branchNameToPhysicalPath 
+        value: ${{ replace(variables['branchNameWithoutRefs'], 'refs/', '') }}
       - name: branchNameToTileCase
         value: ${{ variables['Build.SourceBranch'] }}
     strategy:
@@ -40,10 +42,12 @@ jobs:
             inputs:
               targetType: 'inline'
               script: |
-                  $branch = '$(branchNameToTileCase)' -replace 'refs/(heads/)?(.*)','$2'
-                  Write-Host "##vso[task.setvariable variable=branchNameWithoutRefs]$branch"
                   $branch = (Get-Culture).TextInfo.ToTitleCase('$(branchNameToTileCase)' ) -replace 'refs/(heads/)?(.*)','$2' -replace '/',''
                   Write-Host "##vso[task.setvariable variable=branchNameToTileCase]$branch"
+          - script: |
+            echo branchNameWithoutRefs:$(branchNameWithoutRefs)
+            echo branchNameToPhysicalPath:$(branchNameToPhysicalPath)
+            echo branchNameToTileCase:$(branchNameToTileCase)
           - task: DownloadBuildArtifacts@0
             inputs:
               buildType: 'current'
@@ -74,7 +78,7 @@ jobs:
               IISDeploymentType: 'IISWebApplication'
               ParentWebsiteNameForApplication: 'Sandbox${{parameters.appType}}'
               VirtualPathForApplication: '/$(branchNameWithoutRefs)'
-              PhysicalPathForApplication: '%SystemDrive%\sandbox\${{parameters.appType}}\$(branchNameWithoutRefs)'
+              PhysicalPathForApplication: '%SystemDrive%\sandbox\${{parameters.appType}}\$(branchNameToPhysicalPath)'
               ApplicationPhysicalPathAuth: 'ApplicationWindowsAuth'
               ApplicationAuthUserName: '$(iisUsername)'
               ApplicationAuthUserPassword: '$(iisUserPassword)'
