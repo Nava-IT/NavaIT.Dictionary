@@ -45,9 +45,9 @@ jobs:
                   $branch = (Get-Culture).TextInfo.ToTitleCase('$(branchNameToTileCase)' ) -replace 'refs/(heads/)?(.*)','$2' -replace '/',''
                   Write-Host "##vso[task.setvariable variable=branchNameToTileCase]$branch"
           - script: |
-            echo branchNameWithoutRefs:$(branchNameWithoutRefs)
-            echo branchNameToPhysicalPath:$(branchNameToPhysicalPath)
-            echo branchNameToTileCase:$(branchNameToTileCase)
+            echo branchNameWithoutRefs=>$(branchNameWithoutRefs)
+            echo branchNameToPhysicalPath=>$(branchNameToPhysicalPath)
+            echo branchNameToTileCase=>$(branchNameToTileCase)
           - task: DownloadBuildArtifacts@0
             inputs:
               buildType: 'current'
