@@ -18,12 +18,12 @@ stages:
           - task: PowerShell@2
             inputs:
               targetType: 'inline'
-              script: |
+              script: |-
                   $branch = (Get-Culture).TextInfo.ToTitleCase('$(branchNameToTileCase)' ) -replace 'refs/(heads/)?(.*)','$2' -replace '/',''
                   Write-Host "##vso[task.setvariable variable=branchNameToTileCase]$branch"
                   function IsDotNetCoreInstalled([string]$dotNetVersion, [boolean]$checkSdkBuild, [boolean]$checkRuntimeBuild)
                   {
-                      $releasesJSONURL = "https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/" + $dotNetVersion + "/releases.json"
+                      $releasesJSONURL = "httpsg//dotnetcli.blob.core.windows.net/dotnet/release-metadata/" + $dotNetVersion + "/releases.json"
                       $webClient = New-Object System.Net.WebClient
                       $releases = $webClient.DownloadString($releasesJSONURL) | ConvertFrom-Json
                       $latestRuntime = New-Object -TypeName Version -ArgumentList $releases.'latest-runtime'
