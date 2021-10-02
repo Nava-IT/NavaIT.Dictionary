@@ -10,6 +10,7 @@ variables:
   buildConfiguration: 'Release'
 
 stages:
+  - template: "pipeline-template/prepareVariables.yaml"
   - template: "pipeline-template/buildAndDeploy.yaml"
     parameters:
       appType: "Services"

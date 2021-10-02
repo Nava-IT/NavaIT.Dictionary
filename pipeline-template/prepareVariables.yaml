@@ -1,0 +1,45 @@
+parameters:
+
+stages:
+  - stage: Prepare Variables
+    displayName: Prepare Variables
+    jobs:
+      - job: 'Prepare Variable'
+        pool:
+          name: $(buildServer)
+        variables:
+          - name: branchNameWithoutRefs 
+            value: ${{ replace(replace(variables['Build.SourceBranch'], 'refs/', ''), 'head/', '') }}
+          - name: branchNameToPhysicalPath 
+            value: ${{ replace(variables['branchNameWithoutRefs'], '/', '\') }}
+          - name: branchNameToTileCase
+            value: ${{ variables['Build.SourceBranch'] }}
+          - name: isAspDotNetCoreInstalled
+            value: false
+        steps:
+          - task: PowerShell@2
+            inputs:
+              targetType: 'inline'
+              script: |
+                  $branch = (Get-Culture).TextInfo.ToTitleCase('$(branchNameToTileCase)' ) -replace 'refs/(heads/)?(.*)','$2' -replace '/',''
+                  Write-Host "##vso[task.setvariable variable=branchNameToTileCase]$branch"
+                  function IsDotNetCoreInstalled([string]$dotNetVersion, [boolean]$checkSdkBuild, [boolean]$checkRuntimeBuild)
+                  {
+                      $releasesJSONURL = "https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/" + $dotNetVersion + "/releases.json"
+                      $webClient = New-Object System.Net.WebClient
+                      $releases = $webClient.DownloadString($releasesJSONURL) | ConvertFrom-Json
+                      $latestRuntime = New-Object -TypeName Version -ArgumentList $releases.'latest-runtime'
+                      $latestSdk = New-Object -TypeName Version -ArgumentList $releases.'latest-sdk'
+                      $latestSdkAsString = "{0}.{1}{2}" -f $latestSdk.Major, $latestSdk.Minor, (&{If($checkSdkBuild) {".{0}" -f $latestSdk.Build } Else {""}})
+                      $latestRuntimeAsString = "{0}.{1}{2}" -f $latestRuntime.Major, $latestRuntime.Minor, (&{If($checkRuntimeBuild) {".{0}" -f $latestRuntime.Build } Else {""}})
+                      $installedSdks = dotnet --list-sdks
+                      $installedRuntimes = dotnet --list-runtimes
+                      return ($installedSdks -match $latestSdkAsString) -and ($installedRuntimes -match ("Microsoft.AspNetCore.App {0}" -f $latestRuntimeAsString))
+                  }
+                  Write-Host "##vso[task.setvariable variable=isAspDotNetCoreInstalled]IsDotNetCoreInstalled '5.0' $false $true
+          - script: 'echo branchNameWithoutRefs -- $(branchNameWithoutRefs )'
+          - script: 'echo branchNameToPhysicalPath -- $(branchNameToPhysicalPath )'
+          - script: 'echo branchNameToTileCase-- $(branchNameToTileCase)'
+          - script: 'echo isAspDotNetCoreInstalled-- $(isAspDotNetCoreInstalled)'
+
+
