@@ -7,7 +7,7 @@ stages:
           name: $(buildServer)
         variables:
           - name: branchNameWithoutRefs 
-            value: ${{ replace(replace(variables['Build.SourceBranch'], 'refs/', ''), 'head/', '') }}
+            value: ${{ replace(replace(variables['Build.SourceBranch'], 'refs/', ''), 'heads/', '') }}
           - name: branchNameToPhysicalPath 
             value: ${{ replace(variables['branchNameWithoutRefs'], '/', '\') }}
           - name: branchNameToTileCase
@@ -33,8 +33,8 @@ stages:
                   $latestRuntimeAsString = "{0}.{1}{2}" -f $latestRuntime.Major, $latestRuntime.Minor, (&{If($checkRuntimeBuild) {".{0}" -f $latestRuntime.Build } Else {""}})
                   $installedSdks = dotnet --list-sdks
                   $installedRuntimes = dotnet --list-runtimes
-                  Write-Host $latestRuntimeAsString
-                  Write-Host "##vso[task.setvariable variable=isAspDotNetCoreInstalled]($installedSdks -match $latestSdkAsString) -and ($installedRuntimes -match (\"Microsoft.AspNetCore.App {0}\" -f $latestRuntimeAsString))"
+                  $isAspDotNetCoreInstalled=($installedSdks -match $latestSdkAsString) -and ($installedRuntimes -match ("Microsoft.AspNetCore.App {0}" -f $latestRuntimeAsString))
+                  Write-Host "##vso[task.setvariable variable=isAspDotNetCoreInstalled]$isAspDotNetCoreInstalled"
 
           - script: 'echo branchNameWithoutRefs -- $(branchNameWithoutRefs)'
           - script: 'echo branchNameToPhysicalPath -- $(branchNameToPhysicalPath)'
