@@ -12,6 +12,8 @@ stages:
             value: ${{ replace(variables['branchNameWithoutRefs'], '/', '\') }}
           - name: branchNameToTileCase
             value: ${{ variables['Build.SourceBranch'] }}
+          - name: isMainBranch
+            value: $(Build.SourceBranch) == 'refs/heads/main'
           - name: isAspDotNetCoreInstalled
             value: false
         steps:
@@ -36,10 +38,11 @@ stages:
                   $isAspDotNetCoreInstalled=($installedSdks -match $latestSdkAsString) -and ($installedRuntimes -match ("Microsoft.AspNetCore.App {0}" -f $latestRuntimeAsString))
                   Write-Host "##vso[task.setvariable variable=isAspDotNetCoreInstalled]$isAspDotNetCoreInstalled"
 
-          - script: |
-            echo branchNameWithoutRefs -- $(branchNameWithoutRefs)
-            echo branchNameToPhysicalPath -- $(branchNameToPhysicalPath)
-            echo branchNameToTileCase-- $(branchNameToTileCase)
-            echo isAspDotNetCoreInstalled-- $(isAspDotNetCoreInstalled)
+          - script: 'echo branchNameWithoutRefs -- $(branchNameWithoutRefs)'
+          - script: 'echo branchNameToPhysicalPath -- $(branchNameToPhysicalPath)'
+          - script: 'echo branchNameToTileCase-- $(branchNameToTileCase)'
+          - script: 'echo isAspDotNetCoreInstalled-- $(isAspDotNetCoreInstalled)'
+          - script: 'echo isMainBranch-- $(isMainBranch)'
+          - script: 'echo Build.SourceBranch-- $(Build.SourceBranch)'
 
 
