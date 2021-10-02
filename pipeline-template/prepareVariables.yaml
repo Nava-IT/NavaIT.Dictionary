@@ -22,7 +22,7 @@ stages:
                   $branch = (Get-Culture).TextInfo.ToTitleCase('$(branchNameToTileCase)' ) -replace 'refs/(heads/)?(.*)','$2' -replace '/',''
                   Write-Host \"##vso[task.setvariable variable=branchNameToTileCase]$branch\"
                   $dotNetVersion = '5.0' 
-                  $checkSdkBuild = $true
+                  $checkSdkBuild = $false
                   $checkRuntimeBuild = $true
                   $releasesJSONURL = "https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/" + $dotNetVersion + "/releases.json"
                   $webClient = New-Object System.Net.WebClient
