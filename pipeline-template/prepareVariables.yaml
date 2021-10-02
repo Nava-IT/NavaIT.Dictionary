@@ -24,7 +24,7 @@ stages:
                   $dotNetVersion = '5.0' 
                   $checkSdkBuild = $true
                   $checkRuntimeBuild = $true
-                  $releasesJSONURL = \"https\://dotnetcli.blob.core.windows.net/dotnet/release-metadata/\" + $dotNetVersion + \"/releases.json\"
+                  $releasesJSONURL = "https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/" + $dotNetVersion + "/releases.json"
                   $webClient = New-Object System.Net.WebClient
                   $releases = $webClient.DownloadString($releasesJSONURL) | ConvertFrom-Json
                   $latestRuntime = New-Object -TypeName Version -ArgumentList $releases.'latest-runtime'
