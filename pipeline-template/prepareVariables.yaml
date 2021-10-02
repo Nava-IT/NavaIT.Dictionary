@@ -30,7 +30,7 @@ stages:
                   $latestRuntime = New-Object -TypeName Version -ArgumentList $releases.'latest-runtime'
                   $latestSdk = New-Object -TypeName Version -ArgumentList $releases.'latest-sdk'
                   $latestSdkAsString = "{0}.{1}{2}" -f $latestSdk.Major, $latestSdk.Minor, (&{If($checkSdkBuild) {".{0}" -f $latestSdk.Build } Else {""}})
-                  $latestRuntimeAsString = \"{0}.{1}{2}\" -f $latestRuntime.Major, $latestRuntime.Minor, (&{If($checkRuntimeBuild) {\".{0}\" -f $latestRuntime.Build } Else {\"\"}})
+                  $latestRuntimeAsString = "{0}.{1}{2}" -f $latestRuntime.Major, $latestRuntime.Minor, (&{If($checkRuntimeBuild) {".{0}" -f $latestRuntime.Build } Else {""}})
                   $installedSdks = dotnet --list-sdks
                   $installedRuntimes = dotnet --list-runtimes
                   Write-Host $latestRuntimeAsString
