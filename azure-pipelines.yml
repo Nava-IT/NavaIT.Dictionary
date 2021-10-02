@@ -11,14 +11,14 @@ variables:
 
 stages:
   - template: "pipeline-template/prepareVariables.yaml"
-  # - template: "pipeline-template/buildAndDeploy.yaml"
-  #   parameters:
-  #     appType: "Services"
-  #     projectName: "NavaIT.Dictionary.App"
-  #     portNumber: "7000"
-  # - template: "pipeline-template/buildAndDeploy.yaml"
-  #   parameters:
-  #     appType: "Web"
-  #     projectName: "NavaIT.Dictionary.Web"
-  #     portNumber: "80"
+  - template: "pipeline-template/buildAndDeploy.yaml"
+    parameters:
+      appType: "Services"
+      projectName: "NavaIT.Dictionary.App"
+      portNumber: "7000"
+  - template: "pipeline-template/buildAndDeploy.yaml"
+    parameters:
+      appType: "Web"
+      projectName: "NavaIT.Dictionary.Web"
+      portNumber: "80"
 

@@ -33,6 +33,7 @@ jobs:
         deploy:
           steps:
           - task: InstallNetCoreRuntimeAndHosting@1
+            condition: eq($(isAspDotNetCoreInstalled), 'False')
             inputs:
               version: '5.0'
               useProxy: false
