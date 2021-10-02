@@ -36,8 +36,8 @@ stages:
                   Write-Host $latestRuntimeAsString
                   Write-Host "##vso[task.setvariable variable=isAspDotNetCoreInstalled]($installedSdks -match $latestSdkAsString) -and ($installedRuntimes -match (\"Microsoft.AspNetCore.App {0}\" -f $latestRuntimeAsString))"
 
-          - script: 'echo branchNameWithoutRefs -- $(branchNameWithoutRefs )'
-          - script: 'echo branchNameToPhysicalPath -- $(branchNameToPhysicalPath )'
+          - script: 'echo branchNameWithoutRefs -- $(branchNameWithoutRefs)'
+          - script: 'echo branchNameToPhysicalPath -- $(branchNameToPhysicalPath)'
           - script: 'echo branchNameToTileCase-- $(branchNameToTileCase)'
           - script: 'echo isAspDotNetCoreInstalled-- $(isAspDotNetCoreInstalled)'
 
