@@ -11,7 +11,7 @@ stages:
               targetType: 'inline'
               script: |-
                   $branch = (Get-Culture).TextInfo.ToTitleCase('$(branchNameToTileCase)' ) -replace 'refs/(heads/)?(.*)','$2' -replace '/',''
-                  Write-Host \"##vso[task.setvariable variable=branchNameToTileCase]$branch\"
+                  Write-Host \"##vso[task.setvariable variable=branchNameToTileCase;isOutput=true]$branch\"
                   $dotNetVersion = '5.0' 
                   $checkSdkBuild = $false
                   $checkRuntimeBuild = $true
@@ -25,8 +25,8 @@ stages:
                   $installedSdks = dotnet --list-sdks
                   $installedRuntimes = dotnet --list-runtimes
                   $isAspDotNetCoreInstalled=($installedSdks -match $latestSdkAsString) -and ($installedRuntimes -match ("Microsoft.AspNetCore.App {0}" -f $latestRuntimeAsString))
-                  Write-Host "##vso[task.setvariable variable=isAspDotNetCoreInstalled]$isAspDotNetCoreInstalled"
+                  Write-Host "##vso[task.setvariable variable=isAspDotNetCoreInstalled;isOutput=true]$isAspDotNetCoreInstalled"
                   $isMainBreach = "${{ variables['Build.SourceBranch'] }}" -eq "refs/heads/main"
-                  Write-Host "##vso[task.setvariable variable=isMainBranch]$isMainBreach"
+                  Write-Host "##vso[task.setvariable variable=isMainBranch;isOutput=true]$isMainBreach"
           - template: print-variables.yaml
 
