@@ -7,7 +7,7 @@ trigger:
 - '*'
 
 variables:
-- template: global-variables.yaml
+- template: pipeline-template/global-variables.yaml
 
 stages:
   - template: "pipeline-template/prepare-variables.yaml"
