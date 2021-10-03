@@ -1,3 +1,15 @@
+variables:
+  - name: branchNameWithoutRefs 
+    value: ${{ replace(replace(variables['Build.SourceBranch'], 'refs/', ''), 'heads/', '') }}
+  - name: branchNameToPhysicalPath 
+    value: ${{ replace(variables['branchNameWithoutRefs'], '/', '\') }}
+  - name: branchNameToTileCase
+    value: ${{ variables['Build.SourceBranch'] }}
+  - name: isMainBranch
+    value: true
+  - name: isAspDotNetCoreInstalled
+    value: false
+
 stages:
   - stage: PrepareVariables
     displayName: Prepare Variables
@@ -5,17 +17,6 @@ stages:
       - job: 'PrepareVariable'
         pool:
           name: $(buildServer)
-        variables:
-          - name: branchNameWithoutRefs 
-            value: ${{ replace(replace(variables['Build.SourceBranch'], 'refs/', ''), 'heads/', '') }}
-          - name: branchNameToPhysicalPath 
-            value: ${{ replace(variables['branchNameWithoutRefs'], '/', '\') }}
-          - name: branchNameToTileCase
-            value: ${{ variables['Build.SourceBranch'] }}
-          - name: isMainBranch
-            value: true
-          - name: isAspDotNetCoreInstalled
-            value: false
         steps:
           - task: PowerShell@2
             inputs:
