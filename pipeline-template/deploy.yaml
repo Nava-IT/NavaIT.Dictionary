@@ -21,17 +21,18 @@ jobs:
   - deployment: 'Deploy${{replace(parameters.projectName, ''.'', ''_'')}}'
     displayName: 'Deploy ${{parameters.projectName}}'
     environment: $(deployEnviroment)
-    variables:
-      - name: branchNameWithoutRefs 
-        value: ${{ replace(replace(variables['Build.SourceBranch'], 'refs/', ''), 'head/', '') }}
-      - name: branchNameToPhysicalPath 
-        value: ${{ replace(variables['branchNameWithoutRefs'], '/', '\') }}
-      - name: branchNameToTileCase
-        value: ${{ variables['Build.SourceBranch'] }}
+    # variables:
+    #   - name: branchNameWithoutRefs 
+    #     value: ${{ replace(replace(variables['Build.SourceBranch'], 'refs/', ''), 'head/', '') }}
+    #   - name: branchNameToPhysicalPath 
+    #     value: ${{ replace(variables['branchNameWithoutRefs'], '/', '\') }}
+    #   - name: branchNameToTileCase
+    #     value: ${{ variables['Build.SourceBranch'] }}
     strategy:
       runOnce:
         deploy:
           steps:
+          - template: print-variables.yaml
           - task: InstallNetCoreRuntimeAndHosting@1
             condition: eq(variables.isAspDotNetCoreInstalled, 'False')
             inputs:

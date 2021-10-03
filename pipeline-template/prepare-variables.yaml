@@ -28,12 +28,5 @@ stages:
                   Write-Host "##vso[task.setvariable variable=isAspDotNetCoreInstalled]$isAspDotNetCoreInstalled"
                   $isMainBreach = "${{ variables['Build.SourceBranch'] }}" -eq "refs/heads/main"
                   Write-Host "##vso[task.setvariable variable=isMainBranch]$isMainBreach"
-
-          - script: 'echo branchNameWithoutRefs -- $(branchNameWithoutRefs)'
-          - script: 'echo branchNameToPhysicalPath -- $(branchNameToPhysicalPath)'
-          - script: 'echo branchNameToTileCase-- $(branchNameToTileCase)'
-          - script: 'echo isAspDotNetCoreInstalled-- $(isAspDotNetCoreInstalled)'
-          - script: 'echo isMainBranch-- $(isMainBranch)'
-          - script: 'echo Build.SourceBranch-- $(Build.SourceBranch)'
-
+          - template: print-variables.yaml
 
