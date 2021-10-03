@@ -7,16 +7,16 @@ trigger:
 - '*'
 
 variables:
-  buildConfiguration: 'Release'
+- template: global-variables.yaml
 
 stages:
-  - template: "pipeline-template/prepareVariables.yaml"
-  - template: "pipeline-template/buildAndDeploy.yaml"
+  - template: "pipeline-template/prepare-variables.yaml"
+  - template: "pipeline-template/build-and-deploy.yaml"
     parameters:
       appType: "Services"
       projectName: "NavaIT.Dictionary.App"
       portNumber: "7000"
-  - template: "pipeline-template/buildAndDeploy.yaml"
+  - template: "pipeline-template/build-and-deploy.yaml"
     parameters:
       appType: "Web"
       projectName: "NavaIT.Dictionary.Web"
