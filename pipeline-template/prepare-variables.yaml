@@ -1,0 +1,33 @@
+stages:
+  - stage: PrepareVariables
+    displayName: Prepare Variables
+    jobs:
+      - job: 'PrepareVariable'
+        pool:
+          name: $(buildServer)
+        steps:
+          - task: PowerShell@2
+            inputs:
+              targetType: 'inline'
+              script: |-
+                  $branch = (Get-Culture).TextInfo.ToTitleCase('$(branchNameToTileCase)' ) -replace 'refs/(heads/)?(.*)','$2' -replace '/',''
+                  Write-Host \"##vso[task.setvariable variable=branchNameToTileCase;isOutput=true]$branch\"
+                  $dotNetVersion = '5.0' 
+                  $checkSdkBuild = $false
+                  $checkRuntimeBuild = $true
+                  $releasesJSONURL = "https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/" + $dotNetVersion + "/releases.json"
+                  $webClient = New-Object System.Net.WebClient
+                  $releases = $webClient.DownloadString($releasesJSONURL) | ConvertFrom-Json
+                  $latestRuntime = New-Object -TypeName Version -ArgumentList $releases.'latest-runtime'
+                  $latestSdk = New-Object -TypeName Version -ArgumentList $releases.'latest-sdk'
+                  $latestSdkAsString = "{0}.{1}{2}" -f $latestSdk.Major, $latestSdk.Minor, (&{If($checkSdkBuild) {".{0}" -f $latestSdk.Build } Else {""}})
+                  $latestRuntimeAsString = "{0}.{1}{2}" -f $latestRuntime.Major, $latestRuntime.Minor, (&{If($checkRuntimeBuild) {".{0}" -f $latestRuntime.Build } Else {""}})
+                  $installedSdks = dotnet --list-sdks
+                  $installedRuntimes = dotnet --list-runtimes
+                  $isAspDotNetCoreInstalled=($installedSdks -match $latestSdkAsString) -and ($installedRuntimes -match ("Microsoft.AspNetCore.App {0}" -f $latestRuntimeAsString))
+                  Write-Host $isAspDotNetCoreInstalled
+                  echo "##vso[task.setvariable variable=isAspDotNetCoreInstalled;isOutput=true]$isAspDotNetCoreInstalled"
+                  $isMainBreach = "${{ variables['Build.SourceBranch'] }}" -eq "refs/heads/main"
+                  Write-Host "##vso[task.setvariable variable=isMainBranch;isOutput=true]$isMainBreach"
+          - template: print-variables.yaml
+

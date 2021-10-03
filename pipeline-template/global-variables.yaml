@@ -1,0 +1,13 @@
+variables:
+  - name: branchNameWithoutRefs 
+    value: ${{ replace(replace(variables['Build.SourceBranch'], 'refs/', ''), 'heads/', '') }}
+  - name: branchNameToPhysicalPath 
+    value: ${{ replace(variables['branchNameWithoutRefs'], '/', '\') }}
+  - name: branchNameToTileCase
+    value: ${{ variables['Build.SourceBranch'] }}
+  - name: isMainBranch
+    value: true
+  - name: isAspDotNetCoreInstalled
+    value: false
+  - name: buildConfiguration
+    value: 'Release'

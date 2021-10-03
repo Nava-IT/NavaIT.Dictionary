@@ -14,47 +14,89 @@ parameters:
   - name: 'appType'
     displayName: 'Application Type'
     type: string
+  - name: 'portNumber'
+    type: string
 
 jobs:
   - deployment: 'Deploy${{replace(parameters.projectName, ''.'', ''_'')}}'
     displayName: 'Deploy ${{parameters.projectName}}'
-    environment: 'NavaIT Sandbox Server'
+    environment: $(deployEnviroment)
+    # variables:
+    #   - name: branchNameWithoutRefs 
+    #     value: ${{ replace(replace(variables['Build.SourceBranch'], 'refs/', ''), 'head/', '') }}
+    #   - name: branchNameToPhysicalPath 
+    #     value: ${{ replace(variables['branchNameWithoutRefs'], '/', '\') }}
+    #   - name: branchNameToTileCase
+    #     value: ${{ variables['Build.SourceBranch'] }}
     strategy:
       runOnce:
         deploy:
           steps:
+          - template: print-variables.yaml
+          - task: InstallNetCoreRuntimeAndHosting@1
+            condition: eq(variables.isAspDotNetCoreInstalled, 'False')
+            inputs:
+              version: '5.0'
+              useProxy: false
+              norestart: true
+              iisReset: true
+          - task: PowerShell@2
+            inputs:
+              targetType: 'inline'
+              script: |
+                  $branch = (Get-Culture).TextInfo.ToTitleCase('$(branchNameToTileCase)' ) -replace 'refs/(heads/)?(.*)','$2' -replace '/',''
+                  Write-Host "##vso[task.setvariable variable=branchNameToTileCase]$branch"
+          - script: 'echo branchNameWithoutRefs--$(branchNameWithoutRefs)'
+          - script: 'echo branchNameToPhysicalPath--$(branchNameToPhysicalPath)'
+          - script: 'echo branchNameToTileCase--$(branchNameToTileCase)'
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              artifactName: ${{parameters.artifact}}
+              downloadPath: '$(System.ArtifactsDirectory)'
           - task: IISWebAppManagementOnMachineGroup@0
             displayName: 'IIS Web App Manage'
             inputs:
               EnableIIS: true
+              IISDeploymentType: 'IISWebsite'
+              ActionIISWebsite: 'CreateOrUpdateWebsite'
               WebsiteName: 'Sandbox${{parameters.appType}}'
               WebsitePhysicalPath: '%SystemDrive%\sandbox\${{parameters.appType}}'
-              AddBinding: True
-              Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"7000","hostname":"","sslThumbprint":"","sniFlag":false}]}'
+              WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
+              AddBinding: true
+              Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"${{parameters.portNumber}}","hostname":"test.apll.ir","sslThumbprint":"","sniFlag":false}]}'
               CreateOrUpdateAppPoolForWebsite: true
-              AppPoolName: 'Sandbox${{parameters.appType}}'
               AppPoolNameForWebsite: 'Sandbox${{parameters.appType}}'
               DotNetVersionForWebsite: 'No Managed Code'
-              AppPoolIdentityForWebsite: SpecificUser
-              AppPoolUsernameForWebsite: $(iisUsername)
-              AppPoolPasswordForWebsite: $(iisUserPassword)
-              ParentWebsiteNameForVD: 'Sandbox${{parameters.appType}}'
-              VirtualPathForVD: /
+              PipeLineModeForWebsite: 'Integrated'
+              AppPoolName: 'Sandbox${{parameters.appType}}'
+              AppPoolIdentityForWebsite: 'SpecificUser'
+              AppPoolUsernameForWebsite: '$(iisUsername)'
+              AppPoolPasswordForWebsite: '$(iisUserPassword)'
+          - task: IISWebAppManagementOnMachineGroup@0
+            inputs:
+              EnableIIS: true
+              IISDeploymentType: 'IISWebApplication'
               ParentWebsiteNameForApplication: 'Sandbox${{parameters.appType}}'
-              VirtualPathForApplication: /
-              PhysicalPathForApplication: '%SystemDrive%\apll\${{parameters.appType}}'
-              ApplicationPhysicalPathAuth: ApplicationWindowsAuth
-              ApplicationAuthUserName: $(iisUsername)
-              ApplicationAuthUserPassword: $(iisUserPassword)
+              VirtualPathForApplication: '/$(branchNameWithoutRefs)'
+              PhysicalPathForApplication: '%SystemDrive%\sandbox\${{parameters.appType}}\$(branchNameToPhysicalPath)'
+              ApplicationPhysicalPathAuth: 'ApplicationWindowsAuth'
+              ApplicationAuthUserName: '$(iisUsername)'
+              ApplicationAuthUserPassword: '$(iisUserPassword)'
               CreateOrUpdateAppPoolForApplication: true
-              AppPoolNameForApplication: 'Apll${{parameters.appType}}'
+              AppPoolNameForApplication: 'Sandbox${{parameters.appType}}_$(branchNameToTileCase)'
               DotNetVersionForApplication: 'No Managed Code'
+              PipeLineModeForApplication: 'Integrated'
+              AppPoolIdentityForApplication: 'SpecificUser'
+              AppPoolUsernameForApplication: '$(iisUsername)'
+              AppPoolPasswordForApplication: '$(iisUserPassword)'
+          - script: 'echo $(System.ArtifactsDirectory)\**\${{parameters.projectName}}.zip'
           - task: IISWebAppDeploymentOnMachineGroup@0
             displayName: 'IIS Web App Deploy'
             inputs:
               WebSiteName: 'Sandbox${{parameters.appType}}'
-              VirtualApplication: /
+              VirtualApplication: '/$(branchNameWithoutRefs)'
+              Package: '$(System.ArtifactsDirectory)\**\${{parameters.projectName}}.zip'
               RemoveAdditionalFilesFlag: true
-              TakeAppOfflineFlag: True
-              XmlVariableSubstitution: True
-              JSONFiles: '**/appsettings.json'
+              TakeAppOfflineFlag: true
+              XmlVariableSubstitution: true
