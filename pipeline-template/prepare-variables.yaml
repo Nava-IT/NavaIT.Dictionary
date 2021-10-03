@@ -26,7 +26,7 @@ stages:
                   $installedRuntimes = dotnet --list-runtimes
                   $isAspDotNetCoreInstalled=($installedSdks -match $latestSdkAsString) -and ($installedRuntimes -match ("Microsoft.AspNetCore.App {0}" -f $latestRuntimeAsString))
                   Write-Host $isAspDotNetCoreInstalled
-                  Write-Host "##vso[task.setvariable variable=isAspDotNetCoreInstalled;isOutput=true]$isAspDotNetCoreInstalled"
+                  echo "##vso[task.setvariable variable=isAspDotNetCoreInstalled;isOutput=true]$isAspDotNetCoreInstalled"
                   $isMainBreach = "${{ variables['Build.SourceBranch'] }}" -eq "refs/heads/main"
                   Write-Host "##vso[task.setvariable variable=isMainBranch;isOutput=true]$isMainBreach"
           - template: print-variables.yaml
