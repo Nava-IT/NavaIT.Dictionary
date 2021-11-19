@@ -7,7 +7,7 @@ trigger:
 - '*'
 
 pool:
-  name: 'Windows Agent Poll'
+  name: 'Default'
 
 variables:
   buildConfiguration: 'Release'
