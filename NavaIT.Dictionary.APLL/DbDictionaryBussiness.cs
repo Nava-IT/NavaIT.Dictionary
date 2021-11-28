@@ -105,15 +105,21 @@ from worksheet where ReferenceWorksheet in (select id from @wsIds)";
         {
             string query = @"select top 10 Title, Definition, Scope from(
 select distinct 1 type, Entry1worksheetIdName Title, Definition Definition, ScopeIdName Scope from dictionary.worksheet 
-where Entry1worksheetIdNameNomalised COLLATE Latin1_general_CI_AI like @q+'%' COLLATE Latin1_general_CI_AI
+where Entry1worksheetIdNameNomalised COLLATE Latin1_general_CI_AI = @q COLLATE Latin1_general_CI_AI
 union all
 select distinct 1 type, Entry2worksheetIdName Title, Definition Definition, ScopeIdName Scope from dictionary.worksheet 
-where Entry2worksheetIdNameNomalised COLLATE Latin1_general_CI_AI like @q+'%' COLLATE Latin1_general_CI_AI
+where Entry2worksheetIdNameNomalised COLLATE Latin1_general_CI_AI = @q COLLATE Latin1_general_CI_AI
 union all
 select distinct 2 type, Entry1worksheetIdName Title, Definition Definition, ScopeIdName Scope from dictionary.worksheet 
+where Entry1worksheetIdNameNomalised COLLATE Latin1_general_CI_AI like @q+'%' COLLATE Latin1_general_CI_AI
+union all
+select distinct 2 type, Entry2worksheetIdName Title, Definition Definition, ScopeIdName Scope from dictionary.worksheet 
+where Entry2worksheetIdNameNomalised COLLATE Latin1_general_CI_AI like @q+'%' COLLATE Latin1_general_CI_AI
+union all
+select distinct 3 type, Entry1worksheetIdName Title, Definition Definition, ScopeIdName Scope from dictionary.worksheet 
 where Entry1worksheetIdNameNomalised COLLATE Latin1_general_CI_AI like '%'+@q+'%' COLLATE Latin1_general_CI_AI
 union all
-select distinct 2, Entry2worksheetIdName Title, Definition Definition, ScopeIdName Scope from dictionary.worksheet 
+select distinct 3, Entry2worksheetIdName Title, Definition Definition, ScopeIdName Scope from dictionary.worksheet 
 where Entry2worksheetIdName COLLATE Latin1_general_CI_AI like '%'+@q+'%' COLLATE Latin1_general_CI_AI
 ) a order by type, title";
             using (var con = new SqlConnection(ApplictionSetting.ApllConnectionString))
