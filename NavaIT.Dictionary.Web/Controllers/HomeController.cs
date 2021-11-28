@@ -31,7 +31,7 @@ namespace NavaIT.Dictionary.Web.Controllers
 
         public IActionResult Index()
         {
-            var model = _serviceUtil.Get<string[]>($"{_ServiceConfiguration.Apll.BaseUrl}/dictionary/Scopes");
+            var model = GetScopes();
             return View(model);
         }
 
@@ -44,7 +44,7 @@ namespace NavaIT.Dictionary.Web.Controllers
                 _logger.LogInformation($"/dictionary/{term} started.");
                 var model = _serviceUtil.Get<PageResult[]>(
                     $"{ _ServiceConfiguration.Apll.BaseUrl}/dictionary/Extract?term={term}");
-                _logger.LogInformation($"/dictionary/{term} end (model.count={model?.Count()}.");
+                _logger.LogInformation($"/dictionary/{term} end (model.count={model?.Count()}).");
                 var view = View("Dictionary", model);
                 return view;
             }
@@ -61,6 +61,19 @@ namespace NavaIT.Dictionary.Web.Controllers
             var model = _serviceUtil.Get<string[]>($"{ _ServiceConfiguration.Apll.BaseUrl}/dictionary/Scope?name={scope}");
             return View(model);
         }
+
+        [HttpGet("/scopes")]
+        public IActionResult Scopes()
+        {
+            string[] model = GetScopes();
+            return View(model);
+        }
+
+        private string[] GetScopes()
+        {
+            return _serviceUtil.Get<string[]>($"{_ServiceConfiguration.Apll.BaseUrl}/dictionary/Scopes");
+        }
+
 
         [HttpGet("/search")]
         public IActionResult Search(string term)

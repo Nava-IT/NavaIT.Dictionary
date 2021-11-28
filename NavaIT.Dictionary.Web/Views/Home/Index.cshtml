@@ -1,5 +1,7 @@
-﻿@{
+﻿@model string[]
+@{
     ViewData["Title"] = "خانه";
 }
 
-<partial name="~/Views/Components/Search.cshtml" model='@("IndexPage")'/>
+<partial name="~/Views/Components/Search.cshtml" model='@("IndexPage")' />
+<partial name="/Views/Components/Scopes.cshtml" model="Model" />
