@@ -85,3 +85,7 @@ body {
     content: "\2022";
     font-size: large;
 }
+
+.searchText{
+    font-weight: 700;
+}
