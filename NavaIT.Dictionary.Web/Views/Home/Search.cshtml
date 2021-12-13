@@ -2,7 +2,7 @@
 @if (Model != null)
 {
     <div class='row'>
-        <div class='col-12'>{this.name}</div>
+        <div class='col-12'>@ViewBag.Name</div>
         @foreach (var s in Model)
         {
             <div class='listitem col-lg-4 col-md-4 col-sm-5'>
@@ -16,7 +16,7 @@ else
 {
     <div class="row">
         <div class="col-12">
-            در این حوزه واژه‌ای پیدا نشد.
+            برای عبارت جستجو شده صفحه‌ای پیدا نشد.
         </div>
     </div>
 }
