@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace NavaIT.Dictionary.Web.Controllers
@@ -31,7 +32,7 @@ namespace NavaIT.Dictionary.Web.Controllers
 
         public IActionResult Index()
         {
-            var model = _serviceUtil.Get<string[]>($"{_ServiceConfiguration.Apll.BaseUrl}/dictionary/Scopes");
+            var model = GetScopes();
             return View(model);
         }
 
@@ -44,7 +45,7 @@ namespace NavaIT.Dictionary.Web.Controllers
                 _logger.LogInformation($"/dictionary/{term} started.");
                 var model = _serviceUtil.Get<PageResult[]>(
                     $"{ _ServiceConfiguration.Apll.BaseUrl}/dictionary/Extract?term={term}");
-                _logger.LogInformation($"/dictionary/{term} end (model.count={model?.Count()}.");
+                _logger.LogInformation($"/dictionary/{term} end (model.count={model?.Count()}).");
                 var view = View("Dictionary", model);
                 return view;
             }
@@ -62,10 +63,46 @@ namespace NavaIT.Dictionary.Web.Controllers
             return View(model);
         }
 
+        [HttpGet("/scopes")]
+        public IActionResult Scopes()
+        {
+            string[] model = GetScopes();
+            return View(model);
+        }
+
+        private string[] GetScopes()
+        {
+            return _serviceUtil.Get<string[]>($"{_ServiceConfiguration.Apll.BaseUrl}/dictionary/Scopes");
+        }
+
+
         [HttpGet("/search")]
         public IActionResult Search(string term)
         {
-            return Redirect($"/dictionary/{term}");
+            var searchResult = _serviceUtil.Get<SearchResult[]>($"{_ServiceConfiguration.Apll.BaseUrl}/dictionary/search?q={term}");
+            var convertedSearchResult = searchResult?.Select(sr=>new SearchResultUI()
+            {
+                Title = sr.Title,
+                ShortDescription = sr.ShortDescription,
+                UITitle = ToUITile(sr.Title, term)
+            }).ToArray();
+            ViewBag.Name = term;
+            if (convertedSearchResult?.Length == 1 && Compare(convertedSearchResult[0].Title, term))
+                return Redirect($"/dictionary/{term}");
+            else
+                return View(convertedSearchResult);
+        }
+
+        private const string accentsPattern = "[ًٌٍَُِّْ]?";
+        private string ToUITile(string title, string term)
+        {
+            var pattern = $"({string.Join(accentsPattern, term.ToArray())})";
+            return Regex.Replace(title, pattern, "<span class='searchText'>$1</span>");
+        }
+
+        private bool Compare(string title, string term)
+        {
+            return title == term;
         }
 
         /*        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
