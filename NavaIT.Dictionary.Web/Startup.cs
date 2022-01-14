@@ -29,7 +29,7 @@ namespace NavaIT.Dictionary.Web
             services.Configure<ExternalServicesConfiguration>(Configuration.GetSection("Services"));
 
             services.AddTransient<IServiceUtil, ServiceUtil>();
-            services.AddMvc();
+            services.AddMvc().AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

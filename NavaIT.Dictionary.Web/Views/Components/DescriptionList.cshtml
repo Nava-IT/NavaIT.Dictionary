@@ -14,8 +14,8 @@
             </div>
         </div>
         <div class='row'>
-            <p>
-                [@Html.Raw(String.Join(", ", @description.Scopes.Select(sc => $"<a href='/scope/'{sc}>{sc}</a>")))]@description.Description
+            <p class='description-paragraph'>
+                [@Html.Raw(String.Join(", ", @description.Scopes.Select(sc => $"<a href='/scope/'{sc}>{sc}</a>")))]@Html.Raw(description.Description)
             </p>
         </div>
     </div>
@@ -29,7 +29,9 @@
                 <div class='float-start' dir='ltr'>
                     &rarr;<a href='/dictionary/' @description.ReferenceWorksheetName>@description.ReferenceWorksheetName</a>
                     <div class='float-start' dir='ltr'>@Model.Term@(foreignEquivalentsHasElement ? ", " : "")</div>
-                    [@Html.Raw(String.Join(", ", @description.Scopes.Select(sc => $"<a href='/scope/' + {sc}>{sc}</a>")))]@description.Description
+                    <p class='description-paragraph'>
+                        [@Html.Raw(String.Join(", ", @description.Scopes.Select(sc => $"<a href='/scope/' + {sc}>{sc}</a>")))]@Html.Raw(description.Description)
+                    </p>
                 </div>
             </div>
         </div>

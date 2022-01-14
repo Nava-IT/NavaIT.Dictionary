@@ -55,49 +55,6 @@ from worksheet where ReferenceWorksheet in (select id from @wsIds)";
                     };
                 }).OrderBy(e => e.Term).ToArray();
                 return result;
-                var k = r.GroupBy(a => string.Join(",",
-                    new String[] { a.TermName, a.Equivalent, a.ReferenceWorksheetName, a.Definition }.Union(
-                        a.ReferredTo.OrderBy(s => s)).ToArray()).ToUpper());
-                /*                DescriptionPart[] pd = r.Select(a =>
-                                {
-                                    List<string> strs = new List<string>();
-                                    strs.Add(a.TermName);
-                                    strs.AddRange(a.ReferredTo);
-
-                                    return new DescriptionPart()
-                                    {
-                                        Description = a.Definition,
-                                        Scopes = a.Scope
-                                    };
-                                }).ToArray();*/
-
-                var b = k.Select(item => new PageResult()
-                {
-                    Term = item.First().TermName,
-                    Descriptions = item.Select(a => new DescriptionPart()
-                    {
-                        Description = a.Definition,
-                        ReferenceWorksheetName = a.ReferenceWorksheetName,
-                        ForeignEquivalents = a.ReferredTo.OrderBy(s => s).ToArray(),
-                        Translation = a.Equivalent,
-                        //Scopes = item.
-                    }).ToArray()
-                });
-                return new PageResult[]{
-                    new PageResult()
-                    {
-                        Term = k.First().First().TermName,
-                        Descriptions = k.Select(a => new DescriptionPart()
-                        {
-                            Description = a.First().Definition,
-                            ReferenceWorksheetName = a.First().ReferenceWorksheetName,
-                            ForeignEquivalents = a.First().ReferredTo.OrderBy(s => s).ToArray(),
-                            Translation = a.First().Equivalent,
-                            Scopes = a.Select(s => s.Scope).OrderBy(s => s).ToArray()
-
-                        }).ToArray()
-                    }
-                };
             }
         }
 

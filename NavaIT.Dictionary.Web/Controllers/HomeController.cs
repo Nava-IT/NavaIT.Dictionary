@@ -39,13 +39,22 @@ namespace NavaIT.Dictionary.Web.Controllers
         [HttpGet("/dictionary/{term?}")]
         public IActionResult Dictionary(string term)
         {
-            _logger.LogError($"{ _ServiceConfiguration.Apll.BaseUrl}/dictionary/Extract?term={term}");
+            _logger.LogInformation($"{ _ServiceConfiguration.Apll.BaseUrl}/dictionary/Extract?term={term}");
             try
             {
                 _logger.LogInformation($"/dictionary/{term} started.");
                 var model = _serviceUtil.Get<PageResult[]>(
                     $"{ _ServiceConfiguration.Apll.BaseUrl}/dictionary/Extract?term={term}");
                 _logger.LogInformation($"/dictionary/{term} end (model.count={model?.Count()}).");
+                foreach (var page in model)
+                {
+                    foreach (var desc in page.Descriptions)
+                    {
+                        string[] parts = desc.Description?.Split(new string[] { "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries);
+                        if (parts != null)
+                            desc.Description = string.Join(" </p><p class='description-paragraph'>", parts);
+                    }
+                }
                 var view = View("Dictionary", model);
                 return view;
             }
@@ -80,7 +89,7 @@ namespace NavaIT.Dictionary.Web.Controllers
         public IActionResult Search(string term)
         {
             var searchResult = _serviceUtil.Get<SearchResult[]>($"{_ServiceConfiguration.Apll.BaseUrl}/dictionary/search?q={term}");
-            var convertedSearchResult = searchResult?.Select(sr=>new SearchResultUI()
+            var convertedSearchResult = searchResult?.Select(sr => new SearchResultUI()
             {
                 Title = sr.Title,
                 ShortDescription = sr.ShortDescription,
