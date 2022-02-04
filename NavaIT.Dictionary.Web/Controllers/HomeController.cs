@@ -69,6 +69,7 @@ namespace NavaIT.Dictionary.Web.Controllers
         public IActionResult Scope(string scope)
         {
             var model = _serviceUtil.Get<string[]>($"{ _ServiceConfiguration.Apll.BaseUrl}/dictionary/Scope?name={scope}");
+            ViewBag.Name = scope;
             return View(model);
         }
 
