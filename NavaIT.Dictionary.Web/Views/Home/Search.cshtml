@@ -7,7 +7,7 @@
         {
             <div class='listitem col-lg-4 col-md-4 col-sm-5'>
 
-                <a href=@($"/dictionary/{Uri.EscapeDataString(s.Title)}")>@Html.Raw(s.UITitle)</a>
+                <a href=@($"/dictionary/{Uri.EscapeDataString(s.Title)}")>@Html.Raw(s.UITitle)</a> <span> @(s.ShortDescription)</span>
             </div>
         }
     </div>

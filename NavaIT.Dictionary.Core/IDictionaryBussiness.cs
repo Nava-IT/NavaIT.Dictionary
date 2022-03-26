@@ -1,10 +1,12 @@
-﻿namespace NavaIT.Dictionary.Core
+﻿using NavaIT.Dictionary.Core.Models;
+
+namespace NavaIT.Dictionary.Core
 {
     public interface IDictionaryBussiness
     {
         SearchResult[] Search(string q);
         PageResult[] Extract(string term);
-        string[] Scopes();
+        ScopeModel[] Scopes();
         string[] Scope(string name);
     }
 }

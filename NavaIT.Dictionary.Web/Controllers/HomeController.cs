@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NavaIT.Dictionary.Core;
+using NavaIT.Dictionary.Core.Models;
 using NavaIT.Dictionary.Web.Configuration;
 using NavaIT.Dictionary.Web.Models;
 using NavaIT.Dictionary.Web.Utils;
@@ -76,13 +77,13 @@ namespace NavaIT.Dictionary.Web.Controllers
         [HttpGet("/scopes")]
         public IActionResult Scopes()
         {
-            string[] model = GetScopes();
+            ScopeModel[] model = GetScopes();
             return View(model);
         }
 
-        private string[] GetScopes()
+        private ScopeModel[] GetScopes()
         {
-            return _serviceUtil.Get<string[]>($"{_ServiceConfiguration.Apll.BaseUrl}/dictionary/Scopes");
+            return _serviceUtil.Get<ScopeModel[]>($"{_ServiceConfiguration.Apll.BaseUrl}/dictionary/Scopes");
         }
 
 

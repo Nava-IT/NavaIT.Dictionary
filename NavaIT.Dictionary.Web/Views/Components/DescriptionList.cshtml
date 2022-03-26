@@ -5,8 +5,8 @@
     <div>
         <div class='row'>
             <div class='d-block'>
-                <div class='float-end mr-auto'>@description.Translation</div>
-                <div class='float-start me-1' dir='ltr'>@Model.Term@(foreignEquivalentsHasElement ? ", " : "")</div>
+                <div class='float-end mr-auto fw-bold'>@description.Translation</div>
+                <div class='float-start me-1 fw-bold' dir='ltr'>@Model.Term@(foreignEquivalentsHasElement ? ", " : "")</div>
                 @for (int i = 0; foreignEquivalentsHasElement && i < description.ForeignEquivalents.Length; i++)
                 {
                     <div class='float-start me-1' dir='ltr'>@description.ForeignEquivalents[i]@(i+1== description.ForeignEquivalents.Length ? "" : ", ")</div>
@@ -15,7 +15,7 @@
         </div>
         <div class='row'>
             <p class='description-paragraph'>
-                [@Html.Raw(String.Join(",", @description.Scopes.Select(sc => $"<a href='/scope/'{sc}>{sc}</a>")))] @Html.Raw(description.Description)
+                [@Html.Raw(String.Join(",", @description.Scopes.Select(sc => $"<a href='/scope/{sc}'>{sc}</a>")))] @Html.Raw(description.Description)
             </p>
         </div>
     </div>
@@ -27,10 +27,10 @@
         <div class='row'>
             <div class='d-block'>
                 <div class='float-start' dir='ltr'>
-                    &rarr;<a href='/dictionary/' @description.ReferenceWorksheetName>@description.ReferenceWorksheetName</a>
+                    &rarr;<a href='/dictionary/@description.ReferenceWorksheetName'>@description.ReferenceWorksheetName</a>
                     <div class='float-start me-1' dir='ltr'>@Model.Term@(foreignEquivalentsHasElement ? ", " : "")</div>
                     <p class='description-paragraph'>
-                        [@Html.Raw(String.Join(", ", @description.Scopes.Select(sc => $"<a href='/scope/' + {sc}>{sc}</a>")))] @Html.Raw(description.Description)
+                        [@Html.Raw(String.Join(", ", @description.Scopes.Select(sc => $"<a href='/scope/{sc}'>{sc}</a>")))] @Html.Raw(description.Description)
                     </p>
                 </div>
             </div>
