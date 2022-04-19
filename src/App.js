@@ -1,7 +1,7 @@
 import './App.css';
 import DashboardLayout from './components/Layout/DashboardLayout';
 import { Routes, Route } from 'react-router-dom';
-import Terminology from './components/Terminology/Terminology';
+import Worksheet from './components/Worksheet/Worksheet';
 import RTL from './RTL';
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
       <div className="App">
         <DashboardLayout>
           <Routes>
-            <Route path="/" element={<Terminology />} />
+            <Route path="/" element={<Worksheet />} />
             {/* <Route path="/test" element={<Patients />} /> */}
           </Routes>
         </DashboardLayout>

@@ -1,7 +1,6 @@
 import {
     Card,
     CardContent,
-    Checkbox,
     Divider,
     FormControlLabel,
     Grid,
@@ -9,13 +8,14 @@ import {
     Typography,
     Autocomplete,
     Box,
-    Table,
-    TableRow,
-    TableCell,
-    TableBody
+    Button,
+    Radio,
+    RadioGroup
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import * as React from 'react';
+import { v4 as uuid } from 'uuid';
+import { saveWorksheet } from '../../utils/serviceUtils';
 
 const theme = createTheme({
     direction: 'ltr', // Both here and <body dir="rtl">
@@ -36,9 +36,10 @@ const top100Films = [
     { title: 'The Good, the Bad and the Ugly', year: 1966 }
 ]
 
-const Terminology = (peops) => {
+const Worksheet = (peops) => {
     const [values, setValues] = React.useState({
         specializedGroupEquvalent: '',
+        selectionType:'',
         term: '',
         abbreviation: '',
         tradeName: '',
@@ -70,9 +71,17 @@ const Terminology = (peops) => {
             [event.target.name]: event.target.value
         })
     }
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const worksheet = {
+            id: uuid(),
+            worksheetData: values
+        }
+        saveWorksheet(worksheet);
+    }
     return (
         <form
-            autoComplete='off'
+            onSubmit={handleSubmit}
         >
             <Card>
                 <CardContent>
@@ -104,7 +113,7 @@ const Terminology = (peops) => {
                                         fullWidth
                                         name="specializedGroupEquvalent"
                                         onChange={handleChange}
-                                        required
+
                                         value={values.specializedGroupEquvalent}
                                         variant="outlined" />
                                 </Grid>
@@ -119,30 +128,35 @@ const Terminology = (peops) => {
                                     >
                                         Selection Type:
                                     </Typography>
-                                    <FormControlLabel
-                                        control={(
-                                            <Checkbox
-                                                color='primary'
-                                            />
-                                        )}
-                                        label="selected"
-                                    />
-                                    <FormControlLabel
-                                        control={(
-                                            <Checkbox
-                                                color='primary'
-                                            />
-                                        )}
-                                        label="Newly selected"
-                                    />
-                                    <FormControlLabel
-                                        control={(
-                                            <Checkbox
-                                                color='primary'
-                                            />
-                                        )}
-                                        label="Newly made"
-                                    />
+                                    <RadioGroup
+                                        aria-labelledby="selectionType"
+                                        row
+                                        name="selectionType"
+                                    >
+                                        <FormControlLabel
+                                            value="0"
+                                            control={<Radio
+                                                checked={values.selectionType === '0'}
+                                                onChange={handleChange}
+                                            />}
+                                            label="Selected"
+                                        />
+                                        <FormControlLabel
+                                            value="1"
+                                            control={<Radio
+                                                checked={values.selectionType === '1'}
+                                                onChange={handleChange} />}
+                                            label="Newly Selected"
+                                        />
+                                        <FormControlLabel
+                                            value="2"
+                                            control={<Radio
+                                                checked={values.selectionType === '2'}
+                                                onChange={handleChange}
+                                            />}
+                                            label="Newly Made"
+                                        />
+                                    </RadioGroup>
                                 </Grid>
 
                                 <Grid
@@ -160,7 +174,7 @@ const Terminology = (peops) => {
                                         fullWidth
                                         name='construction'
                                         onChange={handleChange}
-                                        required
+
                                         value={values.construction}
                                         variant="outlined" />
                                 </Grid>
@@ -178,7 +192,7 @@ const Terminology = (peops) => {
                                         fullWidth
                                         name='witness'
                                         onChange={handleChange}
-                                        required
+
                                         value={values.witness}
                                         variant="outlined" />
                                 </Grid>
@@ -337,7 +351,7 @@ const Terminology = (peops) => {
                                         fullWidth
                                         name="definition"
                                         onChange={handleChange}
-                                        required
+
                                         value={values.definition}
                                         variant="outlined"
                                         multiline
@@ -359,7 +373,7 @@ const Terminology = (peops) => {
                                         fullWidth
                                         name="Example"
                                         onChange={handleChange}
-                                        required
+
                                         value={values.Example}
                                         variant="outlined"
                                         multiline
@@ -418,7 +432,7 @@ const Terminology = (peops) => {
                                                 fullWidth
                                                 name="grammaticalCategory"
                                                 onChange={handleChange}
-                                                required
+
                                                 value={values.grammaticalCategory}
                                                 variant="outlined"
                                             />
@@ -440,7 +454,7 @@ const Terminology = (peops) => {
                                                 fullWidth
                                                 name="etymology"
                                                 onChange={handleChange}
-                                                required
+
                                                 value={values.etymology}
                                                 variant="outlined"
                                                 multiline
@@ -571,7 +585,7 @@ const Terminology = (peops) => {
                                         fullWidth
                                         name="description"
                                         onChange={handleChange}
-                                        required
+
                                         value={values.description}
                                         variant="outlined"
                                         multiline
@@ -691,60 +705,79 @@ const Terminology = (peops) => {
                             >
                                 <ThemeProvider theme={theme}>
                                     <div dir="ltr">
-                                        <Table>
-                                            <TableBody>
-                                                <TableRow>
-                                                    <TableCell>
-                                                        <TextField
-                                                            fullWidth
-                                                            name="pattern1"
-                                                            onChange={handleChange}
-                                                            required
-                                                            value={values.pattern1}
-                                                            variant="outlined"
-                                                            multiline
-                                                            rows={3} />
-                                                    </TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell>
-                                                        <TextField
-                                                            fullWidth
-                                                            name="pattern2"
-                                                            onChange={handleChange}
-                                                            required
-                                                            value={values.pattern2}
-                                                            variant="outlined"
-                                                            multiline
-                                                            rows={3} />
+                                        <TextField
+                                            fullWidth
+                                            name="pattern1"
+                                            onChange={handleChange}
 
-                                                    </TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell>
-                                                        <TextField
-                                                            fullWidth
-                                                            name="pattern3"
-                                                            onChange={handleChange}
-                                                            required
-                                                            value={values.pattern3}
-                                                            variant="outlined"
-                                                            multiline
-                                                            rows={3} />
+                                            value={values.pattern1}
+                                            variant="outlined"
+                                            multiline
+                                            rows={4} />
+                                    </div>
+                                </ThemeProvider>
+                            </Grid>
+                            <Grid
+                                item
+                                md={12}
+                                xs={12}
+                            >
+                                <ThemeProvider theme={theme}>
+                                    <div dir="ltr">
+                                        <TextField
+                                            fullWidth
+                                            name="pattern2"
+                                            onChange={handleChange}
 
-                                                    </TableCell>
-                                                </TableRow>
-                                            </TableBody>
-                                        </Table>
+                                            value={values.pattern2}
+                                            variant="outlined"
+                                            multiline
+                                            rows={4} />
+                                    </div>
+                                </ThemeProvider>
+                            </Grid>
+                            <Grid
+                                item
+                                md={12}
+                                xs={12}
+                            >
+                                <ThemeProvider theme={theme}>
+                                    <div dir="ltr">
+                                        <TextField
+                                            fullWidth
+                                            name="pattern3"
+                                            onChange={handleChange}
+
+                                            value={values.pattern3}
+                                            variant="outlined"
+                                            multiline
+                                            rows={4} />
                                     </div>
                                 </ThemeProvider>
                             </Grid>
                         </Grid>
                     </Box>
                 </CardContent>
+                <Divider />
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        p: 2
+                    }}
+                >
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        size="large"
+                        type="submit"
+                    >
+                        Save
+                    </Button>
+                </Box>
             </Card >
         </form >
     )
 }
 
-export default Terminology;
+export default Worksheet;
