@@ -18,6 +18,8 @@ import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import PieChartIcon from '@mui/icons-material/PieChart';
 import GroupIcon from '@mui/icons-material/Group';
+import MainLogo from '../MainLogo/MainLogo';
+import { NavLink } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -45,7 +47,16 @@ function DashboardLayout(props) {
 
     const drawer = (
         <div>
-            <Toolbar />
+            <Toolbar>
+                <NavLink to="/">
+                    <MainLogo
+                        sx={{
+                            height: 42,
+                            width: 42
+                        }}
+                    />
+                </NavLink>
+            </Toolbar>
             <Divider />
             <List>
                 {items.map((text, index) => (
@@ -102,7 +113,7 @@ function DashboardLayout(props) {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
-                        Covid-tracker
+                        {/* Covid-tracker */}
                     </Typography>
                 </Toolbar>
             </AppBar>
