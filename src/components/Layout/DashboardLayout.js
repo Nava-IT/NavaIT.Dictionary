@@ -28,7 +28,7 @@ function DashboardLayout(props) {
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const navigate = useNavigate();
     const items = [
-        { name: 'Terminology', path: '/', icon: <PieChartIcon /> },
+        { name: 'کاربرگه‌ها', path: '/', icon: <PieChartIcon /> },
         { name: 'Link Number', path: '/Linknumber', icon: <GroupIcon /> },
         { name: 'Link Number1', path: '/LinkNumber1', icon: <InboxIcon /> },
         { name: 'Link Number2', path: '/LinkNumber2', icon: <InboxIcon /> },

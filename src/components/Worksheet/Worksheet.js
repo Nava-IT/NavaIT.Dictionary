@@ -16,6 +16,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import * as React from 'react';
 import { v4 as uuid } from 'uuid';
 import { saveWorksheet } from '../../utils/serviceUtils';
+import { useParams } from "react-router-dom";
+
 
 const theme = createTheme({
     direction: 'ltr', // Both here and <body dir="rtl">
@@ -36,41 +38,52 @@ const top100Films = [
     { title: 'The Good, the Bad and the Ugly', year: 1966 }
 ]
 
-const Worksheet = (peops) => {
+const Worksheet = () => {
+    const { id } = useParams();
+    const isAddMode = !id;
+    
     const [values, setValues] = React.useState({
         specializedGroupEquvalent: '',
-        selectionType:'',
-        term: '',
-        abbreviation: '',
-        tradeName: '',
-        scientificName: '',
-        vulgarName: '',
+        scope: '',
+        selectionType: '',
+        term: [],
+        abbreviation: [],
+        tradeName: [],
+        scientificName: [],
+        vulgarName: [],
         grammaticalCategory: '',
         construction: '',
         witness: '',
         etymology: '',
-        synonyms: '',
-        derivations: '',
-        compounds: '',
-        relatedTerms: '',
+        synonyms: [],
+        derivations: [],
+        compounds: [],
+        relatedTerms: [],
         definition: '',
         example: '',
-        references: '',
-        persianLanguageEquvalent: '',
-        groupEquvalent: '',
-        commomWord: '',
+        references: [],
+        persianLanguageEquvalent: [],
+        groupEquvalent: [],
+        commonWord: [],
         description: '',
         pattern1: '',
         pattern2: '',
         pattern3: ''
 
     });
+
     const handleChange = (event) => {
         setValues({
             ...values,
             [event.target.name]: event.target.value
         })
     }
+    // const handleAutoCompleteChange = (event, newValues) => {
+    //     setValues({
+    //         ...values,
+    //         [event.target.name]: newValues
+    //     })
+    // }
     const handleSubmit = (event) => {
         event.preventDefault();
         const worksheet = {
@@ -79,6 +92,9 @@ const Worksheet = (peops) => {
         }
         saveWorksheet(worksheet);
     }
+    // const handleClose = () => {
+    //     navigate('/');
+    // }
     return (
         <form
             onSubmit={handleSubmit}
@@ -107,7 +123,7 @@ const Worksheet = (peops) => {
                                         gutterBottom
                                         variant='h6'
                                     >
-                                        The suggested equivalent of a specialized group:
+                                        معادل پيشنهادي گروه تخصصي:
                                     </Typography>
                                     <TextField
                                         fullWidth
@@ -121,13 +137,13 @@ const Worksheet = (peops) => {
                                     item
                                     md={12}
                                     xs={12}>
-                                    <Typography
+                                    {/* <Typography
                                         color="textPrimary"
                                         gutterBottom
                                         variant='h6'
                                     >
                                         Selection Type:
-                                    </Typography>
+                                    </Typography> */}
                                     <RadioGroup
                                         aria-labelledby="selectionType"
                                         row
@@ -139,14 +155,14 @@ const Worksheet = (peops) => {
                                                 checked={values.selectionType === '0'}
                                                 onChange={handleChange}
                                             />}
-                                            label="Selected"
+                                            label="برگزيده"
                                         />
                                         <FormControlLabel
                                             value="1"
                                             control={<Radio
                                                 checked={values.selectionType === '1'}
                                                 onChange={handleChange} />}
-                                            label="Newly Selected"
+                                            label="نوگزيده"
                                         />
                                         <FormControlLabel
                                             value="2"
@@ -154,7 +170,7 @@ const Worksheet = (peops) => {
                                                 checked={values.selectionType === '2'}
                                                 onChange={handleChange}
                                             />}
-                                            label="Newly Made"
+                                            label="نوساخته"
                                         />
                                     </RadioGroup>
                                 </Grid>
@@ -163,12 +179,12 @@ const Worksheet = (peops) => {
                                     item
                                     md={12}
                                     xs={12}>
-                                    <Divider sx={{ borderColor: '#2D3748' }} />
+                                    <Divider />
                                     <Typography
                                         color='textPrimary'
                                         gutterBottom
                                         variant='h6'>
-                                        Construction:
+                                        ساخت‌واژه:
                                     </Typography>
                                     <TextField
                                         fullWidth
@@ -186,7 +202,7 @@ const Worksheet = (peops) => {
                                         color='textPrimary'
                                         gutterBottom
                                         variant='h6'>
-                                        Witness:
+                                        شاهد:
                                     </Typography>
                                     <TextField
                                         fullWidth
@@ -223,6 +239,13 @@ const Worksheet = (peops) => {
                                                 options={top100Films}
                                                 getOptionLabel={(option) => option.title}
                                                 filterSelectedOptions
+                                                onChange={(event, newValue) => {
+                                                    setValues({
+                                                        ...values,
+                                                        term: newValue
+                                                    }
+                                                    );
+                                                }}
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
@@ -247,6 +270,13 @@ const Worksheet = (peops) => {
                                                 options={top100Films}
                                                 getOptionLabel={(option) => option.title}
                                                 filterSelectedOptions
+                                                onChange={(event, newValue) => {
+                                                    setValues({
+                                                        ...values,
+                                                        abbreviation: newValue
+                                                    }
+                                                    );
+                                                }}
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
@@ -270,6 +300,13 @@ const Worksheet = (peops) => {
                                                 options={top100Films}
                                                 getOptionLabel={(option) => option.title}
                                                 filterSelectedOptions
+                                                onChange={(event, newValue) => {
+                                                    setValues({
+                                                        ...values,
+                                                        tradeName: newValue
+                                                    }
+                                                    );
+                                                }}
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
@@ -293,6 +330,13 @@ const Worksheet = (peops) => {
                                                 options={top100Films}
                                                 getOptionLabel={(option) => option.title}
                                                 filterSelectedOptions
+                                                onChange={(event, newValue) => {
+                                                    setValues({
+                                                        ...values,
+                                                        scientificName: newValue
+                                                    }
+                                                    );
+                                                }}
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
@@ -316,6 +360,13 @@ const Worksheet = (peops) => {
                                                 options={top100Films}
                                                 getOptionLabel={(option) => option.title}
                                                 filterSelectedOptions
+                                                onChange={(event, newValue) => {
+                                                    setValues({
+                                                        ...values,
+                                                        vulgarName: newValue
+                                                    }
+                                                    );
+                                                }}
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
@@ -345,7 +396,7 @@ const Worksheet = (peops) => {
                                         gutterBottom
                                         variant='h6'
                                     >
-                                        Definition:
+                                        تعريف:
                                     </Typography>
                                     <TextField
                                         fullWidth
@@ -367,7 +418,7 @@ const Worksheet = (peops) => {
                                         gutterBottom
                                         variant='h6'
                                     >
-                                        Example:
+                                        مثال:
                                     </Typography>
                                     <TextField
                                         fullWidth
@@ -389,7 +440,7 @@ const Worksheet = (peops) => {
                                         gutterBottom
                                         variant='h6'
                                     >
-                                        References:
+                                        مراجع:
                                     </Typography>
                                     <Autocomplete
                                         multiple
@@ -397,6 +448,13 @@ const Worksheet = (peops) => {
                                         options={top100Films}
                                         getOptionLabel={(option) => option.title}
                                         filterSelectedOptions
+                                        onChange={(event, newValue) => {
+                                            setValues({
+                                                ...values,
+                                                references: newValue
+                                            }
+                                            );
+                                        }}
                                         renderInput={(params) => (
                                             <TextField
                                                 {...params}
@@ -477,6 +535,13 @@ const Worksheet = (peops) => {
                                                 options={top100Films}
                                                 getOptionLabel={(option) => option.title}
                                                 filterSelectedOptions
+                                                onChange={(event, newValue) => {
+                                                    setValues({
+                                                        ...values,
+                                                        synonyms: newValue
+                                                    }
+                                                    );
+                                                }}
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
@@ -505,7 +570,7 @@ const Worksheet = (peops) => {
                                         gutterBottom
                                         variant='h6'
                                     >
-                                        Persian Language Equvalent:
+                                        معادل‌هاي موجود در زبان فارسي:
                                     </Typography>
                                     <Autocomplete
                                         multiple
@@ -513,6 +578,13 @@ const Worksheet = (peops) => {
                                         options={top100Films}
                                         getOptionLabel={(option) => option.title}
                                         filterSelectedOptions
+                                        onChange={(event, newValue) => {
+                                            setValues({
+                                                ...values,
+                                                persianLanguageEquvalent: newValue
+                                            }
+                                            );
+                                        }}
                                         renderInput={(params) => (
                                             <TextField
                                                 {...params}
@@ -530,7 +602,7 @@ const Worksheet = (peops) => {
                                         gutterBottom
                                         variant='h6'
                                     >
-                                        Group Equvalent:
+                                        معادل‌هاي مطرح‌شده در گروه:
                                     </Typography>
                                     <Autocomplete
                                         multiple
@@ -538,6 +610,13 @@ const Worksheet = (peops) => {
                                         options={top100Films}
                                         getOptionLabel={(option) => option.title}
                                         filterSelectedOptions
+                                        onChange={(event, newValue) => {
+                                            setValues({
+                                                ...values,
+                                                groupEquvalent: newValue
+                                            }
+                                            );
+                                        }}
                                         renderInput={(params) => (
                                             <TextField
                                                 {...params}
@@ -554,14 +633,21 @@ const Worksheet = (peops) => {
                                         gutterBottom
                                         variant='h6'
                                     >
-                                        Commom Word:
+                                        واژة رايج در زبان فارسي:
                                     </Typography>
                                     <Autocomplete
                                         multiple
-                                        id="commomWord"
+                                        id="commonWord"
                                         options={top100Films}
                                         getOptionLabel={(option) => option.title}
                                         filterSelectedOptions
+                                        onChange={(event, newValue) => {
+                                            setValues({
+                                                ...values,
+                                                commonWord: newValue
+                                            }
+                                            );
+                                        }}
                                         renderInput={(params) => (
                                             <TextField
                                                 {...params}
@@ -579,7 +665,7 @@ const Worksheet = (peops) => {
                                         gutterBottom
                                         variant='h6'
                                     >
-                                        Description:
+                                        ملاحظات:
                                     </Typography>
                                     <TextField
                                         fullWidth
@@ -621,6 +707,13 @@ const Worksheet = (peops) => {
                                                 options={top100Films}
                                                 getOptionLabel={(option) => option.title}
                                                 filterSelectedOptions
+                                                onChange={(event, newValue) => {
+                                                    setValues({
+                                                        ...values,
+                                                        derivations: newValue
+                                                    }
+                                                    );
+                                                }}
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
@@ -646,6 +739,13 @@ const Worksheet = (peops) => {
                                                 options={top100Films}
                                                 getOptionLabel={(option) => option.title}
                                                 filterSelectedOptions
+                                                onChange={(event, newValue) => {
+                                                    setValues({
+                                                        ...values,
+                                                        compounds: newValue
+                                                    }
+                                                    );
+                                                }}
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
@@ -666,10 +766,17 @@ const Worksheet = (peops) => {
                                             </Typography>
                                             <Autocomplete
                                                 multiple
-                                                id="related terms"
+                                                id="relatedTerms"
                                                 options={top100Films}
                                                 getOptionLabel={(option) => option.title}
                                                 filterSelectedOptions
+                                                onChange={(event, newValue) => {
+                                                    setValues({
+                                                        ...values,
+                                                        relatedTerms: newValue
+                                                    }
+                                                    );
+                                                }}
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
@@ -771,9 +878,19 @@ const Worksheet = (peops) => {
                         variant="contained"
                         size="large"
                         type="submit"
+                        
                     >
-                        Save
+                        ذخیره
                     </Button>
+                    {/* <Button
+                        color="primary"
+                        variant="contained"
+                        size="large"
+                        type="submit"
+                        onCahnge={handleClose}
+                    >
+                        بازگشت
+                    </Button> */}
                 </Box>
             </Card >
         </form >
