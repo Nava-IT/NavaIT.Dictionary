@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NavaIT.Dictionary.Core.Models;
+using System;
 using System.Collections.Generic;
 
 namespace NavaIT.Dictionary.Core
@@ -43,7 +44,7 @@ namespace NavaIT.Dictionary.Core
             throw new NotImplementedException();
         }
 
-        public string[] Scopes()
+        public ScopeModel[] Scopes()
         {
             throw new NotImplementedException();
         }

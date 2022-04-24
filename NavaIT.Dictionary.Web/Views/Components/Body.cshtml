@@ -1,0 +1,24 @@
+﻿@using NavaIT.Dictionary.Core
+@model Body
+@if (Model?.ChildElements != null)
+{
+    foreach (var p in Model?.ChildElements?.OfType<Paragraph>())
+    {
+        <p>
+            @if (p?.ChildElements != null)
+            {
+                foreach (var r in p?.ChildElements?.OfType<Run>
+                    ())
+                {
+                    if (r?.ChildElements != null)
+                    {
+                        var text = r?.ChildElements?.OfType<TextElement>
+                            ().FirstOrDefault();
+                        <span>@text.Text</span>
+                    }
+                }
+            }
+        </p>
+    }
+
+}

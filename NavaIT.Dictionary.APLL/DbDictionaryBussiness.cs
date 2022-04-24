@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using NavaIT.Dictionary.Core;
+using NavaIT.Dictionary.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -24,6 +25,7 @@ insert into @wsIds select worksheetId from worksheet where Entry1worksheetId in 
 or Entry2worksheetId in (select termId from term where name = @term)
 select worksheetId Id, Entry1worksheetIdName TermName, ReferenceWorksheetName ReferenceWorksheetName, Entry2worksheetIdName Equivalent, Definition Definition, ScopeIdName Scope
 from worksheet where worksheetId in (select id from @wsIds)
+order by ScopeIdName collate Persian_100_CI_AS, Entry2worksheetIdName collate Persian_100_CI_AS
 
 select ReferenceWorksheet ReferenceId, Entry1worksheetIdName ReferredTo
 from worksheet where ReferenceWorksheet in (select id from @wsIds)";
@@ -55,72 +57,29 @@ from worksheet where ReferenceWorksheet in (select id from @wsIds)";
                     };
                 }).OrderBy(e => e.Term).ToArray();
                 return result;
-                var k = r.GroupBy(a => string.Join(",",
-                    new String[] { a.TermName, a.Equivalent, a.ReferenceWorksheetName, a.Definition }.Union(
-                        a.ReferredTo.OrderBy(s => s)).ToArray()).ToUpper());
-                /*                DescriptionPart[] pd = r.Select(a =>
-                                {
-                                    List<string> strs = new List<string>();
-                                    strs.Add(a.TermName);
-                                    strs.AddRange(a.ReferredTo);
-
-                                    return new DescriptionPart()
-                                    {
-                                        Description = a.Definition,
-                                        Scopes = a.Scope
-                                    };
-                                }).ToArray();*/
-
-                var b = k.Select(item => new PageResult()
-                {
-                    Term = item.First().TermName,
-                    Descriptions = item.Select(a => new DescriptionPart()
-                    {
-                        Description = a.Definition,
-                        ReferenceWorksheetName = a.ReferenceWorksheetName,
-                        ForeignEquivalents = a.ReferredTo.OrderBy(s => s).ToArray(),
-                        Translation = a.Equivalent,
-                        //Scopes = item.
-                    }).ToArray()
-                });
-                return new PageResult[]{
-                    new PageResult()
-                    {
-                        Term = k.First().First().TermName,
-                        Descriptions = k.Select(a => new DescriptionPart()
-                        {
-                            Description = a.First().Definition,
-                            ReferenceWorksheetName = a.First().ReferenceWorksheetName,
-                            ForeignEquivalents = a.First().ReferredTo.OrderBy(s => s).ToArray(),
-                            Translation = a.First().Equivalent,
-                            Scopes = a.Select(s => s.Scope).OrderBy(s => s).ToArray()
-
-                        }).ToArray()
-                    }
-                };
             }
         }
 
         public SearchResult[] Search(string q)
         {
-            string query = @"select top 10 Title, Definition, Scope from(
-select distinct 1 type, Entry1worksheetIdName Title, Definition Definition, ScopeIdName Scope from dictionary.worksheet 
+            string query = @"select Title, Scope from(
+select distinct 1 type, Entry1worksheetIdName Title, ScopeIdName Scope from dictionary.worksheet 
 where Entry1worksheetIdNameNomalised COLLATE Latin1_general_CI_AI = @q COLLATE Latin1_general_CI_AI
 union all
-select distinct 1 type, Entry2worksheetIdName Title, Definition Definition, ScopeIdName Scope from dictionary.worksheet 
+select distinct 1 type, Entry2worksheetIdName Title, ScopeIdName Scope from dictionary.worksheet 
 where Entry2worksheetIdNameNomalised COLLATE Latin1_general_CI_AI = @q COLLATE Latin1_general_CI_AI
 union all
-select distinct 2 type, Entry1worksheetIdName Title, Definition Definition, ScopeIdName Scope from dictionary.worksheet 
-where Entry1worksheetIdNameNomalised COLLATE Latin1_general_CI_AI like @q+'%' COLLATE Latin1_general_CI_AI
+select distinct 2 type, Entry1worksheetIdName Title, ScopeIdName Scope from dictionary.worksheet 
+where Entry1worksheetIdNameNomalised COLLATE Latin1_general_CI_AI like @q+'_%' COLLATE Latin1_general_CI_AI
 union all
-select distinct 2 type, Entry2worksheetIdName Title, Definition Definition, ScopeIdName Scope from dictionary.worksheet 
-where Entry2worksheetIdNameNomalised COLLATE Latin1_general_CI_AI like @q+'%' COLLATE Latin1_general_CI_AI
+select distinct 2 type, Entry2worksheetIdName Title, ScopeIdName Scope from dictionary.worksheet 
+where Entry2worksheetIdNameNomalised COLLATE Latin1_general_CI_AI like @q+'_%' COLLATE Latin1_general_CI_AI
 union all
-select distinct 3 type, Entry1worksheetIdName Title, Definition Definition, ScopeIdName Scope from dictionary.worksheet 
-where Entry1worksheetIdNameNomalised COLLATE Latin1_general_CI_AI like '%'+@q+'%' COLLATE Latin1_general_CI_AI
+select distinct 3 type, Entry1worksheetIdName Title, ScopeIdName Scope from dictionary.worksheet 
+where Entry1worksheetIdNameNomalised COLLATE Latin1_general_CI_AI like '%_'+@q+'%' COLLATE Latin1_general_CI_AI
 union all
-select distinct 3, Entry2worksheetIdName Title, Definition Definition, ScopeIdName Scope from dictionary.worksheet 
-where Entry2worksheetIdName COLLATE Latin1_general_CI_AI like '%'+@q+'%' COLLATE Latin1_general_CI_AI
+select distinct 3, Entry2worksheetIdName Title, ScopeIdName Scope from dictionary.worksheet 
+where Entry2worksheetIdName COLLATE Latin1_general_CI_AI like '%_'+@q+'%' COLLATE Latin1_general_CI_AI
 ) a order by type, title";
             using (var con = new SqlConnection(ApplictionSetting.ApllConnectionString))
             {
@@ -128,26 +87,30 @@ where Entry2worksheetIdName COLLATE Latin1_general_CI_AI like '%'+@q+'%' COLLATE
                 return res?.Select(r => new SearchResult()
                 {
                     Title = $"{r.Title}",
-                    ShortDescription = $"({r.Scope}){r.Definition}"
+                    ShortDescription = $"({r.Scope})"
                 })?.ToArray();
             }
         }
 
-        public string[] Scopes()
+        public ScopeModel[] Scopes()
         {
-            string query = @"select distinct name from Scope
-                order by name";
+            string query = @"
+select s.Name, sum(ISNULL(exist, 0)) [Count] from Scope s left outer join (select 1 exist, *  from worksheet) w on s.ScopeId = w.ScopeId
+group by s.name
+order by s.name collate Persian_100_CI_AS
+";
             using (var con = new SqlConnection(ApplictionSetting.ApllConnectionString))
             {
-                var res = con.Query<String>(query);
+                var res = con.Query<ScopeModel>(query);
                 return res.ToArray();
             }
         }
 
         public string[] Scope(string name)
         {
-            string query = @"select distinct name from worksheet where ScopeIdName = @name
-                    order by name";
+            string query = @"select * from (
+select distinct name from worksheet where ScopeIdName = @name
+) ws order by name collate Persian_100_CI_AS";
             using (var con = new SqlConnection(ApplictionSetting.ApllConnectionString))
             {
                 var res = con.Query<String>(query, new { name = name });

@@ -1,15 +1,16 @@
-﻿@model string[]
+﻿@using NavaIT.Dictionary.Web.Utils
+@model string[]
 @if (Model != null)
 {
     <div class='row'>
-        <div class='col-12'>{this.name}</div>
-            @foreach (var s in Model)
-            {
-                <div class='listitem col-lg-4 col-md-4 col-sm-5'>
+        <div class='col-12'>@ViewBag.Name <span>(@Model.Length.ToPersianNumber())</span></div>
+        @foreach (var s in Model)
+        {
+            <div class='listitem col-lg-4 col-md-4 col-sm-5'>
 
-                    <a href=@($"/dictionary/{Uri.EscapeDataString(s)}")>@s</a>
-                </div>
-            }
+                <a href=@($"/dictionary/{Uri.EscapeDataString(s)}")>@s</a>
+            </div>
+        }
     </div>
 }
 else

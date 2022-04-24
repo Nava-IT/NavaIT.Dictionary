@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NavaIT.Dictionary.Core;
+using NavaIT.Dictionary.Core.Models;
 using System;
 using System.Collections.Generic;
 
@@ -32,7 +33,7 @@ namespace NavaIT.Dictionary.App.Controllers
 
         [HttpGet]
         [Route("scopes")]
-        public String[] Scopes()
+        public ScopeModel[] Scopes()
         {
             return DictionaryBussiness.Scopes();
         }
