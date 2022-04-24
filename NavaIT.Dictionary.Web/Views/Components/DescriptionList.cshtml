@@ -28,9 +28,9 @@
             <div class='d-block'>
                 <div class='float-start' dir='ltr'>
                     &rarr;<a href='/dictionary/@description.ReferenceWorksheetName'>@description.ReferenceWorksheetName</a>
-                    <div class='float-start me-1' dir='ltr'>@Model.Term@(foreignEquivalentsHasElement ? ", " : "")</div>
+                          <div class='float-start me-1' dir='ltr'>[@Html.Raw(String.Join(", ", @description.Scopes.Select(sc => $"<a href='/scope/{sc}'>{sc}</a>")))] @Model.Term@(foreignEquivalentsHasElement ? ", " : "")</div>
                     <p class='description-paragraph'>
-                        [@Html.Raw(String.Join(", ", @description.Scopes.Select(sc => $"<a href='/scope/{sc}'>{sc}</a>")))] @Html.Raw(description.Description)
+                        @Html.Raw(description.Description)
                     </p>
                 </div>
             </div>
