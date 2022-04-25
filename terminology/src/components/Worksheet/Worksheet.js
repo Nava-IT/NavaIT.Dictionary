@@ -13,10 +13,10 @@ import {
     RadioGroup
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
-import { saveWorksheet } from '../../utils/serviceUtils';
 import { useParams } from "react-router-dom";
+import { worksheetService } from '../../__services__/worksheet.Service';
 
 
 const theme = createTheme({
@@ -41,8 +41,8 @@ const top100Films = [
 const Worksheet = () => {
     const { id } = useParams();
     const isAddMode = !id;
-    
-    const [values, setValues] = React.useState({
+
+    const [values, setValues] = useState({
         specializedGroupEquvalent: '',
         scope: '',
         selectionType: '',
@@ -90,11 +90,21 @@ const Worksheet = () => {
             id: uuid(),
             worksheetData: values
         }
-        saveWorksheet(worksheet);
+        worksheetService.create(worksheet);
     }
     // const handleClose = () => {
     //     navigate('/');
     // }
+
+    useEffect(() => {
+        if (!isAddMode) {
+            //get worksheet and set form fields
+            const worksheet = worksheetService.getById(id);
+            worksheet.forEach()
+            setValues(worksheet);
+            console.log("result", worksheet)
+        }
+    }, []);
     return (
         <form
             onSubmit={handleSubmit}
@@ -878,7 +888,7 @@ const Worksheet = () => {
                         variant="contained"
                         size="large"
                         type="submit"
-                        
+
                     >
                         ذخیره
                     </Button>

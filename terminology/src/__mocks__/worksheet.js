@@ -1,8 +1,8 @@
-import {v4 as uuid} from 'uuid';
+// import {v4 as uuid} from 'uuid';
 
 export const worksheets=[
     {
-        id: uuid(),
+        id: '1',
         scope:'mathematics',
         specializedGroupEquvalent: 'سیب',
         selectionType:'1',
@@ -31,7 +31,7 @@ export const worksheets=[
         pattern3: 'negar123456'
     },
     {
-        id: uuid(),
+        id: 2,
         scope:'mathematics',
         specializedGroupEquvalent: 'باستانی',
         selectionType:'0',
@@ -60,7 +60,7 @@ export const worksheets=[
         pattern3: 'negar123456'
     },
     {
-        id: uuid(),
+        id: 3,
         scope:'mathematics',
         specializedGroupEquvalent: 'سگ',
         selectionType:'1',
@@ -89,7 +89,7 @@ export const worksheets=[
         pattern3: 'negar123456'
     },
     {
-        id: uuid(),
+        id: 4,
         scope:'mathematics',
         specializedGroupEquvalent: 'سلام',
         selectionType:'0',
@@ -118,7 +118,7 @@ export const worksheets=[
         pattern3: 'negar123456'
     },
     {
-        id: uuid(),
+        id: 5,
         scope:'mathematics',
         specializedGroupEquvalent: 'پرتغال',
         selectionType:'1',
@@ -147,7 +147,7 @@ export const worksheets=[
         pattern3: 'negar123456'
     },
     {
-        id: uuid(),
+        id: 6,
         scope:'mathematics',
         specializedGroupEquvalent: 'باستانی',
         selectionType:'0',
@@ -176,7 +176,7 @@ export const worksheets=[
         pattern3: 'negar123456'
     },
     {
-        id: uuid(),
+        id: 7,
         scope:'mathematics',
         specializedGroupEquvalent: 'سیب',
         selectionType:'1',
@@ -205,7 +205,7 @@ export const worksheets=[
         pattern3: 'negar123456'
     },
     {
-        id: uuid(),
+        id: 8,
         scope:'mathematics',
         specializedGroupEquvalent: 'باستانی',
         selectionType:'0',
@@ -234,7 +234,7 @@ export const worksheets=[
         pattern3: 'negar123456'
     },
     {
-        id: uuid(),
+        id: 9,
         scope:'mathematics',
         specializedGroupEquvalent: 'سیب',
         selectionType:'1',
@@ -263,7 +263,7 @@ export const worksheets=[
         pattern3: 'negar123456'
     },
     {
-        id: uuid(),
+        id: 10,
         scope:'mathematics',
         specializedGroupEquvalent: 'باستانی',
         selectionType:'0',
@@ -292,7 +292,7 @@ export const worksheets=[
         pattern3: 'negar123456'
     },
     {
-        id: uuid(),
+        id: 11,
         scope:'mathematics',
         specializedGroupEquvalent: 'سیب',
         selectionType:'1',
@@ -321,7 +321,7 @@ export const worksheets=[
         pattern3: 'negar123456'
     },
     {
-        id: uuid(),
+        id: 12,
         scope:'mathematics',
         specializedGroupEquvalent: 'کتاب',
         selectionType:'0',
@@ -350,7 +350,7 @@ export const worksheets=[
         pattern3: 'negar123456'
     },
     {
-        id: uuid(),
+        id: 13,
         scope:'mathematics',
         specializedGroupEquvalent: 'سیب',
         selectionType:'1',
@@ -379,7 +379,7 @@ export const worksheets=[
         pattern3: 'negar123456'
     },
     {
-        id: uuid(),
+        id: 14,
         scope:'mathematics',
         specializedGroupEquvalent: 'پول',
         selectionType:'0',
