@@ -15,7 +15,7 @@ function getAll() {
 function getById(id) {
     //return fetchWrapper.get(`${baseUrl}/${id}`);
     console.log(id)
-    return worksheets.filter(worksheet => worksheet.id === id);
+    return worksheets.find(worksheet => worksheet.id === id);
 }
 
 function create(params) {

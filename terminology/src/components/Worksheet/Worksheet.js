@@ -17,6 +17,7 @@ import React, { useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useParams } from "react-router-dom";
 import { worksheetService } from '../../__services__/worksheet.Service';
+import { useForm } from "react-hook-form";
 
 
 const theme = createTheme({
@@ -42,35 +43,11 @@ const Worksheet = () => {
     const { id } = useParams();
     const isAddMode = !id;
 
-    const [values, setValues] = useState({
-        specializedGroupEquvalent: '',
-        scope: '',
-        selectionType: '',
-        term: [],
-        abbreviation: [],
-        tradeName: [],
-        scientificName: [],
-        vulgarName: [],
-        grammaticalCategory: '',
-        construction: '',
-        witness: '',
-        etymology: '',
-        synonyms: [],
-        derivations: [],
-        compounds: [],
-        relatedTerms: [],
-        definition: '',
-        example: '',
-        references: [],
-        persianLanguageEquvalent: [],
-        groupEquvalent: [],
-        commonWord: [],
-        description: '',
-        pattern1: '',
-        pattern2: '',
-        pattern3: ''
+    // functions to build form returned by useForm() hook
+    const { register, handleSubmit, reset, setValue, getValues, watch, errors, formState } = useForm();
 
-    });
+    // worksheet state for form
+    const [values, setValues] = useState({});
 
     const handleChange = (event) => {
         setValues({
@@ -84,31 +61,72 @@ const Worksheet = () => {
     //         [event.target.name]: newValues
     //     })
     // }
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const onSubmit = (data) => {
+        //data.preventDefault();
+        return isAddMode
+            ? createWorksheet(data)
+            : updateWorksheet(id, data)
+    }
+    const createWorksheet = (data) => {
         const worksheet = {
             id: uuid(),
             worksheetData: values
         }
         worksheetService.create(worksheet);
     }
+    const updateWorksheet = (id, data) => {
+        return worksheetService.update(id, data)
+    }
+
     // const handleClose = () => {
     //     navigate('/');
     // }
 
+    // effect runs on component mount
     useEffect(() => {
         if (!isAddMode) {
-            //get worksheet and set form fields
-            const worksheet = worksheetService.getById(id);
-            worksheet.forEach()
-            setValues(worksheet);
-            console.log("result", worksheet)
+            // simulate async api call with set timeout
+            setTimeout(() => {
+                //get worksheet and set form fields
+                const worksheet = worksheetService.getById(id);
+
+                const fields = [
+                    'specializedGroupEquvalent',
+                    'scope',
+                    'selectionType',
+                    'term',
+                    'abbreviation',
+                    'tradeName',
+                    'scientificName',
+                    'vulgarName',
+                    'grammaticalCategory',
+                    'construction',
+                    'witness',
+                    'etymology',
+                    'synonyms',
+                    'derivations',
+                    'compounds',
+                    'relatedTerms',
+                    'definition',
+                    'example',
+                    'references',
+                    'persianLanguageEquvalent',
+                    'groupEquvalent',
+                    'commonWord',
+                    'description',
+                    'pattern1',
+                    'pattern2',
+                    'pattern3'
+                ];
+                fields.forEach(field => {
+                    setValue(field, worksheet[field])
+                });
+
+            }, 1000);
         }
     }, []);
     return (
-        <form
-            onSubmit={handleSubmit}
-        >
+        <form onSubmit={handleSubmit(onSubmit)} onReset={reset}>
             <Card>
                 <CardContent>
                     <Box component="main" sx={{ flexGrow: 1 }}>
@@ -138,46 +156,43 @@ const Worksheet = () => {
                                     <TextField
                                         fullWidth
                                         name="specializedGroupEquvalent"
-                                        onChange={handleChange}
-
-                                        value={values.specializedGroupEquvalent}
+                                        // onChange={handleChange}
+                                        {...register("specializedGroupEquvalent", { required: true })}
+                                        // value={values.specializedGroupEquvalent}
                                         variant="outlined" />
                                 </Grid>
                                 <Grid
                                     item
                                     md={12}
                                     xs={12}>
-                                    {/* <Typography
-                                        color="textPrimary"
-                                        gutterBottom
-                                        variant='h6'
-                                    >
-                                        Selection Type:
-                                    </Typography> */}
                                     <RadioGroup
                                         aria-labelledby="selectionType"
                                         row
                                         name="selectionType"
+                                        
                                     >
                                         <FormControlLabel
                                             value="0"
-                                            control={<Radio
-                                                checked={values.selectionType === '0'}
+                                            {...register('selectionType')}
+                                                                                        control={<Radio
+                                                checked={0 === '0'}
                                                 onChange={handleChange}
                                             />}
                                             label="برگزيده"
                                         />
                                         <FormControlLabel
                                             value="1"
+                                            {...register('selectionType')}
                                             control={<Radio
-                                                checked={values.selectionType === '1'}
+                                                checked={0 === '1'}
                                                 onChange={handleChange} />}
                                             label="نوگزيده"
                                         />
                                         <FormControlLabel
                                             value="2"
+                                            {...register('selectionType')}
                                             control={<Radio
-                                                checked={values.selectionType === '2'}
+                                                checked={0 === '2'}
                                                 onChange={handleChange}
                                             />}
                                             label="نوساخته"
@@ -200,7 +215,7 @@ const Worksheet = () => {
                                         fullWidth
                                         name='construction'
                                         onChange={handleChange}
-
+                                        {...register('construction')}
                                         value={values.construction}
                                         variant="outlined" />
                                 </Grid>
@@ -218,7 +233,7 @@ const Worksheet = () => {
                                         fullWidth
                                         name='witness'
                                         onChange={handleChange}
-
+                                        {...register('witness')}
                                         value={values.witness}
                                         variant="outlined" />
                                 </Grid>
@@ -244,11 +259,13 @@ const Worksheet = () => {
                                             </Typography>
                                             <Autocomplete
                                                 multiple
+                                                name="term"
                                                 id="term"
                                                 dir="ltr"
                                                 options={top100Films}
                                                 getOptionLabel={(option) => option.title}
                                                 filterSelectedOptions
+                                                {...register('term')}
                                                 onChange={(event, newValue) => {
                                                     setValues({
                                                         ...values,
@@ -276,10 +293,12 @@ const Worksheet = () => {
                                             </Typography>
                                             <Autocomplete
                                                 multiple
+                                                name="abbreviation"
                                                 id="abbreviation"
                                                 options={top100Films}
                                                 getOptionLabel={(option) => option.title}
                                                 filterSelectedOptions
+                                                {...register('abbreviation')}
                                                 onChange={(event, newValue) => {
                                                     setValues({
                                                         ...values,
@@ -306,10 +325,12 @@ const Worksheet = () => {
                                             </Typography>
                                             <Autocomplete
                                                 multiple
+                                                name="tradeName"
                                                 id="tradeName"
                                                 options={top100Films}
                                                 getOptionLabel={(option) => option.title}
                                                 filterSelectedOptions
+                                                {...register('tradeName')}
                                                 onChange={(event, newValue) => {
                                                     setValues({
                                                         ...values,
@@ -336,10 +357,12 @@ const Worksheet = () => {
                                             </Typography>
                                             <Autocomplete
                                                 multiple
+                                                name="scientificName"
                                                 id="scientificName"
                                                 options={top100Films}
                                                 getOptionLabel={(option) => option.title}
                                                 filterSelectedOptions
+                                                {...register('scientificName')}
                                                 onChange={(event, newValue) => {
                                                     setValues({
                                                         ...values,
@@ -366,10 +389,12 @@ const Worksheet = () => {
                                             </Typography>
                                             <Autocomplete
                                                 multiple
+                                                name="vulgareName"
                                                 id="vulgarName"
                                                 options={top100Films}
                                                 getOptionLabel={(option) => option.title}
                                                 filterSelectedOptions
+                                                {...register('vulgarName')}
                                                 onChange={(event, newValue) => {
                                                     setValues({
                                                         ...values,
@@ -412,7 +437,7 @@ const Worksheet = () => {
                                         fullWidth
                                         name="definition"
                                         onChange={handleChange}
-
+                                        {...register('definition')}
                                         value={values.definition}
                                         variant="outlined"
                                         multiline
@@ -432,10 +457,10 @@ const Worksheet = () => {
                                     </Typography>
                                     <TextField
                                         fullWidth
-                                        name="Example"
+                                        name="example"
                                         onChange={handleChange}
-
-                                        value={values.Example}
+                                        {...register('example')}
+                                        value={values.example}
                                         variant="outlined"
                                         multiline
                                         rows={4} />
@@ -454,10 +479,12 @@ const Worksheet = () => {
                                     </Typography>
                                     <Autocomplete
                                         multiple
+                                        name="references"
                                         id="references"
                                         options={top100Films}
                                         getOptionLabel={(option) => option.title}
                                         filterSelectedOptions
+                                        {...register('references')}
                                         onChange={(event, newValue) => {
                                             setValues({
                                                 ...values,
@@ -500,7 +527,7 @@ const Worksheet = () => {
                                                 fullWidth
                                                 name="grammaticalCategory"
                                                 onChange={handleChange}
-
+                                                {...register('grammaticalCategory')}
                                                 value={values.grammaticalCategory}
                                                 variant="outlined"
                                             />
@@ -522,7 +549,7 @@ const Worksheet = () => {
                                                 fullWidth
                                                 name="etymology"
                                                 onChange={handleChange}
-
+                                                {...register('etymology')}
                                                 value={values.etymology}
                                                 variant="outlined"
                                                 multiline
@@ -541,10 +568,12 @@ const Worksheet = () => {
                                             </Typography>
                                             <Autocomplete
                                                 multiple
+                                                name="synonyms"
                                                 id="synonyms"
                                                 options={top100Films}
                                                 getOptionLabel={(option) => option.title}
                                                 filterSelectedOptions
+                                                {...register('synonyms')}
                                                 onChange={(event, newValue) => {
                                                     setValues({
                                                         ...values,
@@ -584,10 +613,12 @@ const Worksheet = () => {
                                     </Typography>
                                     <Autocomplete
                                         multiple
+                                        name="persianLanguageEquvalent"
                                         id="persianLanguageEquvalent"
                                         options={top100Films}
                                         getOptionLabel={(option) => option.title}
                                         filterSelectedOptions
+                                        {...register('persianLanguageEquvalent')}
                                         onChange={(event, newValue) => {
                                             setValues({
                                                 ...values,
@@ -616,10 +647,12 @@ const Worksheet = () => {
                                     </Typography>
                                     <Autocomplete
                                         multiple
+                                        name="groupEquvalent"
                                         id="groupEquvalent"
                                         options={top100Films}
                                         getOptionLabel={(option) => option.title}
                                         filterSelectedOptions
+                                        {...register('groupEquvalent')}
                                         onChange={(event, newValue) => {
                                             setValues({
                                                 ...values,
@@ -647,10 +680,12 @@ const Worksheet = () => {
                                     </Typography>
                                     <Autocomplete
                                         multiple
+                                        name="commonWord"
                                         id="commonWord"
                                         options={top100Films}
                                         getOptionLabel={(option) => option.title}
                                         filterSelectedOptions
+                                        {...register('commonWord')}
                                         onChange={(event, newValue) => {
                                             setValues({
                                                 ...values,
@@ -681,7 +716,7 @@ const Worksheet = () => {
                                         fullWidth
                                         name="description"
                                         onChange={handleChange}
-
+                                        {...register('description')}
                                         value={values.description}
                                         variant="outlined"
                                         multiline
@@ -713,10 +748,12 @@ const Worksheet = () => {
                                             </Typography>
                                             <Autocomplete
                                                 multiple
+                                                name="derivations"
                                                 id="derivations"
                                                 options={top100Films}
                                                 getOptionLabel={(option) => option.title}
                                                 filterSelectedOptions
+                                                {...register('derivations')}
                                                 onChange={(event, newValue) => {
                                                     setValues({
                                                         ...values,
@@ -745,10 +782,12 @@ const Worksheet = () => {
                                             </Typography>
                                             <Autocomplete
                                                 multiple
+                                                name="compounds"
                                                 id="compounds"
                                                 options={top100Films}
                                                 getOptionLabel={(option) => option.title}
                                                 filterSelectedOptions
+                                                {...register('compounds')}
                                                 onChange={(event, newValue) => {
                                                     setValues({
                                                         ...values,
@@ -776,10 +815,12 @@ const Worksheet = () => {
                                             </Typography>
                                             <Autocomplete
                                                 multiple
+                                                name="relatedTerms"
                                                 id="relatedTerms"
                                                 options={top100Films}
                                                 getOptionLabel={(option) => option.title}
                                                 filterSelectedOptions
+                                                {...register('relatedTerms')}
                                                 onChange={(event, newValue) => {
                                                     setValues({
                                                         ...values,
@@ -826,7 +867,7 @@ const Worksheet = () => {
                                             fullWidth
                                             name="pattern1"
                                             onChange={handleChange}
-
+                                            {...register('pattern1')}
                                             value={values.pattern1}
                                             variant="outlined"
                                             multiline
@@ -845,7 +886,7 @@ const Worksheet = () => {
                                             fullWidth
                                             name="pattern2"
                                             onChange={handleChange}
-
+                                            {...register('pattern2')}
                                             value={values.pattern2}
                                             variant="outlined"
                                             multiline
@@ -864,7 +905,7 @@ const Worksheet = () => {
                                             fullWidth
                                             name="pattern3"
                                             onChange={handleChange}
-
+                                            {...register('pattern3')}
                                             value={values.pattern3}
                                             variant="outlined"
                                             multiline
@@ -888,7 +929,7 @@ const Worksheet = () => {
                         variant="contained"
                         size="large"
                         type="submit"
-
+                        disabled={formState.isSubmitting}
                     >
                         ذخیره
                     </Button>
