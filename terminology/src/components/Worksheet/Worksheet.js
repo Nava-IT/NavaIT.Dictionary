@@ -18,6 +18,7 @@ import { v4 as uuid } from 'uuid';
 import { useParams } from "react-router-dom";
 import { worksheetService } from '../../__services__/worksheet.Service';
 import { useForm } from "react-hook-form";
+import FileUpload from '../FileUpload/file-upload.component'
 
 
 const theme = createTheme({
@@ -62,7 +63,6 @@ const Worksheet = () => {
     //     })
     // }
     const onSubmit = (data) => {
-        //data.preventDefault();
         return isAddMode
             ? createWorksheet(data)
             : updateWorksheet(id, data)
@@ -76,6 +76,10 @@ const Worksheet = () => {
     }
     const updateWorksheet = (id, data) => {
         return worksheetService.update(id, data)
+    }
+
+    const updateUploadedFiles = (files) =>{
+        //setNewUserInfo({ ...newUserInfo, profileImages: files });
     }
 
     // const handleClose = () => {
@@ -169,12 +173,12 @@ const Worksheet = () => {
                                         aria-labelledby="selectionType"
                                         row
                                         name="selectionType"
-                                        
+
                                     >
                                         <FormControlLabel
                                             value="0"
                                             {...register('selectionType')}
-                                                                                        control={<Radio
+                                            control={<Radio
                                                 checked={0 === '0'}
                                                 onChange={handleChange}
                                             />}
@@ -912,6 +916,19 @@ const Worksheet = () => {
                                             rows={4} />
                                     </div>
                                 </ThemeProvider>
+                            </Grid>
+
+                            <Grid
+                                item
+                                md={12}
+                                xs={12}
+                            >
+                                <FileUpload
+                                    accept=".jpg,.png,.jpeg"
+                                    // label="تصاویر مرتبط"
+                                    multiple
+                                    updateFilesCb={updateUploadedFiles}
+                                />
                             </Grid>
                         </Grid>
                     </Box>
