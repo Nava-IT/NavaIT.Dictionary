@@ -28,7 +28,8 @@ export const worksheets=[
         description: 'negar123456',
         pattern1: 'negar123456',
         pattern2: 'negar123456',
-        pattern3: 'negar123456'
+        pattern3: 'negar123456',
+        images:[]
     },
     {
         id: '2',
@@ -57,7 +58,8 @@ export const worksheets=[
         description: 'negar123456',
         pattern1: 'negar123456',
         pattern2: 'negar123456',
-        pattern3: 'negar123456'
+        pattern3: 'negar123456',
+        images:[]
     },
     {
         id: '3',
@@ -86,7 +88,8 @@ export const worksheets=[
         description: 'negar123456',
         pattern1: 'negar123456',
         pattern2: 'negar123456',
-        pattern3: 'negar123456'
+        pattern3: 'negar123456',
+        images:[]
     },
     {
         id: '4',
@@ -115,7 +118,8 @@ export const worksheets=[
         description: 'negar123456',
         pattern1: 'negar123456',
         pattern2: 'negar123456',
-        pattern3: 'negar123456'
+        pattern3: 'negar123456',
+        images:[]
     },
     {
         id: '5',
@@ -144,7 +148,8 @@ export const worksheets=[
         description: 'negar123456',
         pattern1: 'negar123456',
         pattern2: 'negar123456',
-        pattern3: 'negar123456'
+        pattern3: 'negar123456',
+        images:[]
     },
     {
         id: '6',
@@ -173,7 +178,8 @@ export const worksheets=[
         description: 'negar123456',
         pattern1: 'negar123456',
         pattern2: 'negar123456',
-        pattern3: 'negar123456'
+        pattern3: 'negar123456',
+        images:[]
     },
     {
         id: '7',
@@ -202,7 +208,8 @@ export const worksheets=[
         description: 'description',
         pattern1: 'pattern1',
         pattern2: 'pattern2',
-        pattern3: 'pattern3'
+        pattern3: 'pattern3',
+        images:[]
     },
     {
         id: '8',
@@ -231,7 +238,8 @@ export const worksheets=[
         description: 'negar123456',
         pattern1: 'negar123456',
         pattern2: 'negar123456',
-        pattern3: 'negar123456'
+        pattern3: 'negar123456',
+        images:[]
     },
     {
         id: '9',
@@ -260,7 +268,8 @@ export const worksheets=[
         description: 'negar123456',
         pattern1: 'negar123456',
         pattern2: 'negar123456',
-        pattern3: 'negar123456'
+        pattern3: 'negar123456',
+        images:[]
     },
     {
         id: '10',
@@ -289,7 +298,8 @@ export const worksheets=[
         description: 'negar123456',
         pattern1: 'negar123456',
         pattern2: 'negar123456',
-        pattern3: 'negar123456'
+        pattern3: 'negar123456',
+        images:[]
     },
     {
         id: '11',
@@ -318,7 +328,8 @@ export const worksheets=[
         description: 'negar123456',
         pattern1: 'negar123456',
         pattern2: 'negar123456',
-        pattern3: 'negar123456'
+        pattern3: 'negar123456',
+        images:[]
     },
     {
         id: '12',
@@ -347,7 +358,8 @@ export const worksheets=[
         description: 'negar123456',
         pattern1: 'negar123456',
         pattern2: 'negar123456',
-        pattern3: 'negar123456'
+        pattern3: 'negar123456',
+        images:[]
     },
     {
         id: '13',
@@ -376,7 +388,9 @@ export const worksheets=[
         description: 'negar123456',
         pattern1: 'negar123456',
         pattern2: 'negar123456',
-        pattern3: 'negar123456'
+        pattern3: 'negar123456',
+        images:[]
+        
     },
     {
         id: '14',
@@ -405,6 +419,7 @@ export const worksheets=[
         description: 'negar123456',
         pattern1: 'negar123456',
         pattern2: 'negar123456',
-        pattern3: 'negar123456'
+        pattern3: 'negar123456',
+        images:[]
     },
 ]

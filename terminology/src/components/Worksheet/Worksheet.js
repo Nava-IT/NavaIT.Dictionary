@@ -10,7 +10,8 @@ import {
     Box,
     Button,
     Radio,
-    RadioGroup
+    RadioGroup,
+    Paper
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
@@ -19,26 +20,140 @@ import { useParams } from "react-router-dom";
 import { worksheetService } from '../../__services__/worksheet.Service';
 import { useForm } from "react-hook-form";
 import FileUpload from '../FileUpload/file-upload.component'
-
+import PerfectScrollbar from "react-perfect-scrollbar";
+import "react-perfect-scrollbar/dist/css/styles.css";
 
 const theme = createTheme({
     direction: 'ltr', // Both here and <body dir="rtl">
 });
 // Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
 const top100Films = [
-    { title: 'The Shawshank Redemption', year: 1994 },
-    { title: 'The Godfather', year: 1972 },
-    { title: 'The Godfather: Part II', year: 1974 },
-    { title: 'The Dark Knight', year: 2008 },
-    { title: '12 Angry Men', year: 1957 },
-    { title: "Schindler's List", year: 1993 },
-    { title: 'Pulp Fiction', year: 1994 },
+    { label: 'The Shawshank Redemption', year: 1994 },
+    { label: 'The Godfather', year: 1972 },
+    { label: 'The Godfather: Part II', year: 1974 },
+    { label: 'The Dark Knight', year: 2008 },
+    { label: '12 Angry Men', year: 1957 },
+    { label: "Schindler's List", year: 1993 },
+    { label: 'Pulp Fiction', year: 1994 },
     {
-        title: 'The Lord of the Rings: The Return of the King',
+        label: 'The Lord of the Rings: The Return of the King',
         year: 2003,
     },
-    { title: 'The Good, the Bad and the Ugly', year: 1966 }
-]
+    { label: 'The Good, the Bad and the Ugly', year: 1966 },
+    { label: 'Fight Club', year: 1999 },
+    {
+        label: 'The Lord of the Rings: The Fellowship of the Ring',
+        year: 2001,
+    },
+    {
+        label: 'Star Wars: Episode V - The Empire Strikes Back',
+        year: 1980,
+    },
+    { label: 'Forrest Gump', year: 1994 },
+    { label: 'Inception', year: 2010 },
+    {
+        label: 'The Lord of the Rings: The Two Towers',
+        year: 2002,
+    },
+    { label: "One Flew Over the Cuckoo's Nest", year: 1975 },
+    { label: 'Goodfellas', year: 1990 },
+    { label: 'The Matrix', year: 1999 },
+    { label: 'Seven Samurai', year: 1954 },
+    {
+        label: 'Star Wars: Episode IV - A New Hope',
+        year: 1977,
+    },
+    { label: 'City of God', year: 2002 },
+    { label: 'Se7en', year: 1995 },
+    { label: 'The Silence of the Lambs', year: 1991 },
+    { label: "It's a Wonderful Life", year: 1946 },
+    { label: 'Life Is Beautiful', year: 1997 },
+    { label: 'The Usual Suspects', year: 1995 },
+    { label: 'Léon: The Professional', year: 1994 },
+    { label: 'Spirited Away', year: 2001 },
+    { label: 'Saving Private Ryan', year: 1998 },
+    { label: 'Once Upon a Time in the West', year: 1968 },
+    { label: 'American History X', year: 1998 },
+    { label: 'Interstellar', year: 2014 },
+    { label: 'Casablanca', year: 1942 },
+    { label: 'City Lights', year: 1931 },
+    { label: 'Psycho', year: 1960 },
+    { label: 'The Green Mile', year: 1999 },
+    { label: 'The Intouchables', year: 2011 },
+    { label: 'Modern Times', year: 1936 },
+    { label: 'Raiders of the Lost Ark', year: 1981 },
+    { label: 'Rear Window', year: 1954 },
+    { label: 'The Pianist', year: 2002 },
+    { label: 'The Departed', year: 2006 },
+    { label: 'Terminator 2: Judgment Day', year: 1991 },
+    { label: 'Back to the Future', year: 1985 },
+    { label: 'Whiplash', year: 2014 },
+    { label: 'Gladiator', year: 2000 },
+    { label: 'Memento', year: 2000 },
+    { label: 'The Prestige', year: 2006 },
+    { label: 'The Lion King', year: 1994 },
+    { label: 'Apocalypse Now', year: 1979 },
+    { label: 'Alien', year: 1979 },
+    { label: 'Sunset Boulevard', year: 1950 },
+    {
+        label: 'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb',
+        year: 1964,
+    },
+    { label: 'The Great Dictator', year: 1940 },
+    { label: 'Cinema Paradiso', year: 1988 },
+    { label: 'The Lives of Others', year: 2006 },
+    { label: 'Grave of the Fireflies', year: 1988 },
+    { label: 'Paths of Glory', year: 1957 },
+    { label: 'Django Unchained', year: 2012 },
+    { label: 'The Shining', year: 1980 },
+    { label: 'WALL·E', year: 2008 },
+    { label: 'American Beauty', year: 1999 },
+    { label: 'The Dark Knight Rises', year: 2012 },
+    { label: 'Princess Mononoke', year: 1997 },
+    { label: 'Aliens', year: 1986 },
+    { label: 'Oldboy', year: 2003 },
+    { label: 'Once Upon a Time in America', year: 1984 },
+    { label: 'Witness for the Prosecution', year: 1957 },
+    { label: 'Das Boot', year: 1981 },
+    { label: 'Citizen Kane', year: 1941 },
+    { label: 'North by Northwest', year: 1959 },
+    { label: 'Vertigo', year: 1958 },
+    {
+        label: 'Star Wars: Episode VI - Return of the Jedi',
+        year: 1983,
+    },
+    { label: 'Reservoir Dogs', year: 1992 },
+    { label: 'Braveheart', year: 1995 },
+    { label: 'M', year: 1931 },
+    { label: 'Requiem for a Dream', year: 2000 },
+    { label: 'Amélie', year: 2001 },
+    { label: 'A Clockwork Orange', year: 1971 },
+    { label: 'Like Stars on Earth', year: 2007 },
+    { label: 'Taxi Driver', year: 1976 },
+    { label: 'Lawrence of Arabia', year: 1962 },
+    { label: 'Double Indemnity', year: 1944 },
+    {
+        label: 'Eternal Sunshine of the Spotless Mind',
+        year: 2004,
+    },
+    { label: 'Amadeus', year: 1984 },
+    { label: 'To Kill a Mockingbird', year: 1962 },
+    { label: 'Toy Story 3', year: 2010 },
+    { label: 'Logan', year: 2017 },
+    { label: 'Full Metal Jacket', year: 1987 },
+    { label: 'Dangal', year: 2016 },
+    { label: 'The Sting', year: 1973 },
+    { label: '2001: A Space Odyssey', year: 1968 },
+    { label: "Singin' in the Rain", year: 1952 },
+    { label: 'Toy Story', year: 1995 },
+    { label: 'Bicycle Thieves', year: 1948 },
+    { label: 'The Kid', year: 1921 },
+    { label: 'Inglourious Basterds', year: 2009 },
+    { label: 'Snatch', year: 2000 },
+    { label: '3 Idiots', year: 2009 },
+    { label: 'Monty Python and the Holy Grail', year: 1975 },
+];
+
 
 const Worksheet = () => {
     const { id } = useParams();
@@ -78,13 +193,13 @@ const Worksheet = () => {
         return worksheetService.update(id, data)
     }
 
-    const updateUploadedFiles = (files) =>{
+    const updateUploadedFiles = (files) => {
         //setNewUserInfo({ ...newUserInfo, profileImages: files });
     }
 
-    // const handleClose = () => {
-    //     navigate('/');
-    // }
+    const handleClose = () => {
+        // navigate('/');
+    }
 
     // effect runs on component mount
     useEffect(() => {
@@ -129,838 +244,856 @@ const Worksheet = () => {
             }, 1000);
         }
     }, []);
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} onReset={reset}>
-            <Card>
+
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    p: 2
+                }}
+            >
+                <Button
+                    color="primary"
+                    variant="contained"
+                    size="large"
+                    type="submit"
+                    disabled={formState.isSubmitting}
+                >
+                    ذخیره
+                </Button>
+                <Button
+                    color="primary"
+                    variant="contained"
+                    size="large"
+                    type="submit"
+                    onChange={handleClose}
+                >
+                    بازگشت
+                </Button>
+            </Box>
+            <Card
+                sx={{ mb: 2 }}>
                 <CardContent>
-                    <Box component="main" sx={{ flexGrow: 1 }}>
+                    <Grid
+                        container
+                    >
                         <Grid
-                            container
-
+                            item
+                            md={6}
+                            xs={12}
                         >
+                            <Typography
+                                color="textPrimary"
+                                gutterBottom
+                                variant='h6'
+                            >
+                                حوزه:
+                            </Typography>
+                            <Autocomplete
+                                disablePortal
+                                id="scope"
+                                options={top100Films}
+                                {...register('scope')}
+                                renderInput={(params) => <TextField {...params} />}
+                            />
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
+                <Card sx={{height:300}}>
+            <PerfectScrollbar>
+                    <CardContent>
+                        <Box component="main" sx={{ flexGrow: 1 }}>
                             <Grid
-                                item
-                                md={6}
-                                xs={12}
-                                sx={{ p: 2, border: '1px solid grey' }}
-
+                                container
                             >
                                 <Grid
                                     item
-                                    md={12}
+                                    md={6}
                                     xs={12}
+                                    sx={{ p: 2, border: '1px solid grey' }}
+
                                 >
-                                    <Typography
-                                        color="textPrimary"
-                                        gutterBottom
-                                        variant='h6'
+                                    <Grid
+                                        item
+                                        md={12}
+                                        xs={12}
                                     >
-                                        معادل پيشنهادي گروه تخصصي:
-                                    </Typography>
-                                    <TextField
-                                        fullWidth
-                                        name="specializedGroupEquvalent"
-                                        // onChange={handleChange}
-                                        {...register("specializedGroupEquvalent", { required: true })}
-                                        // value={values.specializedGroupEquvalent}
-                                        variant="outlined" />
-                                </Grid>
-                                <Grid
-                                    item
-                                    md={12}
-                                    xs={12}>
-                                    <RadioGroup
-                                        aria-labelledby="selectionType"
-                                        row
-                                        name="selectionType"
-
-                                    >
-                                        <FormControlLabel
-                                            value="0"
-                                            {...register('selectionType')}
-                                            control={<Radio
-                                                checked={0 === '0'}
-                                                onChange={handleChange}
-                                            />}
-                                            label="برگزيده"
-                                        />
-                                        <FormControlLabel
-                                            value="1"
-                                            {...register('selectionType')}
-                                            control={<Radio
-                                                checked={0 === '1'}
-                                                onChange={handleChange} />}
-                                            label="نوگزيده"
-                                        />
-                                        <FormControlLabel
-                                            value="2"
-                                            {...register('selectionType')}
-                                            control={<Radio
-                                                checked={0 === '2'}
-                                                onChange={handleChange}
-                                            />}
-                                            label="نوساخته"
-                                        />
-                                    </RadioGroup>
-                                </Grid>
-
-                                <Grid
-                                    item
-                                    md={12}
-                                    xs={12}>
-                                    <Divider />
-                                    <Typography
-                                        color='textPrimary'
-                                        gutterBottom
-                                        variant='h6'>
-                                        ساخت‌واژه:
-                                    </Typography>
-                                    <TextField
-                                        fullWidth
-                                        name='construction'
-                                        onChange={handleChange}
-                                        {...register('construction')}
-                                        value={values.construction}
-                                        variant="outlined" />
-                                </Grid>
-                                <Grid
-                                    item
-                                    md={12}
-                                    xs={12}>
-                                    <Typography
-                                        color='textPrimary'
-                                        gutterBottom
-                                        variant='h6'>
-                                        شاهد:
-                                    </Typography>
-                                    <TextField
-                                        fullWidth
-                                        name='witness'
-                                        onChange={handleChange}
-                                        {...register('witness')}
-                                        value={values.witness}
-                                        variant="outlined" />
-                                </Grid>
-                            </Grid>
-                            <Grid
-                                item
-                                md={6}
-                                xs={12}
-                                sx={{ p: 2, border: '1px solid grey' }}
-                            >
-                                <ThemeProvider theme={theme}>
-                                    <div dir="ltr">
-                                        <Grid
-                                            item
-                                            md={12}
-                                            xs={12}>
-
-                                            <Typography
-                                                color="textPrimary"
-                                                gutterBottom
-                                                variant='h6'>
-                                                term(en):
-                                            </Typography>
-                                            <Autocomplete
-                                                multiple
-                                                name="term"
-                                                id="term"
-                                                dir="ltr"
-                                                options={top100Films}
-                                                getOptionLabel={(option) => option.title}
-                                                filterSelectedOptions
-                                                {...register('term')}
-                                                onChange={(event, newValue) => {
-                                                    setValues({
-                                                        ...values,
-                                                        term: newValue
-                                                    }
-                                                    );
-                                                }}
-                                                renderInput={(params) => (
-                                                    <TextField
-                                                        {...params}
-                                                    />
-                                                )}
-                                            />
-                                        </Grid>
-
-                                        <Grid
-                                            item
-                                            md={12}
-                                            xs={12}>
-                                            <Typography
-                                                color="textPrimary"
-                                                gutterBottom
-                                                variant='h6'>
-                                                abbreviation:
-                                            </Typography>
-                                            <Autocomplete
-                                                multiple
-                                                name="abbreviation"
-                                                id="abbreviation"
-                                                options={top100Films}
-                                                getOptionLabel={(option) => option.title}
-                                                filterSelectedOptions
-                                                {...register('abbreviation')}
-                                                onChange={(event, newValue) => {
-                                                    setValues({
-                                                        ...values,
-                                                        abbreviation: newValue
-                                                    }
-                                                    );
-                                                }}
-                                                renderInput={(params) => (
-                                                    <TextField
-                                                        {...params}
-                                                    />
-                                                )}
-                                            />
-                                        </Grid>
-                                        <Grid
-                                            item
-                                            md={12}
-                                            xs={12}>
-                                            <Typography
-                                                color="textPrimary"
-                                                gutterBottom
-                                                variant='h6'>
-                                                trade name:
-                                            </Typography>
-                                            <Autocomplete
-                                                multiple
-                                                name="tradeName"
-                                                id="tradeName"
-                                                options={top100Films}
-                                                getOptionLabel={(option) => option.title}
-                                                filterSelectedOptions
-                                                {...register('tradeName')}
-                                                onChange={(event, newValue) => {
-                                                    setValues({
-                                                        ...values,
-                                                        tradeName: newValue
-                                                    }
-                                                    );
-                                                }}
-                                                renderInput={(params) => (
-                                                    <TextField
-                                                        {...params}
-                                                    />
-                                                )}
-                                            />
-                                        </Grid>
-                                        <Grid
-                                            item
-                                            md={12}
-                                            xs={12}>
-                                            <Typography
-                                                color="textPrimary"
-                                                gutterBottom
-                                                variant='h6'>
-                                                scientific name:
-                                            </Typography>
-                                            <Autocomplete
-                                                multiple
-                                                name="scientificName"
-                                                id="scientificName"
-                                                options={top100Films}
-                                                getOptionLabel={(option) => option.title}
-                                                filterSelectedOptions
-                                                {...register('scientificName')}
-                                                onChange={(event, newValue) => {
-                                                    setValues({
-                                                        ...values,
-                                                        scientificName: newValue
-                                                    }
-                                                    );
-                                                }}
-                                                renderInput={(params) => (
-                                                    <TextField
-                                                        {...params}
-                                                    />
-                                                )}
-                                            />
-                                        </Grid>
-                                        <Grid
-                                            item
-                                            md={12}
-                                            xs={12}>
-                                            <Typography
-                                                color="textPrimary"
-                                                gutterBottom
-                                                variant='h6'>
-                                                vulgar name:
-                                            </Typography>
-                                            <Autocomplete
-                                                multiple
-                                                name="vulgareName"
-                                                id="vulgarName"
-                                                options={top100Films}
-                                                getOptionLabel={(option) => option.title}
-                                                filterSelectedOptions
-                                                {...register('vulgarName')}
-                                                onChange={(event, newValue) => {
-                                                    setValues({
-                                                        ...values,
-                                                        vulgarName: newValue
-                                                    }
-                                                    );
-                                                }}
-                                                renderInput={(params) => (
-                                                    <TextField
-                                                        {...params}
-                                                    />
-                                                )}
-                                            />
-                                        </Grid>
-
-                                    </div>
-                                </ThemeProvider>
-                            </Grid>
-
-                            <Grid
-                                item
-                                md={6}
-                                xs={12}
-                                sx={{ p: 2, border: '1px solid grey' }}
-                                mt={2}
-                            >
-                                <Grid
-                                    item
-                                    md={12}
-                                    xs={12}
-                                >
-                                    <Typography
-                                        color="textPrimary"
-                                        gutterBottom
-                                        variant='h6'
-                                    >
-                                        تعريف:
-                                    </Typography>
-                                    <TextField
-                                        fullWidth
-                                        name="definition"
-                                        onChange={handleChange}
-                                        {...register('definition')}
-                                        value={values.definition}
-                                        variant="outlined"
-                                        multiline
-                                        rows={3}
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    md={12}
-                                    xs={12}>
-                                    <Typography
-                                        color="textPrimary"
-                                        gutterBottom
-                                        variant='h6'
-                                    >
-                                        مثال:
-                                    </Typography>
-                                    <TextField
-                                        fullWidth
-                                        name="example"
-                                        onChange={handleChange}
-                                        {...register('example')}
-                                        value={values.example}
-                                        variant="outlined"
-                                        multiline
-                                        rows={4} />
-                                </Grid>
-                                <Grid
-                                    item
-                                    md={12}
-                                    xs={12}
-                                >
-                                    <Typography
-                                        color="textPrimary"
-                                        gutterBottom
-                                        variant='h6'
-                                    >
-                                        مراجع:
-                                    </Typography>
-                                    <Autocomplete
-                                        multiple
-                                        name="references"
-                                        id="references"
-                                        options={top100Films}
-                                        getOptionLabel={(option) => option.title}
-                                        filterSelectedOptions
-                                        {...register('references')}
-                                        onChange={(event, newValue) => {
-                                            setValues({
-                                                ...values,
-                                                references: newValue
-                                            }
-                                            );
-                                        }}
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                            />
-                                        )}
-                                    />
-                                </Grid>
-
-                            </Grid>
-
-                            <Grid
-                                item
-                                md={6}
-                                xs={12}
-                                sx={{ p: 2, border: '1px solid grey' }}
-                                mt={2}
-                            >
-                                <ThemeProvider theme={theme}>
-                                    <div dir="ltr">
-                                        <Grid
-                                            item
-                                            md={12}
-                                            xs={12}
-                                        >
-                                            <Typography
-                                                color="textPrimary"
-                                                gutterBottom
-                                                variant='h6'
-                                            >
-                                                grammatical category:
-                                            </Typography>
-                                            <TextField
-                                                fullWidth
-                                                name="grammaticalCategory"
-                                                onChange={handleChange}
-                                                {...register('grammaticalCategory')}
-                                                value={values.grammaticalCategory}
-                                                variant="outlined"
-                                            />
-
-                                        </Grid>
-                                        <Grid
-                                            item
-                                            md={12}
-                                            xs={12}>
-                                            <Typography
-                                                color="textPrimary"
-                                                gutterBottom
-                                                variant='h6'
-                                            >
-
-                                                etymology:
-                                            </Typography>
-                                            <TextField
-                                                fullWidth
-                                                name="etymology"
-                                                onChange={handleChange}
-                                                {...register('etymology')}
-                                                value={values.etymology}
-                                                variant="outlined"
-                                                multiline
-                                                rows={4} />
-                                        </Grid>
-                                        <Grid
-                                            item
-                                            md={12}
-                                            xs={12}>
-                                            <Typography
-                                                color="textPrimary"
-                                                gutterBottom
-                                                variant='h6'
-                                            >
-                                                synonyms:
-                                            </Typography>
-                                            <Autocomplete
-                                                multiple
-                                                name="synonyms"
-                                                id="synonyms"
-                                                options={top100Films}
-                                                getOptionLabel={(option) => option.title}
-                                                filterSelectedOptions
-                                                {...register('synonyms')}
-                                                onChange={(event, newValue) => {
-                                                    setValues({
-                                                        ...values,
-                                                        synonyms: newValue
-                                                    }
-                                                    );
-                                                }}
-                                                renderInput={(params) => (
-                                                    <TextField
-                                                        {...params}
-                                                    />
-                                                )}
-                                            />
-                                        </Grid>
-                                    </div>
-                                </ThemeProvider>
-                            </Grid>
-
-                            <Grid
-                                item
-                                md={6}
-                                xs={12}
-                                sx={{ p: 2, border: '1px solid grey' }}
-                                mt={2}
-                            >
-                                <Grid
-                                    item
-                                    md={12}
-                                    xs={12}
-                                >
-                                    <Typography
-                                        color="textPrimary"
-                                        gutterBottom
-                                        variant='h6'
-                                    >
-                                        معادل‌هاي موجود در زبان فارسي:
-                                    </Typography>
-                                    <Autocomplete
-                                        multiple
-                                        name="persianLanguageEquvalent"
-                                        id="persianLanguageEquvalent"
-                                        options={top100Films}
-                                        getOptionLabel={(option) => option.title}
-                                        filterSelectedOptions
-                                        {...register('persianLanguageEquvalent')}
-                                        onChange={(event, newValue) => {
-                                            setValues({
-                                                ...values,
-                                                persianLanguageEquvalent: newValue
-                                            }
-                                            );
-                                        }}
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                            />
-                                        )}
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    md={12}
-                                    xs={12}
-                                >
-                                    <Typography
-                                        color="textPrimary"
-                                        gutterBottom
-                                        variant='h6'
-                                    >
-                                        معادل‌هاي مطرح‌شده در گروه:
-                                    </Typography>
-                                    <Autocomplete
-                                        multiple
-                                        name="groupEquvalent"
-                                        id="groupEquvalent"
-                                        options={top100Films}
-                                        getOptionLabel={(option) => option.title}
-                                        filterSelectedOptions
-                                        {...register('groupEquvalent')}
-                                        onChange={(event, newValue) => {
-                                            setValues({
-                                                ...values,
-                                                groupEquvalent: newValue
-                                            }
-                                            );
-                                        }}
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                            />
-                                        )}
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    md={12}
-                                    xs={12}>
-                                    <Typography
-                                        color="textPrimary"
-                                        gutterBottom
-                                        variant='h6'
-                                    >
-                                        واژة رايج در زبان فارسي:
-                                    </Typography>
-                                    <Autocomplete
-                                        multiple
-                                        name="commonWord"
-                                        id="commonWord"
-                                        options={top100Films}
-                                        getOptionLabel={(option) => option.title}
-                                        filterSelectedOptions
-                                        {...register('commonWord')}
-                                        onChange={(event, newValue) => {
-                                            setValues({
-                                                ...values,
-                                                commonWord: newValue
-                                            }
-                                            );
-                                        }}
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                            />
-                                        )}
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    md={12}
-                                    xs={12}
-                                >
-                                    <Typography
-                                        color="textPrimary"
-                                        gutterBottom
-                                        variant='h6'
-                                    >
-                                        ملاحظات:
-                                    </Typography>
-                                    <TextField
-                                        fullWidth
-                                        name="description"
-                                        onChange={handleChange}
-                                        {...register('description')}
-                                        value={values.description}
-                                        variant="outlined"
-                                        multiline
-                                        rows={4} />
-                                </Grid>
-
-                            </Grid>
-
-                            <Grid
-                                item
-                                md={6}
-                                xs={12}
-                                sx={{ p: 2, border: '1px solid grey' }}
-                                mt={2}
-                            >
-                                <ThemeProvider theme={theme}>
-                                    <div dir="ltr">
-                                        <Grid
-                                            item
-                                            md={12}
-                                            xs={12}
-                                        >
-                                            <Typography
-                                                color="textPrimary"
-                                                gutterBottom
-                                                variant='h6'
-                                            >
-                                                derivations:
-                                            </Typography>
-                                            <Autocomplete
-                                                multiple
-                                                name="derivations"
-                                                id="derivations"
-                                                options={top100Films}
-                                                getOptionLabel={(option) => option.title}
-                                                filterSelectedOptions
-                                                {...register('derivations')}
-                                                onChange={(event, newValue) => {
-                                                    setValues({
-                                                        ...values,
-                                                        derivations: newValue
-                                                    }
-                                                    );
-                                                }}
-                                                renderInput={(params) => (
-                                                    <TextField
-                                                        {...params}
-                                                    />
-                                                )}
-                                            />
-                                        </Grid>
-                                        <Grid
-                                            item
-                                            md={12}
-                                            xs={12}
-                                        >
-                                            <Typography
-                                                color="textPrimary"
-                                                gutterBottom
-                                                variant='h6'
-                                            >
-                                                compounds:
-                                            </Typography>
-                                            <Autocomplete
-                                                multiple
-                                                name="compounds"
-                                                id="compounds"
-                                                options={top100Films}
-                                                getOptionLabel={(option) => option.title}
-                                                filterSelectedOptions
-                                                {...register('compounds')}
-                                                onChange={(event, newValue) => {
-                                                    setValues({
-                                                        ...values,
-                                                        compounds: newValue
-                                                    }
-                                                    );
-                                                }}
-                                                renderInput={(params) => (
-                                                    <TextField
-                                                        {...params}
-                                                    />
-                                                )}
-                                            />
-                                        </Grid>
-                                        <Grid
-                                            item
-                                            md={12}
-                                            xs={12}>
-                                            <Typography
-                                                color="textPrimary"
-                                                gutterBottom
-                                                variant='h6'
-                                            >
-                                                related terms:
-                                            </Typography>
-                                            <Autocomplete
-                                                multiple
-                                                name="relatedTerms"
-                                                id="relatedTerms"
-                                                options={top100Films}
-                                                getOptionLabel={(option) => option.title}
-                                                filterSelectedOptions
-                                                {...register('relatedTerms')}
-                                                onChange={(event, newValue) => {
-                                                    setValues({
-                                                        ...values,
-                                                        relatedTerms: newValue
-                                                    }
-                                                    );
-                                                }}
-                                                renderInput={(params) => (
-                                                    <TextField
-                                                        {...params}
-                                                    />
-                                                )}
-                                            />
-                                        </Grid>
-                                    </div>
-                                </ThemeProvider>
-                            </Grid>
-
-                            <Grid
-                                item
-                                md={12}
-                                xs={12}
-                                mt={3}>
-                                <ThemeProvider theme={theme}>
-                                    <div dir="ltr">
                                         <Typography
                                             color="textPrimary"
                                             gutterBottom
                                             variant='h6'
                                         >
-                                            POINT-PATTERN ANALYSIS
+                                            معادل پيشنهادي گروه تخصصي:
                                         </Typography>
-                                    </div>
-                                </ThemeProvider>
-                            </Grid>
-                            <Grid
-                                item
-                                md={12}
-                                xs={12}
-                            >
-                                <ThemeProvider theme={theme}>
-                                    <div dir="ltr">
                                         <TextField
                                             fullWidth
-                                            name="pattern1"
-                                            onChange={handleChange}
-                                            {...register('pattern1')}
-                                            value={values.pattern1}
-                                            variant="outlined"
-                                            multiline
-                                            rows={4} />
-                                    </div>
-                                </ThemeProvider>
-                            </Grid>
-                            <Grid
-                                item
-                                md={12}
-                                xs={12}
-                            >
-                                <ThemeProvider theme={theme}>
-                                    <div dir="ltr">
-                                        <TextField
-                                            fullWidth
-                                            name="pattern2"
-                                            onChange={handleChange}
-                                            {...register('pattern2')}
-                                            value={values.pattern2}
-                                            variant="outlined"
-                                            multiline
-                                            rows={4} />
-                                    </div>
-                                </ThemeProvider>
-                            </Grid>
-                            <Grid
-                                item
-                                md={12}
-                                xs={12}
-                            >
-                                <ThemeProvider theme={theme}>
-                                    <div dir="ltr">
-                                        <TextField
-                                            fullWidth
-                                            name="pattern3"
-                                            onChange={handleChange}
-                                            {...register('pattern3')}
-                                            value={values.pattern3}
-                                            variant="outlined"
-                                            multiline
-                                            rows={4} />
-                                    </div>
-                                </ThemeProvider>
-                            </Grid>
+                                            name="specializedGroupEquvalent"
+                                            // onChange={handleChange}
+                                            {...register("specializedGroupEquvalent", { required: true })}
+                                            // value={values.specializedGroupEquvalent}
+                                            variant="outlined" />
+                                    </Grid>
+                                    <Grid
+                                        item
+                                        md={12}
+                                        xs={12}>
+                                        <RadioGroup
+                                            aria-labelledby="selectionType"
+                                            row
+                                            name="selectionType"
 
-                            <Grid
-                                item
-                                md={12}
-                                xs={12}
-                            >
-                                <FileUpload
-                                    accept=".jpg,.png,.jpeg"
-                                    // label="تصاویر مرتبط"
-                                    multiple
-                                    updateFilesCb={updateUploadedFiles}
-                                />
+                                        >
+                                            <FormControlLabel
+                                                value="0"
+                                                {...register('selectionType')}
+                                                control={<Radio
+                                                    checked={0 === '0'}
+                                                    onChange={handleChange}
+                                                />}
+                                                label="برگزيده"
+                                            />
+                                            <FormControlLabel
+                                                value="1"
+                                                {...register('selectionType')}
+                                                control={<Radio
+                                                    checked={0 === '1'}
+                                                    onChange={handleChange} />}
+                                                label="نوگزيده"
+                                            />
+                                            <FormControlLabel
+                                                value="2"
+                                                {...register('selectionType')}
+                                                control={<Radio
+                                                    checked={0 === '2'}
+                                                    onChange={handleChange}
+                                                />}
+                                                label="نوساخته"
+                                            />
+                                        </RadioGroup>
+                                    </Grid>
+
+                                    <Grid
+                                        item
+                                        md={12}
+                                        xs={12}>
+                                        <Divider />
+                                        <Typography
+                                            color='textPrimary'
+                                            gutterBottom
+                                            variant='h6'>
+                                            ساخت‌واژه:
+                                        </Typography>
+                                        <TextField
+                                            fullWidth
+                                            name='construction'
+                                            onChange={handleChange}
+                                            {...register('construction')}
+                                            value={values.construction}
+                                            variant="outlined" />
+                                    </Grid>
+                                    <Grid
+                                        item
+                                        md={12}
+                                        xs={12}>
+                                        <Typography
+                                            color='textPrimary'
+                                            gutterBottom
+                                            variant='h6'>
+                                            شاهد:
+                                        </Typography>
+                                        <TextField
+                                            fullWidth
+                                            name='witness'
+                                            onChange={handleChange}
+                                            {...register('witness')}
+                                            value={values.witness}
+                                            variant="outlined" />
+                                    </Grid>
+                                </Grid>
+                                <Grid
+                                    item
+                                    md={6}
+                                    xs={12}
+                                    sx={{ p: 2, border: '1px solid grey' }}
+                                >
+                                    <ThemeProvider theme={theme}>
+                                        <div dir="ltr">
+                                            <Grid
+                                                item
+                                                md={12}
+                                                xs={12}>
+
+                                                <Typography
+                                                    color="textPrimary"
+                                                    gutterBottom
+                                                    variant='h6'>
+                                                    term(en):
+                                                </Typography>
+                                                <Autocomplete
+                                                    multiple
+                                                    id="term"
+                                                    dir="ltr"
+                                                    options={top100Films}
+                                                    getOptionLabel={(option) => option.label}
+                                                    filterSelectedOptions
+                                                    {...register('term')}
+                                                    onChange={(event, newValue) => {
+                                                        setValues({
+                                                            ...values,
+                                                            term: newValue
+                                                        }
+                                                        );
+                                                    }}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                        />
+                                                    )}
+                                                />
+                                            </Grid>
+
+                                            <Grid
+                                                item
+                                                md={12}
+                                                xs={12}>
+                                                <Typography
+                                                    color="textPrimary"
+                                                    gutterBottom
+                                                    variant='h6'>
+                                                    abbreviation:
+                                                </Typography>
+                                                <Autocomplete
+                                                    multiple
+                                                    id="abbreviation"
+                                                    options={top100Films}
+                                                    getOptionLabel={(option) => option.label}
+                                                    filterSelectedOptions
+                                                    {...register('abbreviation')}
+                                                    onChange={(event, newValue) => {
+                                                        setValues({
+                                                            ...values,
+                                                            abbreviation: newValue
+                                                        }
+                                                        );
+                                                    }}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                        />
+                                                    )}
+                                                />
+                                            </Grid>
+                                            <Grid
+                                                item
+                                                md={12}
+                                                xs={12}>
+                                                <Typography
+                                                    color="textPrimary"
+                                                    gutterBottom
+                                                    variant='h6'>
+                                                    trade name:
+                                                </Typography>
+                                                <Autocomplete
+                                                    multiple
+                                                    id="tradeName"
+                                                    options={top100Films}
+                                                    getOptionLabel={(option) => option.label}
+                                                    filterSelectedOptions
+                                                    {...register('tradeName')}
+                                                    onChange={(event, newValue) => {
+                                                        setValues({
+                                                            ...values,
+                                                            tradeName: newValue
+                                                        }
+                                                        );
+                                                    }}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                        />
+                                                    )}
+                                                />
+                                            </Grid>
+                                            <Grid
+                                                item
+                                                md={12}
+                                                xs={12}>
+                                                <Typography
+                                                    color="textPrimary"
+                                                    gutterBottom
+                                                    variant='h6'>
+                                                    scientific name:
+                                                </Typography>
+                                                <Autocomplete
+                                                    multiple
+                                                    id="scientificName"
+                                                    options={top100Films}
+                                                    getOptionLabel={(option) => option.label}
+                                                    filterSelectedOptions
+                                                    {...register('scientificName')}
+                                                    onChange={(event, newValue) => {
+                                                        setValues({
+                                                            ...values,
+                                                            scientificName: newValue
+                                                        }
+                                                        );
+                                                    }}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                        />
+                                                    )}
+                                                />
+                                            </Grid>
+                                            <Grid
+                                                item
+                                                md={12}
+                                                xs={12}>
+                                                <Typography
+                                                    color="textPrimary"
+                                                    gutterBottom
+                                                    variant='h6'>
+                                                    vulgar name:
+                                                </Typography>
+                                                <Autocomplete
+                                                    multiple
+                                                    id="vulgarName"
+                                                    options={top100Films}
+                                                    getOptionLabel={(option) => option.label}
+                                                    filterSelectedOptions
+                                                    {...register('vulgarName')}
+                                                    onChange={(event, newValue) => {
+                                                        setValues({
+                                                            ...values,
+                                                            vulgarName: newValue
+                                                        }
+                                                        );
+                                                    }}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                        />
+                                                    )}
+                                                />
+                                            </Grid>
+
+                                        </div>
+                                    </ThemeProvider>
+                                </Grid>
+
+                                <Grid
+                                    item
+                                    md={6}
+                                    xs={12}
+                                    sx={{ p: 2, border: '1px solid grey' }}
+                                    mt={2}
+                                >
+                                    <Grid
+                                        item
+                                        md={12}
+                                        xs={12}
+                                    >
+                                        <Typography
+                                            color="textPrimary"
+                                            gutterBottom
+                                            variant='h6'
+                                        >
+                                            تعريف:
+                                        </Typography>
+                                        <TextField
+                                            fullWidth
+                                            name="definition"
+                                            onChange={handleChange}
+                                            {...register('definition')}
+                                            value={values.definition}
+                                            variant="outlined"
+                                            multiline
+                                            rows={3}
+                                        />
+                                    </Grid>
+                                    <Grid
+                                        item
+                                        md={12}
+                                        xs={12}>
+                                        <Typography
+                                            color="textPrimary"
+                                            gutterBottom
+                                            variant='h6'
+                                        >
+                                            مثال:
+                                        </Typography>
+                                        <TextField
+                                            fullWidth
+                                            name="example"
+                                            onChange={handleChange}
+                                            {...register('example')}
+                                            value={values.example}
+                                            variant="outlined"
+                                            multiline
+                                            rows={4} />
+                                    </Grid>
+                                    <Grid
+                                        item
+                                        md={12}
+                                        xs={12}
+                                    >
+                                        <Typography
+                                            color="textPrimary"
+                                            gutterBottom
+                                            variant='h6'
+                                        >
+                                            مراجع:
+                                        </Typography>
+                                        <Autocomplete
+                                            multiple
+                                            id="references"
+                                            options={top100Films}
+                                            getOptionLabel={(option) => option.label}
+                                            filterSelectedOptions
+                                            {...register('references')}
+                                            onChange={(event, newValue) => {
+                                                setValues({
+                                                    ...values,
+                                                    references: newValue
+                                                }
+                                                );
+                                            }}
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                />
+                                            )}
+                                        />
+                                    </Grid>
+
+                                </Grid>
+
+                                <Grid
+                                    item
+                                    md={6}
+                                    xs={12}
+                                    sx={{ p: 2, border: '1px solid grey' }}
+                                    mt={2}
+                                >
+                                    <ThemeProvider theme={theme}>
+                                        <div dir="ltr">
+                                            <Grid
+                                                item
+                                                md={12}
+                                                xs={12}
+                                            >
+                                                <Typography
+                                                    color="textPrimary"
+                                                    gutterBottom
+                                                    variant='h6'
+                                                >
+                                                    grammatical category:
+                                                </Typography>
+                                                <TextField
+                                                    fullWidth
+                                                    name="grammaticalCategory"
+                                                    onChange={handleChange}
+                                                    {...register('grammaticalCategory')}
+                                                    value={values.grammaticalCategory}
+                                                    variant="outlined"
+                                                />
+
+                                            </Grid>
+                                            <Grid
+                                                item
+                                                md={12}
+                                                xs={12}>
+                                                <Typography
+                                                    color="textPrimary"
+                                                    gutterBottom
+                                                    variant='h6'
+                                                >
+
+                                                    etymology:
+                                                </Typography>
+                                                <TextField
+                                                    fullWidth
+                                                    name="etymology"
+                                                    onChange={handleChange}
+                                                    {...register('etymology')}
+                                                    value={values.etymology}
+                                                    variant="outlined"
+                                                    multiline
+                                                    rows={4} />
+                                            </Grid>
+                                            <Grid
+                                                item
+                                                md={12}
+                                                xs={12}>
+                                                <Typography
+                                                    color="textPrimary"
+                                                    gutterBottom
+                                                    variant='h6'
+                                                >
+                                                    synonyms:
+                                                </Typography>
+                                                <Autocomplete
+                                                    multiple
+                                                    id="synonyms"
+                                                    options={top100Films}
+                                                    getOptionLabel={(option) => option.label}
+                                                    filterSelectedOptions
+                                                    {...register('synonyms')}
+                                                    onChange={(event, newValue) => {
+                                                        setValues({
+                                                            ...values,
+                                                            synonyms: newValue
+                                                        }
+                                                        );
+                                                    }}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                        />
+                                                    )}
+                                                />
+                                            </Grid>
+                                        </div>
+                                    </ThemeProvider>
+                                </Grid>
+
+                                <Grid
+                                    item
+                                    md={6}
+                                    xs={12}
+                                    sx={{ p: 2, border: '1px solid grey' }}
+                                    mt={2}
+                                >
+                                    <Grid
+                                        item
+                                        md={12}
+                                        xs={12}
+                                    >
+                                        <Typography
+                                            color="textPrimary"
+                                            gutterBottom
+                                            variant='h6'
+                                        >
+                                            معادل‌هاي موجود در زبان فارسي:
+                                        </Typography>
+                                        <Autocomplete
+                                            multiple
+                                            id="persianLanguageEquvalent"
+                                            options={top100Films}
+                                            getOptionLabel={(option) => option.label}
+                                            filterSelectedOptions
+                                            {...register('persianLanguageEquvalent')}
+                                            onChange={(event, newValue) => {
+                                                setValues({
+                                                    ...values,
+                                                    persianLanguageEquvalent: newValue
+                                                }
+                                                );
+                                            }}
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                />
+                                            )}
+                                        />
+                                    </Grid>
+                                    <Grid
+                                        item
+                                        md={12}
+                                        xs={12}
+                                    >
+                                        <Typography
+                                            color="textPrimary"
+                                            gutterBottom
+                                            variant='h6'
+                                        >
+                                            معادل‌هاي مطرح‌شده در گروه:
+                                        </Typography>
+                                        <Autocomplete
+                                            multiple
+                                            id="groupEquvalent"
+                                            options={top100Films}
+                                            getOptionLabel={(option) => option.label}
+                                            filterSelectedOptions
+                                            {...register('groupEquvalent')}
+                                            onChange={(event, newValue) => {
+                                                setValues({
+                                                    ...values,
+                                                    groupEquvalent: newValue
+                                                }
+                                                );
+                                            }}
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                />
+                                            )}
+                                        />
+                                    </Grid>
+                                    <Grid
+                                        item
+                                        md={12}
+                                        xs={12}>
+                                        <Typography
+                                            color="textPrimary"
+                                            gutterBottom
+                                            variant='h6'
+                                        >
+                                            واژة رايج در زبان فارسي:
+                                        </Typography>
+                                        <Autocomplete
+                                            multiple
+                                            id="commonWord"
+                                            options={top100Films}
+                                            getOptionLabel={(option) => option.label}
+                                            filterSelectedOptions
+                                            {...register('commonWord')}
+                                            onChange={(event, newValue) => {
+                                                setValues({
+                                                    ...values,
+                                                    commonWord: newValue
+                                                }
+                                                );
+                                            }}
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                />
+                                            )}
+                                        />
+                                    </Grid>
+                                    <Grid
+                                        item
+                                        md={12}
+                                        xs={12}
+                                    >
+                                        <Typography
+                                            color="textPrimary"
+                                            gutterBottom
+                                            variant='h6'
+                                        >
+                                            ملاحظات:
+                                        </Typography>
+                                        <TextField
+                                            fullWidth
+                                            name="description"
+                                            onChange={handleChange}
+                                            {...register('description')}
+                                            value={values.description}
+                                            variant="outlined"
+                                            multiline
+                                            rows={4} />
+                                    </Grid>
+
+                                </Grid>
+
+                                <Grid
+                                    item
+                                    md={6}
+                                    xs={12}
+                                    sx={{ p: 2, border: '1px solid grey' }}
+                                    mt={2}
+                                >
+                                    <ThemeProvider theme={theme}>
+                                        <div dir="ltr">
+                                            <Grid
+                                                item
+                                                md={12}
+                                                xs={12}
+                                            >
+                                                <Typography
+                                                    color="textPrimary"
+                                                    gutterBottom
+                                                    variant='h6'
+                                                >
+                                                    derivations:
+                                                </Typography>
+                                                <Autocomplete
+                                                    multiple
+                                                    id="derivations"
+                                                    options={top100Films}
+                                                    getOptionLabel={(option) => option.label}
+                                                    filterSelectedOptions
+                                                    {...register('derivations')}
+                                                    onChange={(event, newValue) => {
+                                                        setValues({
+                                                            ...values,
+                                                            derivations: newValue
+                                                        }
+                                                        );
+                                                    }}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                        />
+                                                    )}
+                                                />
+                                            </Grid>
+                                            <Grid
+                                                item
+                                                md={12}
+                                                xs={12}
+                                            >
+                                                <Typography
+                                                    color="textPrimary"
+                                                    gutterBottom
+                                                    variant='h6'
+                                                >
+                                                    compounds:
+                                                </Typography>
+                                                <Autocomplete
+                                                    multiple
+                                                    id="compounds"
+                                                    options={top100Films}
+                                                    getOptionLabel={(option) => option.label}
+                                                    filterSelectedOptions
+                                                    {...register('compounds')}
+                                                    onChange={(event, newValue) => {
+                                                        setValues({
+                                                            ...values,
+                                                            compounds: newValue
+                                                        }
+                                                        );
+                                                    }}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                        />
+                                                    )}
+                                                />
+                                            </Grid>
+                                            <Grid
+                                                item
+                                                md={12}
+                                                xs={12}>
+                                                <Typography
+                                                    color="textPrimary"
+                                                    gutterBottom
+                                                    variant='h6'
+                                                >
+                                                    related terms:
+                                                </Typography>
+                                                <Autocomplete
+                                                    multiple
+                                                    id="relatedTerms"
+                                                    options={top100Films}
+                                                    getOptionLabel={(option) => option.label}
+                                                    filterSelectedOptions
+                                                    {...register('relatedTerms')}
+                                                    onChange={(event, newValue) => {
+                                                        setValues({
+                                                            ...values,
+                                                            relatedTerms: newValue
+                                                        }
+                                                        );
+                                                    }}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                        />
+                                                    )}
+                                                />
+                                            </Grid>
+                                        </div>
+                                    </ThemeProvider>
+                                </Grid>
+
+                                <Grid
+                                    item
+                                    md={12}
+                                    xs={12}
+                                    mt={3}>
+                                    <ThemeProvider theme={theme}>
+                                        <div dir="ltr">
+                                            <Typography
+                                                color="textPrimary"
+                                                gutterBottom
+                                                variant='h6'
+                                            >
+                                                POINT-PATTERN ANALYSIS
+                                            </Typography>
+                                        </div>
+                                    </ThemeProvider>
+                                </Grid>
+                                <Grid
+                                    item
+                                    md={12}
+                                    xs={12}
+                                >
+                                    <ThemeProvider theme={theme}>
+                                        <div dir="ltr">
+                                            <TextField
+                                                fullWidth
+                                                name="pattern1"
+                                                onChange={handleChange}
+                                                {...register('pattern1')}
+                                                value={values.pattern1}
+                                                variant="outlined"
+                                                multiline
+                                                rows={4} />
+                                        </div>
+                                    </ThemeProvider>
+                                </Grid>
+                                <Grid
+                                    item
+                                    md={12}
+                                    xs={12}
+                                >
+                                    <ThemeProvider theme={theme}>
+                                        <div dir="ltr">
+                                            <TextField
+                                                fullWidth
+                                                name="pattern2"
+                                                onChange={handleChange}
+                                                {...register('pattern2')}
+                                                value={values.pattern2}
+                                                variant="outlined"
+                                                multiline
+                                                rows={4} />
+                                        </div>
+                                    </ThemeProvider>
+                                </Grid>
+                                <Grid
+                                    item
+                                    md={12}
+                                    xs={12}
+                                >
+                                    <ThemeProvider theme={theme}>
+                                        <div dir="ltr">
+                                            <TextField
+                                                fullWidth
+                                                name="pattern3"
+                                                onChange={handleChange}
+                                                {...register('pattern3')}
+                                                value={values.pattern3}
+                                                variant="outlined"
+                                                multiline
+                                                rows={4} />
+                                        </div>
+                                    </ThemeProvider>
+                                </Grid>
+
+                                <Grid
+                                    item
+                                    md={12}
+                                    xs={12}
+                                >
+                                    <FileUpload
+                                        accept=".jpg,.png,.jpeg"
+                                        // label="تصاویر مرتبط"
+                                        multiple
+                                        updateFilesCb={updateUploadedFiles}
+                                    />
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </Box>
-                </CardContent>
-                <Divider />
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        p: 2
-                    }}
-                >
-                    <Button
-                        color="primary"
-                        variant="contained"
-                        size="large"
-                        type="submit"
-                        disabled={formState.isSubmitting}
-                    >
-                        ذخیره
-                    </Button>
-                    {/* <Button
-                        color="primary"
-                        variant="contained"
-                        size="large"
-                        type="submit"
-                        onCahnge={handleClose}
-                    >
-                        بازگشت
-                    </Button> */}
-                </Box>
-            </Card >
+                        </Box>
+                    </CardContent>
+            </PerfectScrollbar>
+                </Card >
         </form >
     )
 }
