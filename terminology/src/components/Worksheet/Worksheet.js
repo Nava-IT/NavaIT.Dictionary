@@ -11,7 +11,8 @@ import {
     Button,
     Radio,
     RadioGroup,
-    Paper
+    Toolbar,
+    AppBar
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
@@ -19,9 +20,23 @@ import { v4 as uuid } from 'uuid';
 import { useParams } from "react-router-dom";
 import { worksheetService } from '../../__services__/worksheet.Service';
 import { useForm } from "react-hook-form";
-import FileUpload from '../FileUpload/file-upload.component'
-import PerfectScrollbar from "react-perfect-scrollbar";
-import "react-perfect-scrollbar/dist/css/styles.css";
+import FileUpload from '../FileUpload/file-upload.component';
+import CssBaseline from '@mui/material/CssBaseline';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import RestoreIcon from '@mui/icons-material/Restore';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import Paper from '@mui/material/Paper';
+import { Add as AddItemIcon } from '../../icons/add';
+import AddIcon from '@mui/icons-material/Add';
+import SaveIcon from '@mui/icons-material/Save';
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Tooltip from '@mui/material/Tooltip';
 
 const theme = createTheme({
     direction: 'ltr', // Both here and <body dir="rtl">
@@ -246,65 +261,130 @@ const Worksheet = () => {
     }, []);
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} onReset={reset}>
-
-            <Box
+        <Box sx={{ pb: 7 }} >
+            <CssBaseline />
+            <AppBar
+                position="fixed"
                 sx={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    p: 2
-                }}
-            >
-                <Button
-                    color="primary"
-                    variant="contained"
-                    size="large"
-                    type="submit"
-                    disabled={formState.isSubmitting}
-                >
-                    ذخیره
-                </Button>
-                <Button
-                    color="primary"
-                    variant="contained"
-                    size="large"
-                    type="submit"
-                    onChange={handleClose}
-                >
-                    بازگشت
-                </Button>
-            </Box>
-            <Card
-                sx={{ mb: 2 }}>
-                <CardContent>
-                    <Grid
-                        container
+                    top: {
+                        lg: 64,
+                        md: 55,
+                        xs: 48
+                    },
+                    width: {
+                        lg: 'calc(100% - 240px)'
+                    },
+                    bgcolor: '#f1f4f7'
+
+                }}>
+                <Toolbar>
+                    <Box
+                        sx={{
+                            alignItems: 'center',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            flexWrap: 'wrap',
+                            m: -1,
+                            flexGrow: 1
+                        }}
                     >
+                        <Box sx={{
+                            m: 1
+                        }}>
+                            <Tooltip title={
+                                <React.Fragment>
+                                    <Typography color="inherit">ذخیره</Typography>
+                                    <br />
+                                    {"ذخیره این کاربرگه."}
+                                </React.Fragment>
+                            }>
+                                <Button
+                                    size="large"
+                                    startIcon={(<SaveIcon />)}
+                                >
+                                    ذخیره
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title={
+                                <React.Fragment>
+                                    <Typography color="inherit">جدید</Typography>
+                                    <br />
+                                    {"ایجاد کاربرگه جدید."}
+                                </React.Fragment>
+                            }>
+                                <Button
+                                    size="large"
+                                    startIcon={(<AddIcon />)}
+                                >
+                                    جدید
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title={
+                                <React.Fragment>
+                                    <Typography color="inherit">حذف</Typography>
+                                    <br />
+                                    {"حذف این کاربرگه."}
+                                </React.Fragment>
+                            }>
+                                <Button
+                                    size="large"
+                                    startIcon={(<DeleteIcon />)}
+                                >
+                                    حذف
+                                </Button>
+                            </Tooltip>
+                        </Box>
+                        <Box>
+                            <Tooltip title="قبلی">
+                                <IconButton aria-label="previous-record">
+                                    <ArrowUpwardIcon color='primary' />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="بعدی">
+                                <IconButton aria-label="Next-record">
+                                    <ArrowDownwardIcon color='primary' />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="خروج">
+                                <IconButton aria-label="close">
+                                    <CloseIcon color='primary' />
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
+                    </Box>
+                </Toolbar>
+            </AppBar>
+            <form onSubmit={handleSubmit(onSubmit)} onReset={reset}>
+                <Card
+                    sx={{ mb: 2, mt: 7 }}>
+                    <CardContent>
                         <Grid
-                            item
-                            md={6}
-                            xs={12}
+                            container
                         >
-                            <Typography
-                                color="textPrimary"
-                                gutterBottom
-                                variant='h6'
+                            <Grid
+                                item
+                                md={6}
+                                xs={12}
                             >
-                                حوزه:
-                            </Typography>
-                            <Autocomplete
-                                disablePortal
-                                id="scope"
-                                options={top100Films}
-                                {...register('scope')}
-                                renderInput={(params) => <TextField {...params} />}
-                            />
+                                <Typography
+                                    color="textPrimary"
+                                    gutterBottom
+                                    variant='h6'
+                                >
+                                    حوزه:
+                                </Typography>
+                                <Autocomplete
+                                    disablePortal
+                                    id="scope"
+                                    options={top100Films}
+                                    {...register('scope')}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </CardContent>
-            </Card>
-                <Card sx={{height:300}}>
-            <PerfectScrollbar>
+                    </CardContent>
+                </Card>
+                <Card>
                     <CardContent>
                         <Box component="main" sx={{ flexGrow: 1 }}>
                             <Grid
@@ -329,13 +409,27 @@ const Worksheet = () => {
                                         >
                                             معادل پيشنهادي گروه تخصصي:
                                         </Typography>
-                                        <TextField
-                                            fullWidth
-                                            name="specializedGroupEquvalent"
-                                            // onChange={handleChange}
-                                            {...register("specializedGroupEquvalent", { required: true })}
-                                            // value={values.specializedGroupEquvalent}
-                                            variant="outlined" />
+                                        <Autocomplete
+                                            multiple
+                                            id="specializedGroupEquvalent"
+                                            dir="ltr"
+                                            options={top100Films}
+                                            getOptionLabel={(option) => option.label}
+                                            filterSelectedOptions
+                                            {...register('specializedGroupEquvalent')}
+                                            onChange={(event, newValue) => {
+                                                setValues({
+                                                    ...values,
+                                                    specializedGroupEquvalent: newValue
+                                                }
+                                                );
+                                            }}
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                />
+                                            )}
+                                        />
                                     </Grid>
                                     <Grid
                                         item
@@ -351,7 +445,7 @@ const Worksheet = () => {
                                                 value="0"
                                                 {...register('selectionType')}
                                                 control={<Radio
-                                                    checked={0 === '0'}
+                                                    checked={getValues.selectionType === '0'}
                                                     onChange={handleChange}
                                                 />}
                                                 label="برگزيده"
@@ -360,7 +454,7 @@ const Worksheet = () => {
                                                 value="1"
                                                 {...register('selectionType')}
                                                 control={<Radio
-                                                    checked={0 === '1'}
+                                                    checked={getValues.selectionType === '1'}
                                                     onChange={handleChange} />}
                                                 label="نوگزيده"
                                             />
@@ -368,8 +462,8 @@ const Worksheet = () => {
                                                 value="2"
                                                 {...register('selectionType')}
                                                 control={<Radio
-                                                    checked={0 === '2'}
-                                                    onChange={handleChange}
+                                                    checked={getValues.selectionType === '2'}
+                                                     onChange={handleChange}
                                                 />}
                                                 label="نوساخته"
                                             />
@@ -1092,9 +1186,10 @@ const Worksheet = () => {
                             </Grid>
                         </Box>
                     </CardContent>
-            </PerfectScrollbar>
                 </Card >
-        </form >
+            </form >
+        </Box>
+
     )
 }
 

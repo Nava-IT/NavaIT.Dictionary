@@ -113,7 +113,7 @@ function DashboardLayout(props) {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
-                        {/* Covid-tracker */}
+                        Covid-tracker
                     </Typography>
                 </Toolbar>
             </AppBar>
