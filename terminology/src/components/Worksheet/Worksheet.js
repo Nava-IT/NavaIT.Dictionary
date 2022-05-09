@@ -14,6 +14,7 @@ import {
     Toolbar,
     AppBar
 } from '@mui/material';
+import { createFilterOptions } from '@mui/material/Autocomplete';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
@@ -22,13 +23,6 @@ import { worksheetService } from '../../__services__/worksheet.Service';
 import { useForm } from "react-hook-form";
 import FileUpload from '../FileUpload/file-upload.component';
 import CssBaseline from '@mui/material/CssBaseline';
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import Paper from '@mui/material/Paper';
-import { Add as AddItemIcon } from '../../icons/add';
 import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from '@mui/icons-material/Close';
@@ -37,6 +31,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Tooltip from '@mui/material/Tooltip';
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme({
     direction: 'ltr', // Both here and <body dir="rtl">
@@ -168,6 +163,7 @@ const top100Films = [
     { label: '3 Idiots', year: 2009 },
     { label: 'Monty Python and the Holy Grail', year: 1975 },
 ];
+const filter = createFilterOptions();
 
 
 const Worksheet = () => {
@@ -179,15 +175,15 @@ const Worksheet = () => {
 
     // worksheet state for form
     const [values, setValues] = useState({});
+    const navigate = useNavigate();
 
     const handleChange = (event) => {
         setValues({
-            ...values,
             [event.target.name]: event.target.value
         })
     }
     // const handleAutoCompleteChange = (event, newValues) => {
-    //     setValues({
+    //     setValue({
     //         ...values,
     //         [event.target.name]: newValues
     //     })
@@ -200,7 +196,7 @@ const Worksheet = () => {
     const createWorksheet = (data) => {
         const worksheet = {
             id: uuid(),
-            worksheetData: values
+            worksheetData: data
         }
         worksheetService.create(worksheet);
     }
@@ -213,7 +209,7 @@ const Worksheet = () => {
     }
 
     const handleClose = () => {
-        // navigate('/');
+        navigate('/');
     }
 
     // effect runs on component mount
@@ -262,101 +258,112 @@ const Worksheet = () => {
 
     return (
         <Box sx={{ pb: 7 }} >
-            <CssBaseline />
-            <AppBar
-                position="fixed"
-                sx={{
-                    top: {
-                        lg: 64,
-                        md: 55,
-                        xs: 48
-                    },
-                    width: {
-                        lg: 'calc(100% - 240px)'
-                    },
-                    bgcolor: '#f1f4f7'
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <CssBaseline />
+                <AppBar
+                    position="fixed"
+                    sx={{
+                        top: {
+                            lg: 64,
+                            md: 55,
+                            xs: 48
+                        },
+                        width: {
+                            lg: 'calc(100% - 240px)'
+                        },
+                        bgcolor: '#f1f4f7'
 
-                }}>
-                <Toolbar>
-                    <Box
-                        sx={{
-                            alignItems: 'center',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            flexWrap: 'wrap',
-                            m: -1,
-                            flexGrow: 1
-                        }}
-                    >
-                        <Box sx={{
-                            m: 1
-                        }}>
-                            <Tooltip title={
-                                <React.Fragment>
-                                    <Typography color="inherit">ذخیره</Typography>
-                                    <br />
-                                    {"ذخیره این کاربرگه."}
-                                </React.Fragment>
-                            }>
-                                <Button
-                                    size="large"
-                                    startIcon={(<SaveIcon />)}
-                                >
-                                    ذخیره
-                                </Button>
-                            </Tooltip>
-                            <Tooltip title={
-                                <React.Fragment>
-                                    <Typography color="inherit">جدید</Typography>
-                                    <br />
-                                    {"ایجاد کاربرگه جدید."}
-                                </React.Fragment>
-                            }>
-                                <Button
-                                    size="large"
-                                    startIcon={(<AddIcon />)}
-                                >
-                                    جدید
-                                </Button>
-                            </Tooltip>
-                            <Tooltip title={
-                                <React.Fragment>
-                                    <Typography color="inherit">حذف</Typography>
-                                    <br />
-                                    {"حذف این کاربرگه."}
-                                </React.Fragment>
-                            }>
-                                <Button
-                                    size="large"
-                                    startIcon={(<DeleteIcon />)}
-                                >
-                                    حذف
-                                </Button>
-                            </Tooltip>
+                    }}>
+                    <Toolbar>
+                        <Box
+                            sx={{
+                                alignItems: 'center',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                flexWrap: 'wrap',
+                                m: -1,
+                                flexGrow: 1
+                            }}
+                        >
+                            <Box sx={{
+                                m: 1
+                            }}>
+                                <Tooltip title={
+                                    <React.Fragment>
+                                        <Typography color="inherit">ذخیره</Typography>
+                                        <br />
+                                        {"ذخیره این کاربرگه."}
+                                    </React.Fragment>
+                                }>
+                                    <Button
+                                        type="submit"
+                                        size="large"
+                                        startIcon={(<SaveIcon />)}
+                                    >
+                                        ذخیره
+                                    </Button>
+                                </Tooltip>
+                                <Tooltip title={
+                                    <React.Fragment>
+                                        <Typography color="inherit">جدید</Typography>
+                                        <br />
+                                        {"ایجاد کاربرگه جدید."}
+                                    </React.Fragment>
+                                }>
+                                    <Button
+                                        size="large"
+                                        startIcon={(<AddIcon />)}
+                                    >
+                                        جدید
+                                    </Button>
+                                </Tooltip>
+                                <Tooltip title={
+                                    <React.Fragment>
+                                        <Typography color="inherit">حذف</Typography>
+                                        <br />
+                                        {"حذف این کاربرگه."}
+                                    </React.Fragment>
+                                }>
+                                    <Button
+                                        size="large"
+                                        startIcon={(<DeleteIcon />)}
+                                    >
+                                        حذف
+                                    </Button>
+                                </Tooltip>
+                            </Box>
+                            <Box>
+                                <Tooltip title="قبلی">
+                                    <IconButton aria-label="previous-record">
+                                        <ArrowUpwardIcon color='primary' />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="بعدی">
+                                    <IconButton aria-label="Next-record">
+                                        <ArrowDownwardIcon color='primary' />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="خروج">
+                                    <IconButton aria-label="close" onClick={handleClose}>
+                                        <CloseIcon color='primary' />
+                                    </IconButton>
+                                </Tooltip>
+                            </Box>
                         </Box>
-                        <Box>
-                            <Tooltip title="قبلی">
-                                <IconButton aria-label="previous-record">
-                                    <ArrowUpwardIcon color='primary' />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="بعدی">
-                                <IconButton aria-label="Next-record">
-                                    <ArrowDownwardIcon color='primary' />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="خروج">
-                                <IconButton aria-label="close">
-                                    <CloseIcon color='primary' />
-                                </IconButton>
-                            </Tooltip>
-                        </Box>
-                    </Box>
-                </Toolbar>
-            </AppBar>
-            <form onSubmit={handleSubmit(onSubmit)} onReset={reset}>
+                    </Toolbar>
+                </AppBar>
+                <Box>
+                    <Typography
+                        color="textPrimary"
+                        variant='h4'
+                        sx={{ mb: 1, mt: 7 }}>
+                        {isAddMode ? 'کاربرگه جدید' : 'ویرایش کاربرگه'}
+                    </Typography>
+                </Box>
+
+
                 <Card
-                    sx={{ mb: 2, mt: 7 }}>
+                    sx={{ mb: 2 }}>
                     <CardContent>
                         <Grid
                             container
@@ -374,10 +381,13 @@ const Worksheet = () => {
                                     حوزه:
                                 </Typography>
                                 <Autocomplete
+                                    {...register("scope")}
                                     disablePortal
                                     id="scope"
                                     options={top100Films}
-                                    {...register('scope')}
+                                    onChange={(event, newValue) => {
+                                        setValue("scope", newValue);
+                                    }}
                                     renderInput={(params) => <TextField {...params} />}
                                 />
                             </Grid>
@@ -414,17 +424,50 @@ const Worksheet = () => {
                                             id="specializedGroupEquvalent"
                                             dir="ltr"
                                             options={top100Films}
-                                            getOptionLabel={(option) => option.label}
-                                            filterSelectedOptions
-                                            {...register('specializedGroupEquvalent')}
+                                            // getOptionLabel={(option) => option.label}
+
+                                            {...register("specializedGroupEquvalent")}
                                             onChange={(event, newValue) => {
-                                                setValues({
-                                                    ...values,
-                                                    specializedGroupEquvalent: newValue
+                                                if (typeof newValue === 'string') {
+                                                    setValue("specializedGroupEquvalent", newValue);
                                                 }
-                                                );
+                                                else if (newValue && newValue.inputValue) {
+                                                    // Create a new value from the user input
+                                                    setValue("specializedGroupEquvalent", newValue.inputValue);
+                                                }
                                             }}
-                                            renderInput={(params) => (
+                                            filterOptions={(options, params) => {
+                                                const filtered = filter(options, params);
+
+                                                const { inputValue } = params;
+                                                // Suggest the creation of a new value
+                                                const isExisting = options.some((option) => inputValue === option.label);
+                                                if (inputValue !== '' && !isExisting) {
+                                                    filtered.push({
+                                                        inputValue,
+                                                        label: `افزودن "${inputValue}"`,
+                                                    });
+                                                }
+
+                                                return filtered;
+                                            }}
+                                            selectOnFocus
+                                            clearOnBlur
+                                            handleHomeEndKeys
+                                            getOptionLabel={(option) => {
+                                                // Value selected with enter, right from the input
+                                                if (typeof option === 'string') {
+                                                    return option;
+                                                }
+                                                // Add "xxx" option created dynamically
+                                                if (option.inputValue) {
+                                                    return option.inputValue;
+                                                }
+                                                // Regular option
+                                                return option.label;
+                                            }}
+                                            renderOption={(props, option) => <li {...props}>{option.label}</li>}
+                                                                                        renderInput={(params) => (
                                                 <TextField
                                                     {...params}
                                                 />
@@ -438,33 +481,41 @@ const Worksheet = () => {
                                         <RadioGroup
                                             aria-labelledby="selectionType"
                                             row
-                                            name="selectionType"
+                                            {...register('selectionType')}
 
                                         >
                                             <FormControlLabel
-                                                value="0"
-                                                {...register('selectionType')}
+                                                id="selectionType"
                                                 control={<Radio
-                                                    checked={getValues.selectionType === '0'}
-                                                    onChange={handleChange}
+                                                    checked={getValues("selectionType") == '0'}
+                                                    onChange={(event, newValue) => {
+                                                        setValue("selectionType", 0);
+                                                    }}
                                                 />}
+
                                                 label="برگزيده"
                                             />
                                             <FormControlLabel
                                                 value="1"
-                                                {...register('selectionType')}
+                                                id="selectionType"
                                                 control={<Radio
-                                                    checked={getValues.selectionType === '1'}
-                                                    onChange={handleChange} />}
+                                                    checked={getValues("selectionType") == '1'}
+                                                    onChange={(event, newValue) => {
+                                                        setValue("selectionType", newValue ? '1' : '0');
+                                                    }} />}
+
                                                 label="نوگزيده"
                                             />
                                             <FormControlLabel
                                                 value="2"
-                                                {...register('selectionType')}
+                                                id="selectionType"
                                                 control={<Radio
-                                                    checked={getValues.selectionType === '2'}
-                                                     onChange={handleChange}
+                                                    checked={getValues("selectionType") === '2'}
+                                                    onChange={(event, newValue) => {
+                                                        setValue("selectionType", '3');
+                                                    }}
                                                 />}
+
                                                 label="نوساخته"
                                             />
                                         </RadioGroup>
@@ -483,8 +534,9 @@ const Worksheet = () => {
                                         </Typography>
                                         <TextField
                                             fullWidth
-                                            name='construction'
-                                            onChange={handleChange}
+                                            onChange={(event, newValue) => {
+                                                setValue("construction", newValue);
+                                            }}
                                             {...register('construction')}
                                             value={values.construction}
                                             variant="outlined" />
@@ -501,8 +553,10 @@ const Worksheet = () => {
                                         </Typography>
                                         <TextField
                                             fullWidth
-                                            name='witness'
-                                            onChange={handleChange}
+
+                                            onChange={(event, newValue) => {
+                                                setValue("witness", newValue);
+                                            }}
                                             {...register('witness')}
                                             value={values.witness}
                                             variant="outlined" />
@@ -534,13 +588,9 @@ const Worksheet = () => {
                                                     options={top100Films}
                                                     getOptionLabel={(option) => option.label}
                                                     filterSelectedOptions
-                                                    {...register('term')}
+                                                    {...register("term")}
                                                     onChange={(event, newValue) => {
-                                                        setValues({
-                                                            ...values,
-                                                            term: newValue
-                                                        }
-                                                        );
+                                                        setValue("term", newValue);
                                                     }}
                                                     renderInput={(params) => (
                                                         <TextField
@@ -566,13 +616,9 @@ const Worksheet = () => {
                                                     options={top100Films}
                                                     getOptionLabel={(option) => option.label}
                                                     filterSelectedOptions
-                                                    {...register('abbreviation')}
+                                                    {...register("abbreviation")}
                                                     onChange={(event, newValue) => {
-                                                        setValues({
-                                                            ...values,
-                                                            abbreviation: newValue
-                                                        }
-                                                        );
+                                                        setValue("abbreviation", newValue);
                                                     }}
                                                     renderInput={(params) => (
                                                         <TextField
@@ -599,11 +645,7 @@ const Worksheet = () => {
                                                     filterSelectedOptions
                                                     {...register('tradeName')}
                                                     onChange={(event, newValue) => {
-                                                        setValues({
-                                                            ...values,
-                                                            tradeName: newValue
-                                                        }
-                                                        );
+                                                        setValue("tradeName", newValue);
                                                     }}
                                                     renderInput={(params) => (
                                                         <TextField
@@ -630,11 +672,7 @@ const Worksheet = () => {
                                                     filterSelectedOptions
                                                     {...register('scientificName')}
                                                     onChange={(event, newValue) => {
-                                                        setValues({
-                                                            ...values,
-                                                            scientificName: newValue
-                                                        }
-                                                        );
+                                                        setValue("scientificName", newValue);
                                                     }}
                                                     renderInput={(params) => (
                                                         <TextField
@@ -661,11 +699,7 @@ const Worksheet = () => {
                                                     filterSelectedOptions
                                                     {...register('vulgarName')}
                                                     onChange={(event, newValue) => {
-                                                        setValues({
-                                                            ...values,
-                                                            vulgarName: newValue
-                                                        }
-                                                        );
+                                                        setValue("vulgarName", newValue);
                                                     }}
                                                     renderInput={(params) => (
                                                         <TextField
@@ -700,8 +734,10 @@ const Worksheet = () => {
                                         </Typography>
                                         <TextField
                                             fullWidth
-                                            name="definition"
-                                            onChange={handleChange}
+
+                                            onChange={(event, newValue) => {
+                                                setValue("definition", newValue);
+                                            }}
                                             {...register('definition')}
                                             value={values.definition}
                                             variant="outlined"
@@ -722,8 +758,10 @@ const Worksheet = () => {
                                         </Typography>
                                         <TextField
                                             fullWidth
-                                            name="example"
-                                            onChange={handleChange}
+
+                                            onChange={(event, newValue) => {
+                                                setValue("example", newValue);
+                                            }}
                                             {...register('example')}
                                             value={values.example}
                                             variant="outlined"
@@ -750,11 +788,7 @@ const Worksheet = () => {
                                             filterSelectedOptions
                                             {...register('references')}
                                             onChange={(event, newValue) => {
-                                                setValues({
-                                                    ...values,
-                                                    references: newValue
-                                                }
-                                                );
+                                                setValue("references", newValue);
                                             }}
                                             renderInput={(params) => (
                                                 <TextField
@@ -789,8 +823,10 @@ const Worksheet = () => {
                                                 </Typography>
                                                 <TextField
                                                     fullWidth
-                                                    name="grammaticalCategory"
-                                                    onChange={handleChange}
+
+                                                    onChange={(event, newValue) => {
+                                                        setValue("grammaticalCategory", newValue);
+                                                    }}
                                                     {...register('grammaticalCategory')}
                                                     value={values.grammaticalCategory}
                                                     variant="outlined"
@@ -811,8 +847,10 @@ const Worksheet = () => {
                                                 </Typography>
                                                 <TextField
                                                     fullWidth
-                                                    name="etymology"
-                                                    onChange={handleChange}
+
+                                                    onChange={(event, newValue) => {
+                                                        setValue("etymology", newValue);
+                                                    }}
                                                     {...register('etymology')}
                                                     value={values.etymology}
                                                     variant="outlined"
@@ -838,11 +876,7 @@ const Worksheet = () => {
                                                     filterSelectedOptions
                                                     {...register('synonyms')}
                                                     onChange={(event, newValue) => {
-                                                        setValues({
-                                                            ...values,
-                                                            synonyms: newValue
-                                                        }
-                                                        );
+                                                        setValue("synonyms", newValue);
                                                     }}
                                                     renderInput={(params) => (
                                                         <TextField
@@ -882,11 +916,7 @@ const Worksheet = () => {
                                             filterSelectedOptions
                                             {...register('persianLanguageEquvalent')}
                                             onChange={(event, newValue) => {
-                                                setValues({
-                                                    ...values,
-                                                    persianLanguageEquvalent: newValue
-                                                }
-                                                );
+                                                setValue("persianLanguageEquvalent", newValue);
                                             }}
                                             renderInput={(params) => (
                                                 <TextField
@@ -915,11 +945,7 @@ const Worksheet = () => {
                                             filterSelectedOptions
                                             {...register('groupEquvalent')}
                                             onChange={(event, newValue) => {
-                                                setValues({
-                                                    ...values,
-                                                    groupEquvalent: newValue
-                                                }
-                                                );
+                                                setValue("groupEquvalent", newValue);
                                             }}
                                             renderInput={(params) => (
                                                 <TextField
@@ -947,11 +973,7 @@ const Worksheet = () => {
                                             filterSelectedOptions
                                             {...register('commonWord')}
                                             onChange={(event, newValue) => {
-                                                setValues({
-                                                    ...values,
-                                                    commonWord: newValue
-                                                }
-                                                );
+                                                setValue("commonWord", newValue);
                                             }}
                                             renderInput={(params) => (
                                                 <TextField
@@ -974,8 +996,10 @@ const Worksheet = () => {
                                         </Typography>
                                         <TextField
                                             fullWidth
-                                            name="description"
-                                            onChange={handleChange}
+
+                                            onChange={(event, newValue) => {
+                                                setValue("description", newValue);
+                                            }}
                                             {...register('description')}
                                             value={values.description}
                                             variant="outlined"
@@ -1014,11 +1038,7 @@ const Worksheet = () => {
                                                     filterSelectedOptions
                                                     {...register('derivations')}
                                                     onChange={(event, newValue) => {
-                                                        setValues({
-                                                            ...values,
-                                                            derivations: newValue
-                                                        }
-                                                        );
+                                                        setValue("derivations", newValue);
                                                     }}
                                                     renderInput={(params) => (
                                                         <TextField
@@ -1047,11 +1067,7 @@ const Worksheet = () => {
                                                     filterSelectedOptions
                                                     {...register('compounds')}
                                                     onChange={(event, newValue) => {
-                                                        setValues({
-                                                            ...values,
-                                                            compounds: newValue
-                                                        }
-                                                        );
+                                                        setValue("compounds", newValue);
                                                     }}
                                                     renderInput={(params) => (
                                                         <TextField
@@ -1079,11 +1095,7 @@ const Worksheet = () => {
                                                     filterSelectedOptions
                                                     {...register('relatedTerms')}
                                                     onChange={(event, newValue) => {
-                                                        setValues({
-                                                            ...values,
-                                                            relatedTerms: newValue
-                                                        }
-                                                        );
+                                                        setValue("relatedTerms", newValue);
                                                     }}
                                                     renderInput={(params) => (
                                                         <TextField
@@ -1122,8 +1134,10 @@ const Worksheet = () => {
                                         <div dir="ltr">
                                             <TextField
                                                 fullWidth
-                                                name="pattern1"
-                                                onChange={handleChange}
+
+                                                onChange={(event, newValue) => {
+                                                    setValue("pattern1", newValue);
+                                                }}
                                                 {...register('pattern1')}
                                                 value={values.pattern1}
                                                 variant="outlined"
@@ -1141,8 +1155,10 @@ const Worksheet = () => {
                                         <div dir="ltr">
                                             <TextField
                                                 fullWidth
-                                                name="pattern2"
-                                                onChange={handleChange}
+
+                                                onChange={(event, newValue) => {
+                                                    setValue("pattern2", newValue);
+                                                }}
                                                 {...register('pattern2')}
                                                 value={values.pattern2}
                                                 variant="outlined"
@@ -1160,8 +1176,10 @@ const Worksheet = () => {
                                         <div dir="ltr">
                                             <TextField
                                                 fullWidth
-                                                name="pattern3"
-                                                onChange={handleChange}
+
+                                                onChange={(event, newValue) => {
+                                                    setValue("pattern3", newValue);
+                                                }}
                                                 {...register('pattern3')}
                                                 value={values.pattern3}
                                                 variant="outlined"

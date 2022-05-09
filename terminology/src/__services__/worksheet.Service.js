@@ -25,6 +25,7 @@ function create(params) {
 
 function update(id, params) {
     //return "fetchWrapper.put(`${baseUrl}/${id}`, params)";
+    console.log(params)
 }
 
 // prefixed with underscored because delete is a reserved word in javascript
