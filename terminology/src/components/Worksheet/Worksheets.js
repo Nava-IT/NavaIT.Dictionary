@@ -4,7 +4,7 @@ import React from 'react';
 import WorksheetToolbar from './WorksheetToolbar';
 import Grid from '../UI/Grid/Grid';
 import { worksheets } from '../../__mocks__/worksheet';
-import { useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const columns = [
     {
@@ -14,9 +14,18 @@ const columns = [
     },
     {
         field: 'term',
-        headerName: 'مدخل',
+        headerName: 'واژه بیگانه',
         width: 150,
-        editable: true,
+        renderCell: (params) => (
+            <NavLink
+                to={`./worksheet/${params.id}`}
+                style={{
+                    color: "primary",
+                    textDecoration: "none",
+                }}>
+                {params.value.toString()}
+            </NavLink>
+        )
     },
     {
         field: 'scope',
@@ -47,13 +56,6 @@ const columns = [
 
 
 const Worksheet = () => {
-    const navigate = useNavigate();
-    const handleRowClick = (param, event) => {
-        console.log("Row:");
-        console.log(param);
-        console.log(event);
-        navigate(`./worksheet/${param.id}`);
-    };
     return (
         <Box
             sx={{
@@ -66,7 +68,7 @@ const Worksheet = () => {
                     <Grid
                         columns={columns}
                         rows={worksheets}
-                        rowDoubleClicked={handleRowClick} />
+                    />
                 </Box>
             </Container>
 

@@ -9,12 +9,11 @@ export const worksheetService = {
 };
 
 function getAll() {
-    return 'fetchWrapper.get(baseUrl)';
+    //return 'fetchWrapper.get(baseUrl)';
 }
 
 function getById(id) {
     //return fetchWrapper.get(`${baseUrl}/${id}`);
-    console.log(id)
     return worksheets.find(worksheet => worksheet.id === id);
 }
 

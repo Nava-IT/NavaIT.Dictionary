@@ -6,7 +6,6 @@ export default function Grid(props) {
   return (
     <div style={{ height: 550, width: '100%' }}>
       <DataGrid
-        onRowDoubleClick={props.rowDoubleClicked}
         rows={props.rows}
         columns={props.columns}
         pageSize={20}

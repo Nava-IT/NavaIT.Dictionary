@@ -182,12 +182,15 @@ const Worksheet = () => {
             [event.target.name]: event.target.value
         })
     }
-    // const handleAutoCompleteChange = (event, newValues) => {
-    //     setValue({
-    //         ...values,
-    //         [event.target.name]: newValues
-    //     })
-    // }
+    const handleAutocompleteChange = (event, newValues, title) => {
+        // if (typeof newValue === 'string') {
+        //     setValue("specializedGroupEquvalent", newValue);
+        // }
+        // else if (newValue && newValue.inputValue) {
+        //     // Create a new value from the user input
+        //     setValue("specializedGroupEquvalent", newValue.inputValue);
+        // }
+    }
     const onSubmit = (data) => {
         return isAddMode
             ? createWorksheet(data)
@@ -427,15 +430,7 @@ const Worksheet = () => {
                                             // getOptionLabel={(option) => option.label}
 
                                             {...register("specializedGroupEquvalent")}
-                                            onChange={(event, newValue) => {
-                                                if (typeof newValue === 'string') {
-                                                    setValue("specializedGroupEquvalent", newValue);
-                                                }
-                                                else if (newValue && newValue.inputValue) {
-                                                    // Create a new value from the user input
-                                                    setValue("specializedGroupEquvalent", newValue.inputValue);
-                                                }
-                                            }}
+                                            onChange={(event, newValue) => handleAutocompleteChange(newValue,id )}
                                             filterOptions={(options, params) => {
                                                 const filtered = filter(options, params);
 
@@ -487,9 +482,9 @@ const Worksheet = () => {
                                             <FormControlLabel
                                                 id="selectionType"
                                                 control={<Radio
-                                                    checked={getValues("selectionType") == '0'}
+                                                    checked={getValues("selectionType") === '0'}
                                                     onChange={(event, newValue) => {
-                                                        setValue("selectionType", 0);
+                                                        setValue("selectionType", '0');
                                                     }}
                                                 />}
 
@@ -499,7 +494,7 @@ const Worksheet = () => {
                                                 value="1"
                                                 id="selectionType"
                                                 control={<Radio
-                                                    checked={getValues("selectionType") == '1'}
+                                                    checked={getValues("selectionType") === '1'}
                                                     onChange={(event, newValue) => {
                                                         setValue("selectionType", newValue ? '1' : '0');
                                                     }} />}
